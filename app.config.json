@@ -1,0 +1,26 @@
+{
+  "$schema": "./schemas/app-config.schema.json",
+  "name": "Label Sheet Maker",
+  "nameJa": "ラベルシート作成",
+  "slug": "label-sheet-maker",
+  "version": "1.0.0",
+  "description": "Create precise label sheets with local data merge, images, codes, used-position selection, print calibration, print-ready PDF output, portable project files, and a keyboard/touch-friendly label editor.",
+  "descriptionJa": "ラベル用紙を実寸で設定し、差し込みデータ・画像・コード・使いかけ位置・印刷補正を反映した印刷用PDFと作業ファイルを、操作しやすいラベル編集UIでブラウザー内に作成します。",
+  "defaultLanguage": "auto",
+  "repository": {
+    "owner": "ttomohisa",
+    "name": "htmlapps-label-sheet-maker"
+  },
+  "build": {
+    "output": "dist/index.html",
+    "blockRuntimeNetwork": true,
+    "selfExtract": {
+      "enabled": true,
+      "output": "dist/index.self-extract.html"
+    },
+    "sizeBudget": {
+      "readableWarningMb": 25,
+      "selfExtractWarningMb": 12
+    }
+  }
+}
