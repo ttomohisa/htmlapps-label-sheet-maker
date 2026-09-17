@@ -1,145 +1,128 @@
 # Label Sheet Maker / ラベルシート作成
 
+[![GitHub Pages](https://github.com/ttomohisa/htmlapps-label-sheet-maker/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/ttomohisa/htmlapps-label-sheet-maker/actions/workflows/deploy-pages.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Single HTML](https://img.shields.io/badge/distribution-single%20HTML-0ea5e9)](https://ttomohisa.github.io/htmlapps-label-sheet-maker/)
 
 [English README](README.md)
 
-ラベルシートの物理寸法を合わせ、文字・差し込みデータ・画像・QRコード・バーコードを配置し、使いかけ用紙を含むシート全体へ順番に並べるブラウザーツールです。
+ラベル用紙の実寸を設定し、1枚のラベルを編集し、CSV / TSVの差し込み、使いかけ用紙への配置、印刷用PDF作成までを、ファイルを外部へアップロードせずブラウザー内で行える単一HTMLアプリです。
 
-**v1.0.0は正式版です。** 用紙 → ラベル → シート → 出力の一連の流れに、差し込みデータ、画像・コード、使いかけ位置、印刷補正/PDF、作業ファイル、PC/スマホ向けのラベル編集操作まで揃えています。
+## 🚀 デモ
 
-![Label Sheet Maker / ラベルシート作成の画面](assets/screenshot.png)
+### [GitHub PagesでLabel Sheet Makerを開く](https://ttomohisa.github.io/htmlapps-label-sheet-maker/)
+
+GitHub Pagesから最初のHTMLを読み込んだ後、用紙寸法の計算、ラベル編集、CSV / TSV解析、ローカル画像、QR・バーコード生成、作業ファイルの保存・復元、PDF生成は端末内で処理されます。アプリで選択・入力したファイルや値を、このアプリからサーバーへアップロードすることはありません。
+
+[![Label Sheet Maker / ラベルシート作成の画面](assets/screenshot.png)](https://ttomohisa.github.io/htmlapps-label-sheet-maker/)
 
 ## 主な機能
 
-- A4 / Letter / カスタム用紙
-- mm / inch表示切替（内部計算はmm）
-- メーカー名に依存しない汎用レイアウトプリセット
-- ラベル番号付きSVGライブプレビュー
-- 右余白 / 下余白の自動計算
-- 用紙からのはみ出し・不正値検出
-- よく使う用紙設定を名前付きで端末内保存
-- mm座標で管理するSVGラベルエディタ
-- 要素枠全体のドラッグ移動 / 四隅リサイズ / 選択状態のカーソル変化
-- キャンバス上部のアイコン操作（複製 / 前面 / 背面 / 削除）
-- スマホで選択要素を操作できる下部固定アクションバーと長押しメニュー
-- ゴシック / 明朝に加え、メイリオ・游ゴシック・游明朝・ヒラギノ系・丸ゴシック・等幅などのローカル書体
-- 文字サイズ / 太字 / 横・縦揃え / 折り返し
-- 50〜300%ズーム / パンモード / 安全余白 / スナップON/OFF / Undo / Redo
-- キャンバス選択後のDelete / Backspace削除、矢印キー0.2mm移動、Shift+矢印1mm移動、Alt+ドラッグの一時スナップ無効、Escape選択解除
-- ラベル画面上部とツール欄から入れる差し込みデータ導線
-- UTF-8 / UTF-8 BOM / Shift_JIS のCSV・TSV読み込み
-- Drag & Dropと表データ貼り付け
-- 行プレビューとデータ列のラベル配置
-- 同一ラベル繰り返し / データ差し込みモード
-- PNG / JPEG / WebP画像（全体表示 / 枠いっぱい）
-- 固定値または差し込み項目から生成するUTF-8 QRコード
-- Code 128 Set B / Code 39のベクターバーコードと入力検証
-- 実際の用紙寸法に沿ったシート全体プレビュー
-- 使いかけ用紙の使用済み位置を手動指定
-- 空いている位置だけへデータ順を保って自動配置
-- 2ページ目以降を新品シートとして扱う複数ページ計算
-- X/Y各±10mm、0.1mm単位の印刷位置補正
-- 補正値を名前付きで端末内保存
-- ラベル枠・中央マーク・番号入りの位置合わせ用PDF
-- A4 / Letter / カスタム用紙の300dpi相当印刷用PDF生成
-- 補正値を反映した最終ページプレビュー
-- 画像や差し込みデータも含めた `.labelsheet.json` 作業ファイル保存 / 読み込み
-- schemaVersionによる形式管理と、破損・未対応ファイルのエラー表示
-- 日本語 / 英語UI
-- PCの4ステップナビゲーション
-- スマートフォンの下部固定4タブ
-- 実行時CDN / API / analytics / telemetry / 外部フォントなし
-- 通常の単一HTML版とgzip自己解凍版
+- **実際の寸法でラベル用紙を定義** — A4 / Letter / カスタム用紙、メーカー名に依存しない汎用プリセットを使い、ラベル寸法、行列、余白、間隔をmmまたはinchで調整できます。
+- **1枚のラベルをキャンバス上で編集** — テキスト、ローカルPNG / JPEG / WebP画像、QRコード、Code 128、Code 39を追加し、移動・リサイズ・複製・前後移動・削除・Undo / Redoをその場で行えます。
+- **ローカルデータを差し込み** — UTF-8 / UTF-8 BOM / Shift_JISのCSV・TSVを読み込むほか、ドラッグ＆ドロップや表データ貼り付けにも対応。列をテキストやコードへ割り当てられます。
+- **使いかけ用紙を再利用** — 1ページ目で既に剥がした位置を手動指定し、空いている位置だけへデータ順を保って自動配置します。2ページ目以降は新品シートとして扱います。
+- **印刷位置を補正** — X/Yを0.1mm単位で調整し、名前付き補正プリセットを端末内へ保存。ラベル枠・中央マーク・位置番号入りの位置合わせ用PDFも作成できます。
+- **印刷用PDFをローカル生成** — A4 / Letter / カスタム用紙に対応し、最終ページプレビューと「実際のサイズ / 100%」での印刷案内を表示します。
+- **作業を1ファイルで再開** — 用紙設定、ラベル要素、埋め込み画像、差し込みデータ、使用済み位置、出力設定を `.labelsheet.json` に保存して後から復元できます。
+- **PC・スマホの編集操作に対応** — PCではテキストをダブルクリックして直接編集。スマホでは選択要素の固定アクションバーと長押しメニューを利用できます。スナップはON/OFFでき、ドラッグ中に `Alt` を押すと一時的に無効化できます。
+- **完全ローカル処理の単一HTML** — 日本語 / 英語UI、登録不要、実行時CDN・analytics・telemetry・外部フォントなし。Content Security Policyは `connect-src 'none'` です。
 
-**用紙 → ラベル → シート → 出力** の4工程に加え、v1.0.0ではv0.8の操作改善に加え、テキストのダブルクリック編集、モバイル編集ボタン、削除Undo、スナップガイドへ対応しています。
+## すぐに使う
+
+### Webで使う
+
+[デモを開く](https://ttomohisa.github.io/htmlapps-label-sheet-maker/)だけで利用できます。インストールやアカウント登録は不要です。
+
+### HTMLをダウンロードして使う
+
+1. このリポジトリまたはビルド成果物から `dist/index.html` をダウンロードします。
+2. 最新のChromiumベースブラウザー、Firefox、Safariで開きます。
+3. ローカルWebサーバーを立てず、HTMLファイルを直接開いて利用できます。
+
+`dist/index.self-extract.html` も用意しています。同じアプリをgzip圧縮して内包した自己解凍式の単一HTMLで、ブラウザー内だけで展開します。
+
+### ビルドして完全オフラインで使う（advanced）
+
+1. このリポジトリをダウンロードまたはクローンします。
+2. Windowsで `build-standalone.bat` をダブルクリックします。
+3. リポジトリ検証後、`dist/` に単一HTMLが生成されます。
+4. `dist/index.html` または `dist/index.self-extract.html` を任意の場所へコピーします。
+5. 以降はその1ファイルをインターネット接続なしで開けます。
+
+標準のWindowsビルドにPython、Node.js、ローカルWebサーバーは不要です。Windows PowerShellを使用します。
 
 ## 使い方
 
-1. **用紙**を開きます。
-2. 汎用プリセットを選ぶか、A4 / Letter / カスタム用紙を選択して寸法を入力します。
-3. ラベル幅・高さ、行列、左/上余白、縦横間隔を設定します。
-4. シートプレビューと自動計算された右/下余白を確認します。
-5. **ラベル**を開き、テキスト等を追加します。要素枠をドラッグして移動、四隅でサイズ変更し、選択後は上部のアイコンから複製・前面・背面・削除できます。
-6. CSV / TSV / 表データを使う場合は、ラベル画面の**差し込み**からデータ設定へ移動し、列をデータ項目として追加します。
-7. 画像、QRコード、Code 128、Code 39を追加し、固定値またはデータ項目を設定します。
-8. ズーム / パンと安全余白を使って配置を確認します。
-9. **シート**を開き、1ページ目で既に使ったラベル位置をタップして使用済みにします。
-10. 自動計算されたページを切り替え、2ページ目以降の配置も確認します。
-11. **出力**を開き、必要なら位置合わせ用PDFを作ってX/Y補正値を調整します。
-12. 印刷用PDFを作成・保存し、印刷時は**実際のサイズ / 100%**を使用します。
-13. よく使う用紙寸法とプリンター補正値は端末内へ保存できます。
-14. 上部の**作業ファイルを保存**から `.labelsheet.json` を保存し、**作業ファイルを開く**またはドラッグ＆ドロップで後から再開できます。
+1. **用紙**で汎用プリセットを選ぶか、A4 / Letter / カスタム用紙を指定し、ラベル幅・高さ、行列、余白、間隔を入力します。
+2. シートのライブプレビューと、自動計算された右余白 / 下余白を確認します。
+3. **ラベル**でテキスト、画像、QRコード、Code 128、Code 39を追加します。要素枠をドラッグして移動し、四隅のハンドルでリサイズします。
+4. 内容を変えるラベルでは、**差し込みデータ**からCSV / TSVまたは表貼り付けを読み込み、列をデータ項目として追加します。
+5. 行プレビューを切り替え、差し込みテキストやコードの内容を確認します。
+6. **シート**で、1ページ目の既に使用したラベル位置をタップします。新しいラベルは空いている位置だけへ順番に配置されます。
+7. 2ページ目以降の配置を確認します。2ページ目以降は新品シートとして扱われます。
+8. **出力**で、必要なら位置合わせ用PDFを作成してX/Y補正を調整し、補正値をプリセットとして保存します。
+9. 印刷用PDFを作成し、印刷時は**実際のサイズ / 100%**を使用します。
+10. 上部の**作業ファイルを保存**から現在の作業を `.labelsheet.json` に保存し、後から**作業ファイルを開く**またはドラッグ＆ドロップで再開できます。
 
-内蔵プリセットは物理寸法と行列だけを表す汎用設定で、メーカー公式テンプレートではありません。
+内蔵プリセットは物理寸法と行列を表す汎用設定です。メーカー公式テンプレートではありません。
 
-## プライバシー
+### ラベルエディタの操作
 
-入力した用紙寸法、CSV / 表データ、ローカル画像、QR・バーコード内容、補正値、作業ファイルの保存・読み込み、PDF生成はブラウザー内で処理されます。このアプリから外部サーバーへ送信しません。
+- 要素をクリック / タップすると選択できます。
+- 要素枠をドラッグすると移動できます。
+- 四隅のハンドルをドラッグするとリサイズできます。タッチ端末では、見た目より大きい透明なタップ領域を確保しています。
+- PCでは固定文字のテキストをダブルクリックすると文字入力欄へ移動し、全文が選択されます。
+- キャンバス上の要素操作から、編集・複製・前面へ・背面へ・削除を実行できます。
+- スマホでは要素を選択すると、4工程タブの上に固定アクションバーが表示されます。
+- タッチ端末で要素を長押しするとコンテキストメニューを開けます。指を動かすと長押し判定は解除され、通常のドラッグになります。
+- スナップはキャンバス上部でON/OFFできます。ドラッグ中に `Alt` を押している間だけ一時的にスナップを無効化できます。
 
-Content Security Policyは標準どおり `connect-src 'none'` を維持しています。v1.0.0も実行時のCDN・外部ライブラリ取得・外部フォント依存はなく、追加書体も端末内フォントのフォールバックです。
+### キーボード操作
 
-保存したカスタムレイアウトはブラウザーのサイトデータに保存されます。サイトデータを削除すると消える場合があります。
+| ショートカット | 操作 |
+| --- | --- |
+| `Ctrl` / `⌘` + `Z` | 元に戻す |
+| `Ctrl` / `⌘` + `Shift` + `Z` | やり直す |
+| `Delete` / `Backspace` | 選択要素を削除 |
+| `Esc` | 選択解除 |
+| `←` / `→` / `↑` / `↓` | 選択要素を0.2mm移動 |
+| `Shift` + 矢印キー | 選択要素を1mm移動 |
+| `Alt` + ドラッグ | 一時的にスナップを無効化 |
 
-## 現在の範囲
+要素を削除した直後は、トーストの**元に戻す**から復元できます。
 
-v1.0.0では一連の印刷フローと作業ファイルに加え、ダブルクリック編集、削除Undo、スナップON/OFF、Altでの一時スナップ無効、スマホ下部固定アクション、長押しメニューまで含むラベルキャンバス操作を仕上げています。
+## GitHub Pagesで公開する
 
-1. 用紙寸法
-2. ラベル編集
-3. CSV / 表貼り付けによる差し込み
-4. 使いかけラベルの位置指定
-5. プリンターX/Y位置補正
-6. 印刷用PDF出力
-7. 作業ファイル保存 / 再開
+このリポジトリには、単一HTMLをビルド・検証して `dist/` をGitHub Pagesへ公開するワークフローが含まれています。
 
-正式な対象範囲・対象外機能は [APP_SPEC.md](APP_SPEC.md) を参照してください。
+1. リポジトリを `htmlapps-label-sheet-maker` としてGitHubへプッシュします。
+2. **Settings → Pages → Build and deployment → Source** で **GitHub Actions** を選択します。
+3. `main` へプッシュするか、Actions画面から **Deploy standalone app to GitHub Pages** を手動実行します。
+4. デプロイ成功後、`https://ttomohisa.github.io/htmlapps-label-sheet-maker/` で利用できます。
 
-## 対応ブラウザー
+`main` へのプッシュ時は、Pages公開前にリポジトリ検証が実行されます。ビルド入力に関係するPull Requestでは **Validate standalone HTML** が実行されます。
 
-主な対象:
+## 開発とビルド
 
-- Google Chrome
-- Microsoft Edge
-- Android Chrome
-
-通常版HTMLは `file://` で直接開き、ネットワーク接続なしでも動作する構成です。
-
-## 開発
-
-Browser Kittyの最新単一HTMLテンプレート構成に準拠しています。
-
-- 編集対象は `src/index.template.html`
-- `dist/` の生成HTMLは直接編集しない
-- アプリ情報は `app.config.json`
-- 仕様・受入条件は `APP_SPEC.md`
-- v1.0.0でも実行時CDN・パッケージ取得・外部フォント取得なし。QR、シート配置、作業ファイル処理、300dpi相当描画、PDF生成ロジックは単一HTMLへ内包
-
-### テスト
-
-```bash
-node tests/v0.1-core.test.mjs
-node tests/v0.1-static.test.mjs
-node tests/v0.2-editor-core.test.mjs
-node tests/v0.2-static.test.mjs
-node tests/v0.3-data-core.test.mjs
-node tests/v0.3-static.test.mjs
-node tests/v0.4-media-core.test.mjs
-node tests/v0.4-static.test.mjs
-node tests/v0.5-sheet-core.test.mjs
-node tests/v0.5-static.test.mjs
-node tests/v0.6-output-core.test.mjs
-node tests/v0.6-static.test.mjs
-node tests/v0.7-project-core.test.mjs
-node tests/v0.7-static.test.mjs
-node tests/v0.8-editor-ux.test.mjs
-node tests/v0.8.2-mobile-ux.test.mjs
-node tests/v0.9-release-candidate.test.mjs
-node tests/v1.0-mobile-ux.test.mjs
-node tests/v1.0-longpress-release.test.mjs
-node tests/v1.0-release.test.mjs
+```text
+.
+├─ src/index.template.html       # アプリ本体のテンプレート
+├─ app.config.json               # アプリ情報とビルド設定
+├─ dependencies.json             # 実行時依存定義（現在は空）
+├─ build-standalone.bat          # Windows用ビルド入口
+├─ build-standalone.ps1          # 単一HTML生成処理
+├─ scripts/                      # 検証・自己解凍版生成補助
+├─ tests/                        # Core / Static / UX / Release回帰テスト
+├─ dist/
+│  ├─ index.html                 # 読みやすい単一HTML版
+│  └─ index.self-extract.html    # gzip自己解凍式の単一HTML版
+└─ .github/workflows/
+   ├─ build-standalone.yml       # Pull Request時のビルド検証
+   └─ deploy-pages.yml           # mainからPagesへ自動公開
 ```
+
+編集するのは `src/index.template.html` です。`dist/` の生成済みHTMLを直接編集しないでください。
 
 ### Windowsでビルド
 
@@ -147,22 +130,67 @@ node tests/v1.0-release.test.mjs
 build-standalone.bat
 ```
 
-生成物:
+ビルド処理ではPowerShell構文、リポジトリ構造、通常版単一HTML、自己解凍版を検証し、`dist/` にビルド・依存関係のマニフェストも生成します。
 
-```text
-dist/
-├─ index.html
-├─ index.self-extract.html
-├─ dependency-manifest.json
-├─ build-size-report.json
-├─ self-extract-manifest.json
-└─ .nojekyll
+### テスト
+
+用紙計算、ラベルエディタ、差し込みデータ、画像・コード、シート配置、PDF出力、作業ファイル、スマホUX、長押し、正式リリース条件を対象に回帰テストがあります。
+
+開発時にNode.jsがある場合は、全テストをまとめて実行できます。
+
+```bash
+for file in tests/*.test.mjs; do node "$file"; done
 ```
 
-## 商標について
+Windows PowerShellの場合:
+
+```powershell
+Get-ChildItem tests\*.test.mjs | ForEach-Object { node $_.FullName }
+```
+
+## プライバシーと外部通信防止
+
+このアプリは、ラベル作成に使うユーザーデータを**完全ローカル処理**する構成です。
+
+- Content Security Policyに `connect-src 'none'` を指定
+- 実行時CDN、API通信、analytics、telemetry、外部フォントなし
+- CSV / TSV、貼り付け表、ローカル画像、QR・バーコード内容、作業ファイル、PDF生成はブラウザー内で処理
+- カスタム用紙設定と印刷補正プリセットはブラウザーのサイトデータへ保存
+- `.labelsheet.json` は端末内で生成され、作業再開に必要な画像や差し込みデータも含められます
+
+GitHub Pages版では最初のHTMLを取得する通信は発生しますが、読み込み後に選択・入力したデータをこのアプリからアップロードしません。ネットワークを完全に切って使う場合は、生成済み `dist/index.html` をローカルで開いてください。
+
+## 制限事項
+
+- 内蔵レイアウトは汎用の寸法プリセットで、ラベル用紙メーカーが提供する公式テンプレートではありません。印刷前に実際の用紙寸法を確認してください。
+- 印刷用PDFは見た目と位置精度を優先して約300dpiでページを描画します。PDF内の文字を検索・編集できることは目的としていません。
+- Code 128は現在Set Bを使用し、印字可能なASCII文字に対応します。Code 39は英大文字・数字・空白・対応記号を使用できます。
+- QRコードはUTF-8文字列から生成しますが、印刷サイズが小さすぎると読み取りにくくなる場合があります。
+- 画像入力は端末内のPNG / JPEG / WebPに対応します。SVG画像入力や外部画像URLは未対応です。
+- CSV / TSVと表貼り付けに対応します。v1.0.0ではXLSX、Google Sheetsには対応していません。
+- 使いかけ用紙の使用済み位置は手動で指定します。カメラによる自動検出はありません。
+- PDFは生成できますが、プリンタードライバーやプリンター本体を直接制御しません。最終的な位置精度は給紙精度や印刷ダイアログの倍率にも影響されます。
+- 非常に大きいカスタム用紙、多数の高解像度画像、大量の差し込みデータではブラウザーのメモリを多く使用する場合があります。
+- 作業ファイルには画像や差し込みデータが含まれる場合があります。機密情報を含む作業ファイルの保管・共有には注意してください。
+
+## 第三者由来コード
+
+| コンポーネント | ライセンス | 用途 |
+| --- | --- | --- |
+| Project Nayuki QR Code generatorのアルゴリズム（一部を適応） | MIT | QRエンコードと誤り訂正構造 |
+
+Code 39 / Code 128は公開されているシンボル構造をもとにローカル実装しており、外部バーコードランタイムは同梱していません。`dependencies.json` の実行時パッケージ依存は現在0件です。
+
+詳細は [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) を確認してください。
 
 QRコードは株式会社デンソーウェーブの登録商標です。
 
+## コントリビューション
+
+バグ報告や機能提案はGitHub Issuesからお願いします。開発への参加方法は [CONTRIBUTING.md](CONTRIBUTING.md) を確認してください。
+
 ## ライセンス
 
-MIT License。詳細は [LICENSE](LICENSE) を参照してください。第三者由来部分の表示は [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) に記載しています。
+Copyright © 2026 ttomohisa
+
+このプロジェクトは [MIT License](LICENSE) で公開されています。
