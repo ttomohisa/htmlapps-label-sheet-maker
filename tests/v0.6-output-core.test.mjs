@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import vm from 'node:vm';
 
 const root = new URL('../', import.meta.url);
-const source = fs.readFileSync(new URL('src/index.template.html', root), 'utf8');
+const source = fs.readFileSync(process.env.LABEL_SHEET_TEST_SOURCE || new URL('src/index.template.html', root), 'utf8');
 const match = source.match(/\/\* PDF_OUTPUT_CORE:BEGIN \*\/([\s\S]*?)\/\* PDF_OUTPUT_CORE:END \*\//);
 assert.ok(match, 'PDF output core must be embedded between PDF_OUTPUT_CORE markers');
 const context = vm.createContext({ console, Math, Number, Object, Array, Uint8Array, TextEncoder });

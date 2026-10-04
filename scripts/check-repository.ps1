@@ -250,3 +250,7 @@ if (-not $webrtcReadyText.Contains("options.requireReadyChannelOpen!==false&&(!r
   throw "WebRTC application-ready must wait for the designated DataChannel to open."
 }
 
+
+# Run application regressions after building so every distributed variant is checked.
+& node (Join-Path $Root "scripts/run-app-tests.mjs")
+if ($LASTEXITCODE -ne 0) { throw "Application regression tests failed." }

@@ -28,6 +28,13 @@ GitHub Pages delivers the initial HTML. After it loads, sheet geometry, label ed
 - **Desktop and touch-friendly editing** — Double-click text to edit on desktop; on mobile use the fixed selected-element action bar or long-press menu. Snapping can be toggled, and holding `Alt` while dragging temporarily disables it.
 - **Private single-HTML operation** — Japanese / English UI, no account, no runtime CDN, no analytics or telemetry, no remote font, and `connect-src 'none'` in the Content Security Policy.
 
+### Safer editing and saving
+
+- Finish a valid Paper value before leaving its field. Temporary or invalid input keeps existing label content and used positions intact; field errors explain what to correct. A deliberately smaller valid label can resize/clamp existing content.
+- Duplicate CSV column names stay separate, including names that already end in a suffix. Newer file/paste choices win if an earlier read finishes later.
+- Create a new PDF after changing printable content, count, used positions, or calibration. Old results are cleared, and an unfinished paper edit disables export. Save uses the filename currently shown.
+- Canvas shortcuts act only while the Label canvas has focus. Enter/Space on a first-sheet position keeps keyboard focus on that position.
+
 ## Quick start
 
 ### Use the web demo
@@ -122,7 +129,7 @@ Each push to `main` runs the repository checks before Pages deployment. Pull req
    └─ deploy-pages.yml           # Automatic Pages deployment from main
 ```
 
-Edit `src/index.template.html`, not the generated HTML under `dist/`.
+Edit `src/index.template.html`, not generated HTML. The build also synchronizes `label-sheet-maker.html` with `dist/index.html`; the root download and readable build contain identical bytes.
 
 ### Build on Windows
 
@@ -136,16 +143,16 @@ The build process validates PowerShell syntax, repository structure, standalone 
 
 The repository contains regression tests for the paper-layout core, label editor, data merge, images / codes, sheet composition, PDF output, project files, mobile UX, long-press behavior, and release checks.
 
-Run all test files with Node.js when developing:
+After building, run all tests with Node.js 22 or newer. The full repository check also runs this command:
 
 ```bash
-for file in tests/*.test.mjs; do node "$file"; done
+node scripts/run-app-tests.mjs
 ```
 
 On Windows PowerShell:
 
 ```powershell
-Get-ChildItem tests\*.test.mjs | ForEach-Object { node $_.FullName }
+node scripts/run-app-tests.mjs
 ```
 
 ## Privacy and runtime network protection

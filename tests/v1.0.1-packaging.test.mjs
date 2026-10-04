@@ -1,0 +1,12 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import vm from 'node:vm';
+import { gunzipSync } from 'node:zlib';
+import test from 'node:test';
+const root=new URL('../',import.meta.url);
+const readable=fs.readFileSync(new URL('dist/index.html',root));
+const download=fs.readFileSync(new URL('label-sheet-maker.html',root));
+const loader=fs.readFileSync(new URL('dist/index.self-extract.html',root),'utf8');
+test('root direct download is byte-identical to the current readable build',()=>assert.ok(download.equals(readable), 'root download differs from current build'));
+test('self-extract payload is byte-identical to readable build',()=>{const payload=loader.match(/<script id="self-extract-payload"[^>]*>([A-Za-z0-9+\/=]+)<\/script>/);assert.ok(payload,'embedded payload');assert.ok(gunzipSync(Buffer.from(payload[1],'base64')).equals(readable));});
+test('every shipped inline script parses',()=>{for(const html of [readable.toString(),download.toString(),loader])for(const [,attrs,body] of html.matchAll(/<script([^>]*)>([\s\S]*?)<\/script>/gi)){if(/application\/(?:json|octet-stream)/.test(attrs))continue;new vm.Script(body);}});
