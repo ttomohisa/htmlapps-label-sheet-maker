@@ -13,7 +13,7 @@ function run(names,source,label){
   if(result.status!==0)throw new Error(`${label} tests failed (${result.status??result.signal}).`);
 }
 run(tests,null,'all source and packaging tests');
-const runtimeTests=tests.filter(name=>name.endsWith('core.test.mjs')||/v1\.0(?:\.1)?-(?:work-protection|import|pdf)/.test(name));
+const runtimeTests=tests.filter(name=>name.endsWith('core.test.mjs')||/v1\.0(?:\.1)?-(?:work-protection|import|pdf|startup)/.test(name));
 const temp=fs.mkdtempSync(path.join(os.tmpdir(),'label-sheet-tests-'));
 try{
   const loader=fs.readFileSync(path.join(root,'dist/index.self-extract.html'),'utf8');
