@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import vm from 'node:vm';
 
 const root = new URL('../', import.meta.url);
-const source = fs.readFileSync(new URL('src/index.template.html', root), 'utf8');
+const source = fs.readFileSync(process.env.LABEL_SHEET_TEST_SOURCE || new URL('src/index.template.html', root), 'utf8');
 const match = source.match(/\/\* BARCODE_MEDIA_CORE:BEGIN \*\/([\s\S]*?)\/\* BARCODE_MEDIA_CORE:END \*\//);
 assert.ok(match, 'barcode/media core must be embedded between BARCODE_MEDIA_CORE markers');
 const context = vm.createContext({ console, TextEncoder, Uint8Array, Array, Math, Number, String, Object, RegExp, JSON });

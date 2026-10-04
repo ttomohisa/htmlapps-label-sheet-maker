@@ -17,7 +17,7 @@ assert.match(source, /editTextButton'\)\.addEventListener\('click',focusSelected
 assert.match(source, /function restoreDeletedElement\(/);
 assert.match(source, /deletedSnapshot/);
 assert.match(source, /actionLabel:t\('undoDelete'\)/);
-assert.match(source, /onAction:restoreDeletedElement/);
+assert.match(source, /onAction:\(\)=>restoreDeletedElement\(snapshot\)/);
 
 // Visible resize knobs stay compact while coarse pointers get a larger invisible hit target.
 assert.match(source, /function isCoarsePointer\(/);

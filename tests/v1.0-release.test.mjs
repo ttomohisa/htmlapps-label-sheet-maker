@@ -5,7 +5,7 @@ const root = new URL('../', import.meta.url);
 const source = fs.readFileSync(new URL('src/index.template.html', root), 'utf8');
 const config = JSON.parse(fs.readFileSync(new URL('app.config.json', root), 'utf8'));
 
-assert.equal(config.version, '1.0.0', 'stable release must be versioned v1.0.0');
+assert.match(config.version, /^1\.\d+\.\d+$/, 'v1.0 behavior must remain covered on stable v1 releases');
 assert.equal(config.build.blockRuntimeNetwork, true);
 assert.match(source, /connect-src 'none'/);
 assert.match(source, /id="mobileSelectionBar"/);

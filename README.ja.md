@@ -52,6 +52,13 @@ GitHub Pagesから最初のHTMLを読み込んだ後、用紙寸法の計算、�
 
 標準のWindowsビルドにPython、Node.js、ローカルWebサーバーは不要です。Windows PowerShellを使用します。
 
+### 編集と保存の安全性
+
+- 用紙の値は、有効な入力を終えて欄を離れた時に確定します。入力途中や無効な値ではラベル内容や使用済み位置を変更せず、欄の近くにエラーを表示します。有効な小さいラベルへ変更した場合は要素が枠内に調整されます。
+- CSVの重複列名や既に番号付きの列名でも、全列の値を保持します。古い読み込みが遅れて完了しても、新しく選んだファイルや貼り付け内容を上書きしません。
+- 内容・枚数・使用済み位置・印刷補正を変更した後はPDFを作り直してください。古いPDFは保存できなくなり、用紙の未確定入力がある間も出力を無効にします。保存時には画面の現在のファイル名を使います。
+- キーボードの削除・移動・Undoはラベルキャンバスにフォーカスがある時だけ動作します。シート位置をEnter / Spaceで切り替えてもフォーカスを維持します。
+
 ## 使い方
 
 1. **用紙**で汎用プリセットを選ぶか、A4 / Letter / カスタム用紙を指定し、ラベル幅・高さ、行列、余白、間隔を入力します。
@@ -139,13 +146,13 @@ build-standalone.bat
 開発時にNode.jsがある場合は、全テストをまとめて実行できます。
 
 ```bash
-for file in tests/*.test.mjs; do node "$file"; done
+node scripts/run-app-tests.mjs
 ```
 
 Windows PowerShellの場合:
 
 ```powershell
-Get-ChildItem tests\*.test.mjs | ForEach-Object { node $_.FullName }
+node scripts/run-app-tests.mjs
 ```
 
 ## プライバシーと外部通信防止
@@ -194,3 +201,7 @@ QRコードは株式会社デンソーウェーブの登録商標です。
 Copyright © 2026 ttomohisa
 
 このプロジェクトは [MIT License](LICENSE) で公開されています。
+
+### 信頼性の回帰テスト
+
+完全なリポジトリ検証にはNode.js 22以降を使用します。ビルド後に `node scripts/run-app-tests.mjs` を実行すると、ソース・通常版・ルートのダウンロード版・自己展開版の復元内容に対して既存コアと新しい動作回帰を確認します。アプリの利用と通常の単体ビルドにはNode.jsは不要です。`label-sheet-maker.html` はビルド時に `dist/index.html` と同一バイトへ更新されます。

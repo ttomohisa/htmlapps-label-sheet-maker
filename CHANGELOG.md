@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.0.1] - 2026-10-04
+
+### Fixed
+- Preserve label elements and used positions while editing temporary, empty, or invalid paper values. Commit the combined valid layout on change/blur; flag invalid fields locally.
+- Preserve all CSV columns when duplicate, empty, or explicitly suffixed headers collide.
+- Ignore obsolete CSV, paste, project, and image import completions. Project restore retires pending imports and PDF jobs.
+- Tie PDF results and immutable page/count metadata to one frozen print job; clear export eligibility after printable changes or pending paper edits.
+- Honor the current sanitized filename when saving either PDF kind.
+- Keep calibration controls labelled in millimetres when paper/editor dimensions use inches.
+- Scope editor shortcuts to the active label canvas, retain focus after keyboard slot toggles, and prevent stale delete Undo from duplicating elements.
+- Generate the root HTML download from the same bytes as the readable build.
+
+### Verification
+- Added request-race, layout-edit, keyboard/focus, Undo, PDF-generation, and release-parity regressions. Run the seven existing cores and new behaviors against source, readable HTML, the root download, and the decompressed self-extract payload.
+- Removed a machine-specific icon test fixture path while retaining the original canonical icon checksum.
+
 ## [1.0.0] - 2026-09-17
 
 ### Added
