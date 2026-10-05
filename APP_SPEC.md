@@ -8,7 +8,7 @@ Japanese name: **ラベルシート作成**
 
 Repository: `ttomohisa/htmlapps-label-sheet-maker`
 
-Current development milestone: **v1.0.1 — Work and output reliability**
+Current development milestone: **v1.1.0 — Object centering and geometry reliability**
 
 ## 2. Product principles
 
@@ -491,3 +491,13 @@ Printing guidance explicitly instructs users to choose Actual Size / 100% and av
 - The full repository check builds both standalone variants, synchronizes the root download, and runs source/static/behavior plus all-variant core/behavior tests with Node.js 22+. Direct app use and the standalone builder do not require Node.
 
 Physical printer alignment, paper feed tolerances, and scan reliability still require the user's actual printer, label stock, and scanner. Use Actual Size / 100%.
+
+
+## v1.1.0 — Object centering and geometry reliability
+
+- Position & size provides localized **Center horizontally** and **Center vertically** buttons for the selected text, image, QR, Code 128, or Code 39 frame. The target coordinate is `(label size - frame size) / 2` in internal millimetres; display units, zoom and snap do not affect it. Keep the other axis, frame size, content/binding, text alignment, identity, selection and stacking order.
+- Each actual center move is one Undo step and invalidates the previous PDF once through the existing printable-state fingerprint. Already-centered and no-selection calls retain history, redo and PDF eligibility. Controls are disabled without a selection.
+- Editor X/Y/width/height fields allow incomplete text while focused. Change/blur rejects blank, whitespace, malformed and non-finite values, and non-positive sizes; restore the last committed display value with a field-local error. No rejected draft changes geometry, history or PDF eligibility. Explicit zero coordinates remain valid. Corrected values use the current mm/in unit and existing bounds clamping. Selection or display-unit changes clear stale drafts/errors.
+- Undo/Redo retire active move/resize, pan capture and touch long-press ownership before restoring history. Discrete edits (including keyboard nudge, duplicate/delete/order, and completed image insertion), layout replacement/reset, project load, page change and Escape also retire active gestures; abandoned partial drags are never inserted into the new history. Late pointer events cannot overwrite the restored geometry. Normal completed drag, resize, pointercancel and scoped keyboard behavior remain unchanged.
+- Regression coverage executes production core/functions/event handlers with deterministic DOM boundaries on source, readable, root download and restored self-extract output. These source-level checks do not claim real-browser rendering, PDF rasterization, barcode scanning or physical-printer verification.
+- Project schemaVersion remains 1; dependencies, barcode/QR algorithms, per-row quantity behavior and runtime network/security boundaries are unchanged.

@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.1.0 — 2026-10-05
+
+- Added Japanese/English horizontal and vertical selected-frame centering in physical units, with one-step Undo/Redo and no-op PDF/history preservation.
+- Fixed blank, malformed, non-finite and non-positive editor size entries changing committed geometry; invalid commits now restore the displayed value with field-local feedback.
+- Fixed stale move/resize events overwriting Undo/Redo state. Layout/project/selection context changes also retire active gestures and long-press ownership without storing partial drags.
+- Added all-variant production-function/event regressions. No dependency, project-schema or barcode algorithm changes.
+
+
 ## [1.0.1] - 2026-10-04
 
 ### Fixed

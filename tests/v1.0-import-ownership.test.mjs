@@ -29,7 +29,7 @@ function runtime() {
     AppConfirm: { ask: () => { const value = deferred(); confirmations.push(value); return value.promise; } },
     FileReader: class { readAsDataURL(file) { this.file = file; reads.push(this); } },
     Image: class { set src(value) { this.dataUrl = value; images.push(this); } },
-    renderLabelEditor() {}, renderPresetOptions() {}, render() {}, setPage() {}, pushEditorHistory() {},
+    closeTouchContextMenu() {}, renderLabelEditor() {}, renderPresetOptions() {}, render() {}, setPage() {}, pushEditorHistory() {},
     dataState: { mode: 'repeat', repeatCount: 1, headers: [], rows: [], rowIndex: 0, fileBytes: null, fileName: '', encoding: 'auto', detectedEncoding: 'utf-8' },
     sheetState: { usedFirstPage: [], pageIndex: 0 },
     editorState: { elements: [], selectedId: null, history: [[]], historyIndex: 0 },
@@ -45,7 +45,7 @@ function runtime() {
   context.state = { settings: clone(context.defaultSettings) };
   const importState = source.match(/^      const importState=.*;$/m);
   if (importState) vm.runInContext(importState[0], context);
-  for (const name of ['resetLayoutDrafts', 'invalidateGeneratedPdf', 'invalidatePendingImports', 'editorBounds', 'applyParsedData', 'parseTextData', 'loadDataFile', 'reparseDataFile', 'applyProject', 'hasMeaningfulProjectWork', 'loadProjectFile', 'inferImageMime', 'newEditorId', 'loadImageElement']) {
+  for (const name of ['cancelLongPress', 'cancelEditorInteraction', 'resetLayoutDrafts', 'invalidateGeneratedPdf', 'invalidatePendingImports', 'editorBounds', 'applyParsedData', 'parseTextData', 'loadDataFile', 'reparseDataFile', 'applyProject', 'hasMeaningfulProjectWork', 'loadProjectFile', 'inferImageMime', 'newEditorId', 'loadImageElement']) {
     vm.runInContext(functionSource(name), context);
   }
   // Exercise the actual file-picker and paste handlers, including same-file reselection.
@@ -216,3 +216,10 @@ test('CSV encoding override and reparse retain current file bytes and source nam
 test('project restore retires PDF generation, pending paper drafts, and delete Undo together',()=>{const {context:c}=runtime();c.layoutDrafts.labelWidth='';c.editorState.deletedSnapshot={element:{id:'obsolete'}};c.outputState.generatedBlob={size:10};c.outputState.generation=4;c.outputState.busy=true;c.applyProject(project(c,'replacement'));assert.equal(c.outputState.generation,5);assert.equal(c.outputState.busy,false);assert.equal(c.outputState.generatedBlob,null);assert.deepEqual(clone(c.layoutDrafts),{});assert.equal(c.editorState.deletedSnapshot,null);assert.equal(c.dataState.rows[0].name,'replacement');});
 test('valid project restore normalizes element bounds and used slots before seeding history',()=>{const {context:c}=runtime(),value=project(c,'bounds');value.editor.elements=[{...c.LabelEditorCore.createTextElement({id:'outside',labelWidth:66,labelHeight:33.9,text:'Keep me'}),x:100,y:100}];value.sheet.usedFirstPage=[2,999];c.applyProject(value);const element=c.editorState.elements[0];assert.ok(element.x+element.width<=66);assert.ok(element.y+element.height<=33.9);assert.deepEqual(clone(c.editorState.history[0]),clone(c.editorState.elements));assert.deepEqual(clone(c.sheetState.usedFirstPage),[2]);});
 test('invalid project layout remains recoverable without destroying imported geometry or used positions',()=>{const {context:c}=runtime(),value=project(c,'invalid');value.settings.paperWidth=10;value.editor.elements=[{...c.LabelEditorCore.createTextElement({id:'keep',labelWidth:66,labelHeight:33.9,text:'Keep me'}),x:50,y:20}];value.sheet.usedFirstPage=[2,999];c.applyProject(value);assert.equal(c.editorState.elements[0].x,50);assert.deepEqual(clone(c.sheetState.usedFirstPage),[2,999]);});
+
+test('completed image read retires partial drag before selecting the new image',async()=>{
+  const h=runtime(),c=h.context,original=c.LabelEditorCore.createTextElement({id:'original',labelWidth:66,labelHeight:33.9});
+  c.editorState.elements=[{...original,x:original.x+5}];c.editorState.selectedId=original.id;c.editorState.interaction={pointerId:7,id:original.id,original:clone(original)};
+  const work=c.loadImageElement({name:'synthetic.png',type:'image/png'});finishRead(h.reads[0]);await microtasks();finishImage(h.images[0]);await work;
+  assert.equal(c.editorState.interaction,null);assert.equal(c.editorState.elements[0].x,original.x);assert.equal(c.editorState.elements.length,2);assert.equal(c.editorState.elements[1].type,'image');
+});

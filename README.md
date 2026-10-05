@@ -33,6 +33,8 @@ GitHub Pages delivers the initial HTML. After it loads, sheet geometry, label ed
 - Finish a valid Paper value before leaving its field. Temporary or invalid input keeps existing label content and used positions intact; field errors explain what to correct. A deliberately smaller valid label can resize/clamp existing content.
 - Duplicate CSV column names stay separate, including names that already end in a suffix. Newer file/paste choices win if an earlier read finishes later.
 - Create a new PDF after changing printable content, count, used positions, or calibration. Old results are cleared, and an unfinished paper edit disables export. Save uses the filename currently shown.
+- Empty or invalid element position/size entries return to the last committed value with a field error. Correct the number to continue; width and height must be positive. Selection or unit changes clear stale feedback.
+- Undo/Redo and document-context changes retire unfinished drags so late pointer events cannot overwrite restored work.
 - Canvas shortcuts act only while the Label canvas has focus. Enter/Space on a first-sheet position keeps keyboard focus on that position.
 
 ## Quick start
@@ -78,6 +80,7 @@ Built-in presets describe physical dimensions and grid counts only. They are not
 
 - Click or tap an element to select it.
 - Drag the element frame to move it.
+- In **Element settings → Position & size**, use **Center horizontally** or **Center vertically** to center the selected frame on the label. Size, text alignment, and the other axis stay unchanged; Undo restores the previous position.
 - Drag a corner handle to resize it. Touch devices use a larger invisible hit target around each handle.
 - Double-click a fixed-text element on desktop to jump to the text field and select its full value.
 - Use the contextual canvas actions to edit, duplicate, move forward / backward, or delete the selection.
