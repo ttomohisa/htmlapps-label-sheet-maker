@@ -30,7 +30,7 @@ GitHub Pages delivers the initial HTML. After it loads, sheet geometry, label ed
 
 ### Safer editing and saving
 
-- Finish a valid Paper value before leaving its field. Temporary or invalid input keeps existing label content and used positions intact; field errors explain what to correct. A deliberately smaller valid label can resize/clamp existing content.
+- Finish a valid Paper value before leaving its field. Temporary or invalid input keeps existing label content and used positions intact; field errors explain what to correct. Empty or non-finite dimensions show “—” in preview measurements. A deliberately smaller valid label can resize/clamp existing content.
 - Duplicate CSV column names stay separate, including names that already end in a suffix. Newer file/paste choices win if an earlier read finishes later.
 - Create a new PDF after changing printable content, count, used positions, or calibration. Old results are cleared, and an unfinished paper edit disables export. Save uses the filename currently shown.
 - Empty or invalid element position/size entries return to the last committed value with a field error. Correct the number to continue; width and height must be positive. Selection or unit changes clear stale feedback.

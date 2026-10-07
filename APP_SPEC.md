@@ -8,7 +8,7 @@ Japanese name: **ラベルシート作成**
 
 Repository: `ttomohisa/htmlapps-label-sheet-maker`
 
-Current development milestone: **v1.1.1 — Header consistency**
+Current development milestone: **v1.1.2 — Unavailable draft measurements**
 
 ## 2. Product principles
 
@@ -503,3 +503,10 @@ Physical printer alignment, paper feed tolerances, and scan reliability still re
 - Undo/Redo retire active move/resize, pan capture and touch long-press ownership before restoring history. Discrete edits (including keyboard nudge, duplicate/delete/order, and completed image insertion), layout replacement/reset, project load, page change and Escape also retire active gestures; abandoned partial drags are never inserted into the new history. Late pointer events cannot overwrite the restored geometry. Normal completed drag, resize, pointercancel and scoped keyboard behavior remain unchanged.
 - Regression coverage executes production core/functions/event handlers with deterministic DOM boundaries on source, readable, root download and restored self-extract output. These source-level checks do not claim real-browser rendering, PDF rasterization, barcode scanning or physical-printer verification.
 - Project schemaVersion remains 1; dependencies, barcode/QR algorithms, per-row quantity behavior and runtime network/security boundaries are unchanged.
+
+
+## v1.1.2 — Unavailable draft measurements
+
+- Numeric preview measurements show `—` for empty, malformed, or non-finite Paper dimension drafts, instead of exposing NaN or Infinity. Finite invalid values such as zero or negative dimensions remain visible with the existing field-local validation.
+- This is display-only: keep the unfinished input, last committed layout, label elements, used slots, history, persistence, project-save and PDF guards unchanged. Correcting a draft restores the numeric measurement through the existing commit flow.
+- Apply the same behavior in Japanese/English and mm/in, and verify source, readable, root-download and restored self-extract variants.
