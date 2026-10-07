@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.1 — 2026-10-07
+
+- Standardize header target-language labels to EN / JA with localized accessible names and tooltips, and synchronize the visible version badge with v1.1.1.
+
 ## 1.1.0 — 2026-10-05
 
 - Added Japanese/English horizontal and vertical selected-frame centering in physical units, with one-step Undo/Redo and no-op PDF/history preservation.
