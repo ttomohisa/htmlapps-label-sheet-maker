@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.2 — 2026-10-07
+
+- Show an unavailable measurement (—) instead of NaN or Infinity while a Paper dimension draft is empty or non-finite. Keep field validation, unfinished inputs, committed geometry, and export guards unchanged.
+- Add Japanese/English and mm/in regressions through the real input, change, and blur handlers for all four paper/label dimensions.
+
 ## 1.1.1 — 2026-10-07
 
 - Standardize header target-language labels to EN / JA with localized accessible names and tooltips, and synchronize the visible version badge with v1.1.1.

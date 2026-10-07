@@ -37,6 +37,53 @@ function boot(language, savedLanguage=null){
 }
 for(const language of ['en','ja'])test(`complete ${language} application initializes controls, translation, preview, and editing`,()=>{const {ids,window}=boot(language);assert.equal(ids.get('versionBadge').textContent,`v${config.version}`);assert.equal(ids.get('labelWidth').value,'66');assert.equal(ids.get('columns').value,'3');assert.equal(ids.get('saveGeneratedPdf').disabled,true);assert.ok(ids.get('paperPreviewSvg').childNodes.length>24);assert.ok(ids.get('paperPage').classList.contains('is-active'));assert.ok(window.AppToast);ids.get('addTextButton').listeners.get('click')();assert.equal(ids.get('editorEmpty').hidden,true);ids.get('languageButton').listeners.get('click')();assert.equal(ids.get('languageButton').textContent,language==='en'?'EN':'JA');});
 
+// Removing the finite-number display guard must expose NaN/Infinity here.
+// Run the real input/change/blur handlers and complete application renderer.
+for(const language of ['ja','en'])for(const unit of ['mm','in'])test(`${language}/${unit}: invalid paper dimension drafts show an unavailable metric without committing work`,()=>{
+  const {ids,storage}=boot(language);
+  ids.get('paperSizeSelect').listeners.get('change')({target:{value:'custom'}});
+  if(unit==='in')ids.get('unitIn').listeners.get('click')();
+  ids.get('addTextButton').listeners.get('click')();
+  for(const key of ['paperWidth','paperHeight','labelWidth','labelHeight']){
+    const input=ids.get(key),original=input.value,metric=ids.get(key.startsWith('paper')?'paperMetric':'labelMetric');
+    const originalMetric=metric.textContent;
+    const stored=storage.get('labelSheetMaker.settings.v1');
+    const editorMetric=ids.get('labelCanvasMetric').textContent;
+    const editorViewBox=ids.get('labelEditorSvg').getAttribute('viewBox');
+    for(const draft of ['', ' ', '-', '1e', 'NaN', 'Infinity', '-Infinity', '1e999']){
+      input.value=draft;
+      for(const event of ['input','change','blur']){
+        input.listeners.get(event)();
+        assert.match(metric.textContent,/—/,`${key}/${JSON.stringify(draft)}/${event}`);
+        assert.doesNotMatch(metric.textContent,/NaN|Infinity|∞/);
+        assert.equal(input.value,draft,'do not replace an unfinished input');
+        assert.equal(input.getAttribute('aria-invalid'),'true');
+        assert.ok(input.validationMessage);
+        assert.equal(ids.get('saveGeneratedPdf').disabled,true);
+        assert.equal(storage.get('labelSheetMaker.settings.v1'),stored);
+        assert.equal(ids.get('labelCanvasMetric').textContent,editorMetric);
+        assert.equal(ids.get('labelEditorSvg').getAttribute('viewBox'),editorViewBox);
+        assert.equal(ids.get('editorEmpty').hidden,true);
+      }
+    }
+    input.value=original;
+    input.listeners.get('input')();
+    input.listeners.get('change')();
+    assert.equal(metric.textContent,originalMetric);
+    assert.equal(input.getAttribute('aria-invalid'),'false');
+  }
+});
+
+for(const language of ['ja','en'])test(`${language}: finite zero and negative draft values stay visible with validation`,()=>{
+  const {ids,storage}=boot(language),input=ids.get('labelWidth'),stored=storage.get('labelSheetMaker.settings.v1');
+  for(const draft of ['0','-5']){
+    input.value=draft;input.listeners.get('input')();input.listeners.get('change')();
+    assert.equal(ids.get('labelMetric').textContent,`${language==='ja'?'ラベル':'Label'} ${draft} × 33.9 mm`);
+    assert.equal(input.getAttribute('aria-invalid'),'true');
+    assert.equal(storage.get('labelSheetMaker.settings.v1'),stored);
+  }
+});
+
 for(const initialLanguage of ['ja','en'])test(`${initialLanguage}: header labels, accessibility, privacy and version survive toggles and saved language`,()=>{
   const {ids,document,storage}=boot(initialLanguage),button=ids.get('languageButton');
   for(let count=0;count<4;count++){

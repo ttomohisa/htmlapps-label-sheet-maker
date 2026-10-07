@@ -432,7 +432,7 @@
       <div class="brand">
         <div class="brand-mark" aria-hidden="true"><img id="appBrandIcon" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDk1IDEwOTUiPjxyZWN0IHg9IjM3IiB5PSIzNyIgd2lkdGg9IjEwMjEiIGhlaWdodD0iMTAyMSIgcng9IjI1NS4yNSIgZmlsbD0iIzBlNjc1MiIvPjxwYXRoIGZpbGw9IiNmYmZjZmIiIGQ9Ik0yNjAgMTY1aDQ0OWwxNjYgMTY0djU1NXEwIDQ1LTQ1IDQ1SDI2MXEtNDUgMC00NS00NVYyMTBxMC00NSA0NC00NXoiLz48ZyBmaWxsPSIjMGU2NzUyIj48cGF0aCBkPSJNNzEwIDE4NnY4OHEwIDQ3IDQ3IDQ3aDg4eiIvPjxkZWZzPjxyZWN0IGlkPSJhIiB3aWR0aD0iMTc5IiBoZWlnaHQ9IjExOSIgcng9IjI1Ii8+PC9kZWZzPjx1c2UgaHJlZj0iI2EiIHg9IjI1OSIgeT0iMjcyIi8+PHVzZSBocmVmPSIjYSIgeD0iNDU4IiB5PSIyNzIiLz48dXNlIGhyZWY9IiNhIiB4PSIyNTkiIHk9IjQxOCIvPjx1c2UgaHJlZj0iI2EiIHg9IjQ1OCIgeT0iNDE4Ii8+PHVzZSBocmVmPSIjYSIgeD0iMjU5IiB5PSI1NjMiLz48dXNlIGhyZWY9IiNhIiB4PSI0NTgiIHk9IjU2MyIvPjx1c2UgaHJlZj0iI2EiIHg9IjY1OSIgeT0iNTYzIi8+PHVzZSBocmVmPSIjYSIgeD0iMjU5IiB5PSI3MDgiLz48dXNlIGhyZWY9IiNhIiB4PSI0NTgiIHk9IjcwOCIvPjx1c2UgaHJlZj0iI2EiIHg9IjY1OSIgeT0iNzA4Ii8+PC9nPjxwYXRoIGZpbGw9IiNmYmZjZmIiIGQ9Ik02NzYgNDU1cS0xMyA1NyAxNyA4M2gzMHEtMzMtMTktMjgtNzN6Ii8+PGcgdHJhbnNmb3JtPSJyb3RhdGUoLTEyIDgwMCA0NTUpIj48cmVjdCB4PSI2ODAiIHk9IjM5MSIgd2lkdGg9IjIyMCIgaGVpZ2h0PSIxMzIiIHJ4PSIyOCIgZmlsbD0iI2ZiZmNmYiIvPjxyZWN0IHg9IjY5MyIgeT0iNDA0IiB3aWR0aD0iMTk0IiBoZWlnaHQ9IjEwNiIgcng9IjIyIiBmaWxsPSIjMGU2NzUyIi8+PC9nPjwvc3ZnPgo=" alt=""></div>
         <div class="brand-copy">
-          <p class="brand-name"><span id="brandName">Label Sheet Maker</span><span class="version-badge" id="versionBadge">v1.1.1</span></p>
+          <p class="brand-name"><span id="brandName">Label Sheet Maker</span><span class="version-badge" id="versionBadge">v1.1.2</span></p>
           <p class="brand-meta" data-i18n="brandMeta">Set sheet dimensions and label positions precisely</p>
         </div>
       </div>
@@ -845,7 +845,7 @@
       <h3 data-i18n="helpPrivacyTitle">プライバシー</h3><p data-i18n="helpPrivacyBody">入力した寸法、CSV、画像、コード内容、PDF生成はすべてブラウザー内で処理され、このアプリから外部サーバーへ送信されません。</p>
       <h3 data-i18n="helpNotesTitle">注意事項</h3><ul><li data-i18n="helpNote1">v1.0.0正式版です。スマホ操作、保存、差し込み、シート配置、印刷PDFまで主要フローを回帰確認しています。</li><li data-i18n="helpNote2">内蔵プリセットはメーカー公式テンプレートではなく、寸法ベースの汎用設定です。実際の用紙寸法を確認して使用してください。</li><li data-i18n="helpNote3">ブラウザーのサイトデータを削除すると、端末内に保存した用紙設定も消える場合があります。</li><li data-i18n="qrTrademark">QRコードは株式会社デンソーウェーブの登録商標です。</li></ul>
       <p class="dialog-note" data-i18n="helpOffline">配布用HTMLはネットワーク接続なしでも開ける構成です。</p>
-      <p data-i18n="helpReliability">用紙寸法は有効な値で入力を終えた時に反映します。内容や印刷設定を変更した後はPDFを作り直してください。</p>
+      <p data-i18n="helpReliability">用紙寸法は有効な値で入力を終えた時に反映します。空欄や数値として扱えない寸法は、プレビューの寸法表示で「—」になります。内容や印刷設定を変更した後はPDFを作り直してください。</p>
       <section><h3 data-i18n="positionSize">位置とサイズ</h3><p data-i18n="helpGeometry"></p></section>
       <!-- APP:HELP:END -->
     </div>
@@ -854,8 +854,8 @@
   <script>
     (() => {
       'use strict';
-      const APP_CONFIG = {"$schema":"./schemas/app-config.schema.json","name":"Label Sheet Maker","nameJa":"ラベルシート作成","slug":"label-sheet-maker","version":"1.1.1","description":"Create precise label sheets with local data merge, images, codes, used-position selection, print calibration, print-ready PDF output, portable project files, and a keyboard/touch-friendly label editor.","descriptionJa":"ラベル用紙を実寸で設定し、差し込みデータ・画像・コード・使いかけ位置・印刷補正を反映した印刷用PDFと作業ファイルを、操作しやすいラベル編集UIでブラウザー内に作成します。","defaultLanguage":"auto","repository":{"owner":"ttomohisa","name":"htmlapps-label-sheet-maker"},"build":{"output":"dist/index.html","blockRuntimeNetwork":true,"selfExtract":{"enabled":true,"output":"dist/index.self-extract.html"},"sizeBudget":{"readableWarningMb":25,"selfExtractWarningMb":12}}};
-      const BUILD_MANIFEST = {"schemaVersion":2,"builder":"single-html-app-template/1.3","generatedAtUtc":"2026-10-07T01:00:55.9676886Z","app":{"name":"Label Sheet Maker","slug":"label-sheet-maker","version":"1.1.1"},"dependencies":[]};
+      const APP_CONFIG = {"$schema":"./schemas/app-config.schema.json","name":"Label Sheet Maker","nameJa":"ラベルシート作成","slug":"label-sheet-maker","version":"1.1.2","description":"Create precise label sheets with local data merge, images, codes, used-position selection, print calibration, print-ready PDF output, portable project files, and a keyboard/touch-friendly label editor.","descriptionJa":"ラベル用紙を実寸で設定し、差し込みデータ・画像・コード・使いかけ位置・印刷補正を反映した印刷用PDFと作業ファイルを、操作しやすいラベル編集UIでブラウザー内に作成します。","defaultLanguage":"auto","repository":{"owner":"ttomohisa","name":"htmlapps-label-sheet-maker"},"build":{"output":"dist/index.html","blockRuntimeNetwork":true,"selfExtract":{"enabled":true,"output":"dist/index.self-extract.html"},"sizeBudget":{"readableWarningMb":25,"selfExtractWarningMb":12}}};
+      const BUILD_MANIFEST = {"schemaVersion":2,"builder":"single-html-app-template/1.3","generatedAtUtc":"2026-10-07T02:25:58.1631886Z","app":{"name":"Label Sheet Maker","slug":"label-sheet-maker","version":"1.1.2"},"dependencies":[]};
       const assetBundle = {"schemaVersion":2,"dependencies":{}};
       const blobUrls = new Set();
       const assetByteCache = new Map();
@@ -1302,8 +1302,8 @@
       });
       Object.assign(translations.ja,{snapToggleLabel:'スナップ',touchMenuLabel:'要素メニュー',shortcutMoveLarge:'1 mm移動',shortcutSnapBypass:'スナップ無効',helpNote1:'v1.0.0ではスマホ下部の選択要素アクション、スナップ切替、Altによる一時スナップ無効、長押しメニューまで含めて正式版として仕上げています。'});
       Object.assign(translations.en,{snapToggleLabel:'Snap',touchMenuLabel:'Element menu',shortcutMoveLarge:'Move 1 mm',shortcutSnapBypass:'Disable snap',helpNote1:'v1.0.0 completes the stable release with a mobile selection action bar, snap toggle, temporary Alt snap bypass, and touch long-press menu.'});
-      Object.assign(translations.ja,{pdfPendingLayout:'「用紙」の入力を有効な値に修正してからPDFを作成してください。プレビューは最後に確定した用紙設定です。',helpReliability:'用紙寸法は入力途中には確定せず、有効な値で入力を終えた時に反映します。内容・枚数・使用済み位置・印刷補正を変更した後はPDFを作り直してください。保存時のファイル名は直前まで編集できます。'});
-      Object.assign(translations.en,{pdfPendingLayout:'Finish valid values in Paper before creating a PDF. The preview uses the last committed paper settings.',helpReliability:'Paper dimensions are committed only after you finish entering valid values. After changing content, counts, used positions, or calibration, create a new PDF. You can edit the filename immediately before saving.'});
+      Object.assign(translations.ja,{pdfPendingLayout:'「用紙」の入力を有効な値に修正してからPDFを作成してください。プレビューは最後に確定した用紙設定です。',helpReliability:'用紙寸法は入力途中には確定せず、有効な値で入力を終えた時に反映します。空欄や数値として扱えない寸法は、プレビューの寸法表示で「—」になります。内容・枚数・使用済み位置・印刷補正を変更した後はPDFを作り直してください。保存時のファイル名は直前まで編集できます。'});
+      Object.assign(translations.en,{pdfPendingLayout:'Finish valid values in Paper before creating a PDF. The preview uses the last committed paper settings.',helpReliability:'Paper dimensions are committed only after you finish entering valid values. Empty or non-finite dimensions appear as “—” in preview measurements. After changing content, counts, used positions, or calibration, create a new PDF. You can edit the filename immediately before saving.'});
       function readStorage(key){try{return localStorage.getItem(key);}catch{return null;}}
       function writeStorage(key,value){try{localStorage.setItem(key,value);return true;}catch{return false;}}
       function removeStorage(key){try{localStorage.removeItem(key);return true;}catch{return false;}}
@@ -1331,7 +1331,7 @@
       let projectFileName='label-sheet-project.labelsheet.json';
       let editorIdCounter=1;
       function t(key,replacements={}){let text=translations[language]?.[key]??translations.en[key]??key; for(const [name,value] of Object.entries(replacements)) text=text.replaceAll(`{${name}}`,String(value)); return text;}
-      function formatNumber(value,max=3){return new Intl.NumberFormat(language,{maximumFractionDigits:max}).format(value);}
+      function formatNumber(value,max=3){return Number.isFinite(value)?new Intl.NumberFormat(language,{maximumFractionDigits:max}).format(value):'—';}
       Object.assign(translations.ja,{centerHorizontal:'左右中央に配置',centerVertical:'上下中央に配置',geometryInputInvalid:'有限の数値を入力してください。幅と高さは0より大きい値が必要です。元の値を保持しました。',helpGeometry:'要素設定の「左右中央に配置」「上下中央に配置」は、文字・画像・コードの枠をラベルの中央へ移動します。文字の枠内配置やサイズは変わりません。空欄・無効な位置やサイズは元の値に戻り、元に戻す／やり直す・用紙変更・作業ファイルの読込時は進行中のドラッグを終了します。'});
       Object.assign(translations.en,{centerHorizontal:'Center horizontally',centerVertical:'Center vertically',geometryInputInvalid:'Enter a finite number; width and height must be greater than zero. The previous value was kept.',helpGeometry:'In Element settings, Center horizontally / Center vertically moves the selected text, image, or code frame to the label center without changing its size or text alignment. Empty or invalid geometry returns to its previous value. Undo/Redo, paper changes, and opening a project retire any active drag.'});
       function unitLabel(){return unit==='in'?'in':'mm';}
