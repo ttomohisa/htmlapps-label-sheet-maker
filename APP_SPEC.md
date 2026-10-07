@@ -8,7 +8,7 @@ Japanese name: **ラベルシート作成**
 
 Repository: `ttomohisa/htmlapps-label-sheet-maker`
 
-Current development milestone: **v1.1.0 — Object centering and geometry reliability**
+Current development milestone: **v1.1.1 — Header consistency**
 
 ## 2. Product principles
 
@@ -427,6 +427,8 @@ Not in v1.0:
 - QR-related trademark notices must be added before the QR feature ships.
 
 ## 12. Accessibility
+
+- Header language switching shows the target language as `EN` in Japanese and `JA` in English, with localized aria-label/title (`英語に切り替え` / `Switch to Japanese`). The visible `vX.Y.Z` badge matches `app.config.json`; privacy remains `完全ローカル処理` / `Fully local processing`.
 
 - Visible focus states.
 - Keyboard-operable controls.
