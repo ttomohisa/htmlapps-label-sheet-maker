@@ -1,5 +1,10 @@
 # Label Sheet Maker / ラベルシート作成 — Product Specification
 
+## v1.1.3 — Icon normalization
+
+- Canonical background and matching artwork green: `#16624f`; background x/y radii exactly 25% of their respective dimensions.
+- Preserve artwork, padding, app behavior, and synchronized header/favicon/download/loader representations.
+
 ## 1. Product
 
 Label Sheet Maker is a Browser Kitty app for defining physical label-sheet geometry, designing one label, merging local tabular data, marking already-used label positions, calibrating printer offset, and producing print-ready PDF files.
@@ -8,7 +13,7 @@ Japanese name: **ラベルシート作成**
 
 Repository: `ttomohisa/htmlapps-label-sheet-maker`
 
-Current development milestone: **v1.1.2 — Unavailable draft measurements**
+Current development milestone: **v1.1.3 — Unavailable draft measurements**
 
 ## 2. Product principles
 
