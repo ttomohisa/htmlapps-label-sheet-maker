@@ -14,6 +14,6 @@ assert.doesNotMatch(source, /<link\b[^>]*href=[\"']https?:\/\//i, 'runtime sourc
 assert.doesNotMatch(source, /\b(?:fetch|XMLHttpRequest|WebSocket|EventSource)\s*\(/, 'runtime source should not initiate network APIs');
 assert.match(spec, /完全ローカル処理/);
 assert.match(spec, /v0\.[12]\.0/);
-assert.match(icon.toLowerCase(), /#0e6752/);
+assert.match(icon.toLowerCase(), /#16624f/);
 assert.equal((source.match(/__APP_ICON_DATA_URI__/g) || []).length, 2);
 console.log('v0.1 static tests passed');

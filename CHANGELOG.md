@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.3 - 2026-10-09
+
+- Normalize icon brand color and exact 25% background corner radii without changing artwork.
+- Rebuild matching header, favicon, download alias, and self-extract representations.
+
 ## 1.1.2 — 2026-10-07
 
 - Show an unavailable measurement (—) instead of NaN or Infinity while a Paper dimension draft is empty or non-finite. Keep field validation, unfinished inputs, committed geometry, and export guards unchanged.

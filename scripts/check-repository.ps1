@@ -254,3 +254,6 @@ if (-not $webrtcReadyText.Contains("options.requireReadyChannelOpen!==false&&(!r
 # Run application regressions after building so every distributed variant is checked.
 & node (Join-Path $Root "scripts/run-app-tests.mjs")
 if ($LASTEXITCODE -ne 0) { throw "Application regression tests failed." }
+
+& node (Join-Path $Root "scripts/test-icon-normalization.cjs")
+if ($LASTEXITCODE -ne 0) { throw "Icon normalization checks failed." }
