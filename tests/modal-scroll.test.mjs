@@ -32,11 +32,11 @@ for (const element of ['html', 'body']) {
   });
 }
 
-test('Help describes background locking and internal scrolling in Japanese and English', () => {
+test('Help excludes layout audit prose while retaining usage notes', () => {
   const help = html.match(/<!-- APP:HELP:BEGIN -->([\s\S]*?)<!-- APP:HELP:END -->/)[1];
-  assert.ok(help.includes(`<p data-i18n="helpModalScroll">${jaHelp}</p>`));
-  assert.ok(html.includes(`helpModalScroll:'${jaHelp}'`));
-  assert.ok(html.includes(`helpModalScroll:'${enHelp}'`));
+  assert.equal(help.includes('data-i18n="helpModalScroll"'), false);
+  assert.equal(html.includes(`helpModalScroll:'${jaHelp}'`), false);
+  assert.equal(html.includes(`helpModalScroll:'${enHelp}'`), false);
   assert.match(help, /data-i18n="helpGeometry"/);
   assert.match(help, /data-i18n="helpOffline"/);
 });
@@ -51,17 +51,19 @@ test('modal-only patch preserves all existing styles including responsive shield
 test('all four dialog shells retain their existing headers, scroll containers and actions', () => {
   const dialogs = [...html.matchAll(/<dialog\b[^>]*>[\s\S]*?<\/dialog>/g)].map(match => match[0]);
   assert.deepEqual(dialogs.map(value => value.match(/\bid="([^"]+)"/)[1]), ['appConfirmDialog', 'saveLayoutDialog', 'saveCalibrationDialog', 'helpDialog']);
+  // Rebaseline only the intentional JA/EN help-copy removal; shell markup is unchanged.
   const shells = dialogs.join('\n').replace(/      <p data-i18n="helpModalScroll">[^<]*<\/p>\n/, '');
-  assert.equal(hash(shells), 'c74a3f694403a40a1a1cb9d1f51527a3bccb512e1703c3094d1ca550679b0417');
+  assert.equal(hash(shells), '36d4188885b4c0818dd5b8ed5a513d8d9b235a407835232b2165e82b18c07a6d');
 });
 
 test('modal-only patch preserves runtime, editor, data, PDF output and dialog handlers', () => {
+  // The runtime hash includes translation literals; update for the copy-only cleanup.
   let script = html.match(/<script>\s*([\s\S]*?)<\/script>/)[1];
   for (const [name, token] of [['APP_CONFIG', '__APP_CONFIG_JSON__'], ['BUILD_MANIFEST', '__BUILD_MANIFEST_JSON__'], ['assetBundle', '__EMBEDDED_ASSET_BUNDLE_JSON__']]) {
     script = script.replace(new RegExp(`(const ${name} = )[\\s\\S]*?;\\n`), `$1${token};\n`);
   }
   script = script.replace(/helpModalScroll:'[^']*',/g, '');
-  assert.equal(hash(script), '1511262da7884490ecc63bb2af47761013353c5bae7922524a7d1ce6e64e9091');
+  assert.equal(hash(script), '0105da540da17d33766bf4f3320992e51bfbdef771471f1e32c75ab4e3874aca');
 });
 
 test('local-processing badge retains its decorative shield and check', () => {
