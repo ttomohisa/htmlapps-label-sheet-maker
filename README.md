@@ -28,6 +28,8 @@ GitHub Pages delivers the initial HTML. After it loads, sheet geometry, label ed
 - **Desktop and touch-friendly editing** — Double-click text to edit on desktop; on mobile use the fixed selected-element action bar or long-press menu. Snapping can be toggled, and holding `Alt` while dragging temporarily disables it.
 - **Private single-HTML operation** — Japanese / English UI, no account, no runtime CDN, no analytics or telemetry, no remote font, and `connect-src 'none'` in the Content Security Policy.
 
+While Help, a save dialog, or a confirmation dialog is open, background scrolling is paused. Scroll inside the dialog to read its contents; normal page scrolling resumes after closing it.
+
 ### Safer editing and saving
 
 - Finish a valid Paper value before leaving its field. Temporary or invalid input keeps existing label content and used positions intact; field errors explain what to correct. Empty or non-finite dimensions show “—” in preview measurements. A deliberately smaller valid label can resize/clamp existing content.

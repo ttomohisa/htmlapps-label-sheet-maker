@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.4 - 2026-10-11
+
+- Pause background scrolling while Help, paper-layout saving, calibration saving, or confirmation dialogs are open. Resume ordinary page scrolling when the last modal closes.
+- Preserve existing dialog sizing, internal scrolling, safe-area spacing, actions, focus handling, and the local-processing shield's appearance and visibility.
+- Add Japanese/English Help guidance and source/all-release-variant modal regression contracts without changing label editing, data handling, project files, or PDF generation.
+
 ## 1.1.3 - 2026-10-09
 
 - Normalize icon brand color and exact 25% background corner radii without changing artwork.

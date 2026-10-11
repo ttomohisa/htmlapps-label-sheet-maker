@@ -1,5 +1,12 @@
 # Label Sheet Maker / ラベルシート作成 — Product Specification
 
+## v1.1.4 — Modal background scrolling
+
+- While Help, Save paper layout, Save calibration preset, or the confirmation dialog is open modally, lock both document scroll containers with `html:has(dialog:modal), body:has(dialog:modal) { overflow: hidden; }`. Closing the last modal restores ordinary page scrolling without JavaScript scroll state.
+- Preserve the existing dialog shells, sticky headers, internal scrolling, desktop sizing, mobile safe-area padding, Close / Cancel / Escape / backdrop behavior, focus handling, and local-processing shield visibility policy.
+- Japanese and English Help explain the background lock and scrolling inside dialogs. Label editing, sheet geometry, data handling, project persistence, and PDF generation are unchanged.
+- Regression checks cover source, readable HTML, the root download, and restored self-extract HTML through the canonical application runner. Native browser acceptance checks must confirm outside-wheel blocking, normal page scrolling after dismissal, and reachable Help tail / save / confirmation actions on desktop and short/narrow viewports.
+
 ## v1.1.3 — Icon normalization
 
 - Canonical background and matching artwork green: `#16624f`; background x/y radii exactly 25% of their respective dimensions.
@@ -13,7 +20,7 @@ Japanese name: **ラベルシート作成**
 
 Repository: `ttomohisa/htmlapps-label-sheet-maker`
 
-Current development milestone: **v1.1.3 — Unavailable draft measurements**
+Current development milestone: **v1.1.4 — Modal background scrolling**
 
 ## 2. Product principles
 
