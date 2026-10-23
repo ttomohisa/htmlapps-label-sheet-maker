@@ -522,3 +522,8 @@ Physical printer alignment, paper feed tolerances, and scan reliability still re
 - Numeric preview measurements show `—` for empty, malformed, or non-finite Paper dimension drafts, instead of exposing NaN or Infinity. Finite invalid values such as zero or negative dimensions remain visible with the existing field-local validation.
 - This is display-only: keep the unfinished input, last committed layout, label elements, used slots, history, persistence, project-save and PDF guards unchanged. Correcting a draft restores the numeric measurement through the existing commit flow.
 - Apply the same behavior in Japanese/English and mm/in, and verify source, readable, root-download and restored self-extract variants.
+
+## Shared mobile footer and Help build information
+
+- Hide only the informational page footer at the existing smartphone breakpoint (600px); preserve functional bottom navigation/actions and Help controls.
+- The existing build-information disclosure is the final item inside the scrollable Help body, retaining its metadata IDs, population, and desktop/mobile availability.
