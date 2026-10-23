@@ -370,6 +370,7 @@
       .output-preview-stage { min-height:520px; }
     }
     @media (max-width: 600px) {
+      footer { display: none; }
       body { padding-bottom:calc(var(--mobile-bar-height) + env(safe-area-inset-bottom)); }
       .header-inner { padding:9px 14px; }
       .brand-mark { width:36px; height:36px; }
@@ -780,15 +781,6 @@
       </div>
     </section>
     <!-- APP:END -->
-
-    <details class="build-details">
-      <summary data-i18n="buildInfo">ビルド情報</summary>
-      <div class="build-grid">
-        <div class="build-item"><span data-i18n="appVersion">アプリバージョン</span><strong id="buildVersion">—</strong></div>
-        <div class="build-item"><span data-i18n="builtAt">ビルド日時</span><strong id="builtAt">—</strong></div>
-        <div class="build-item"><span data-i18n="dependencies">内包依存</span><strong id="dependencyCount">0</strong></div>
-      </div>
-    </details>
   </main>
 
   <footer><span id="footerName">Label Sheet Maker</span> · MIT License · <span data-i18n="footer">用紙設定はブラウザー内で処理されます</span></footer>
@@ -850,6 +842,14 @@
       <section><h3 data-i18n="positionSize">位置とサイズ</h3><p data-i18n="helpGeometry"></p></section>
 
       <!-- APP:HELP:END -->
+    <details class="build-details">
+      <summary data-i18n="buildInfo">ビルド情報</summary>
+      <div class="build-grid">
+        <div class="build-item"><span data-i18n="appVersion">アプリバージョン</span><strong id="buildVersion">—</strong></div>
+        <div class="build-item"><span data-i18n="builtAt">ビルド日時</span><strong id="builtAt">—</strong></div>
+        <div class="build-item"><span data-i18n="dependencies">内包依存</span><strong id="dependencyCount">0</strong></div>
+      </div>
+    </details>
     </div>
   </dialog>
 
@@ -1704,7 +1704,7 @@
       const helpDialog=$('#helpDialog');
       $('#helpButton').addEventListener('click',()=>helpDialog.showModal());
       $('#closeHelpButton').addEventListener('click',()=>helpDialog.close());
-      helpDialog.addEventListener('click',event=>{const rect=helpDialog.getBoundingClientRect();if(event.clientX<rect.left||event.clientX>rect.right||event.clientY<rect.top||event.clientY>rect.bottom)helpDialog.close();});
+      helpDialog.addEventListener('click',event=>{if(event.target!==helpDialog)return;const rect=helpDialog.getBoundingClientRect();if(event.clientX<rect.left||event.clientX>rect.right||event.clientY<rect.top||event.clientY>rect.bottom)helpDialog.close();});
 
       $('#versionBadge').textContent=`v${APP_CONFIG.version}`;$('#buildVersion').textContent=APP_CONFIG.version;$('#builtAt').textContent=BUILD_MANIFEST.generatedAtUtc||'—';$('#dependencyCount').textContent=String(BUILD_MANIFEST.dependencies?.length||0);
       $('#outputFilename').value=outputState.generatedFilename;renderPresetOptions();applyLanguage();renderLabelEditor();setPage('paperPage');

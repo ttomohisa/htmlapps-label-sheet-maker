@@ -41,29 +41,29 @@ test('Help excludes layout audit prose while retaining usage notes', () => {
   assert.match(help, /data-i18n="helpOffline"/);
 });
 
-test('modal-only patch preserves all existing styles including responsive shield visibility', () => {
+test('shared mobile layout preserves responsive shield visibility and reviewed styles', () => {
   // Baseline: main 53a1e6f87c911fceede460274783abcc7fb3a0a2 (v1.1.3).
-  // Strip only the approved addition; rebaseline for intentional future redesigns.
+  // Strip the modal lock; the reviewed baseline now also includes only the 600px informational-footer hide.
   const existingCss = css.replace(/    html:has\(dialog:modal\),\s*body:has\(dialog:modal\)\s*\{\s*overflow:\s*hidden;?\s*\}\n/, '');
-  assert.equal(hash(existingCss), '5c3a596692752ae7986ce4f19bdbc722a8f8dab2ee51df2f701945a933b3654f');
+  assert.equal(hash(existingCss), 'f2575f921851af31e1a57ec92bdae18a6bf62e51252f58da684238d60c5f3fab');
 });
 
 test('all four dialog shells retain their existing headers, scroll containers and actions', () => {
   const dialogs = [...html.matchAll(/<dialog\b[^>]*>[\s\S]*?<\/dialog>/g)].map(match => match[0]);
   assert.deepEqual(dialogs.map(value => value.match(/\bid="([^"]+)"/)[1]), ['appConfirmDialog', 'saveLayoutDialog', 'saveCalibrationDialog', 'helpDialog']);
-  // Rebaseline only the intentional JA/EN help-copy removal; shell markup is unchanged.
+  // Rebaseline the exact build-details relocation into Help; other dialog shells remain unchanged.
   const shells = dialogs.join('\n').replace(/      <p data-i18n="helpModalScroll">[^<]*<\/p>\n/, '');
-  assert.equal(hash(shells), '36d4188885b4c0818dd5b8ed5a513d8d9b235a407835232b2165e82b18c07a6d');
+  assert.equal(hash(shells), 'a014e744ceab15a06f20b1a317f7e9fb70a6ab540b3af8fbf4d8ccec612f407d');
 });
 
-test('modal-only patch preserves runtime, editor, data, PDF output and dialog handlers', () => {
-  // The runtime hash includes translation literals; update for the copy-only cleanup.
+test('shared mobile layout preserves reviewed runtime, editor, data and PDF output', () => {
+  // The only runtime addition is the Help descendant-target guard, separately executed by mobile-build-info.test.cjs.
   let script = html.match(/<script>\s*([\s\S]*?)<\/script>/)[1];
   for (const [name, token] of [['APP_CONFIG', '__APP_CONFIG_JSON__'], ['BUILD_MANIFEST', '__BUILD_MANIFEST_JSON__'], ['assetBundle', '__EMBEDDED_ASSET_BUNDLE_JSON__']]) {
     script = script.replace(new RegExp(`(const ${name} = )[\\s\\S]*?;\\n`), `$1${token};\n`);
   }
   script = script.replace(/helpModalScroll:'[^']*',/g, '');
-  assert.equal(hash(script), '0105da540da17d33766bf4f3320992e51bfbdef771471f1e32c75ab4e3874aca');
+  assert.equal(hash(script), '2a542aeb3ce2d4d3c83f14c505f5a6b0693247375bcd5f70849635c9a6b5547a');
 });
 
 test('local-processing badge retains its decorative shield and check', () => {

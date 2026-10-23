@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Hide the informational page footer at the existing smartphone breakpoint and move the unchanged build information to the end of Help. Preserve native disclosure and dialog dismissal.
+
 ## 1.1.4 - 2026-10-11
 
 - Pause background scrolling while Help, paper-layout saving, calibration saving, or confirmation dialogs are open. Resume ordinary page scrolling when the last modal closes.
