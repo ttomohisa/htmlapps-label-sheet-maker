@@ -29,7 +29,9 @@ function createContext() {
   const c = vm.createContext({console: {error: error => errors.push(error)}, TextEncoder, TextDecoder, Uint8Array, Blob, setTimeout, JSON, Date, Object});
   c.$ = key => { if (!nodes.has(key)) nodes.set(key, new SvgNode(key)); return nodes.get(key); };
   c.t = (key, data = {}) => `${key}:${JSON.stringify(data)}`;
-  c.AppToast = {show: toast => toasts.push(toast)};
+  c.uiErrors={};
+  c.setUiError=(id,key)=>{if(key)toasts.push({message:c.t(key)});};c.renderCommonUI=()=>{};c.window={BrowserKittyUI:{text:key=>key}};
+  c.AppToast = {refresh(){},show: toast => toasts.push(toast)};
   c.hasPendingLayoutDrafts = () => false;
   c.language = 'en';
   c.requestAnimationFrame = callback => frames.push(callback);
@@ -49,7 +51,7 @@ function createContext() {
   }
   c.state = {settings:clone(c.LabelSheetCore.builtInPresets()[0].settings)};
   c.editorState.elements = [c.LabelEditorCore.createTextElement({id:'text',labelWidth:66,labelHeight:33.9,text:'OLD'})];
-  const names = ['sheetItemCount','sheetComposition','editorBounds','currentDataRow','sheetRowForItem','createSvg','fontFamilyCss','wrapElementText','appendSelectionHandles','renderTextElement','codeValidation','renderCodePlaceholder','renderCodeElement','renderSheetLabelContent','renderPrintablePageSvg','formatBytes','pdfContentFingerprint','capturePdfSnapshot','invalidateGeneratedPdf','refreshPdfValidity','renderOutputResult','renderOutputPage','createPdfDocument','saveGeneratedPdf'];
+  const names = ['sheetItemCount','sheetComposition','editorBounds','currentDataRow','sheetRowForItem','createSvg','fontFamilyCss','wrapElementText','appendSelectionHandles','renderTextElement','codeValidation','renderCodePlaceholder','renderCodeElement','renderSheetLabelContent','renderPrintablePageSvg','formatBytes','pdfContentFingerprint','capturePdfSnapshot','invalidateGeneratedPdf','refreshPdfValidity','renderOutputResult','renderOutputPage','createPdfDocument','deliverBlob','saveGeneratedPdf'];
   for (const name of names) { const body = functionSource(name); if (body) vm.runInContext(body, c); }
   const actualRasterize = functionSource('rasterizeSvgToJpeg');
   c.rasterizeSvgToJpeg = async (svg, settings) => {rasters.push({svg,settings:clone(settings || c.state.settings)});return {jpegBytes:new Uint8Array([0xff,0xd8,0xff,0xd9]),pixelWidth:1,pixelHeight:1};};

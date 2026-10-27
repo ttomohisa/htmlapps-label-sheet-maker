@@ -236,3 +236,8 @@ Useful mount options include `initialPage`, `pageTopTarget`, `pageTopOffset`, `o
 ## WebRTC application-ready rule
 
 For `webrtc-qr-pairing.html`, PeerConnection `connected` alone is not application-ready. The designated readiness DataChannel must also be `open`. Custom channel layouts set `readyChannelLabel` to a reliable control channel.
+
+
+## Browser Kitty shared UI
+
+Shared UI 1.0.0 is vendored as exact `ui-conventions.js` / `.css` bytes with a semantic lock. Build-time embedding preserves the one-file release. The app calls language resolution/choice, explicit button states, manual retention and settings save-status APIs; domain persistence, confirmation, scoped Undo and errors stay app-owned. Header actions and principal icon controls target 44px; compact unit choices and physical sheet slots retain their documented geometry/keyboard exceptions.

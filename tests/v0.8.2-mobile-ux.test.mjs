@@ -16,7 +16,7 @@ assert.match(source, /editTextButton'\)\.addEventListener\('click',focusSelected
 // Delete should expose a reversible action rather than being a dead-end destructive operation.
 assert.match(source, /function restoreDeletedElement\(/);
 assert.match(source, /deletedSnapshot/);
-assert.match(source, /actionLabel:t\('undoDelete'\)/);
+assert.match(source, /actionKey:'undoDelete'/);
 assert.match(source, /onAction:\(\)=>restoreDeletedElement\(snapshot\)/);
 
 // Visible resize knobs stay compact while coarse pointers get a larger invisible hit target.

@@ -22,10 +22,11 @@ function functionSource(name) {
 function runtime() {
   const nodes = new Map(), messages = [], reads = [], images = [], confirmations = [];
   const context = vm.createContext({ console: { warn() {}, error() {} }, TextEncoder, TextDecoder, Uint8Array, Blob, JSON, Date, setTimeout });
+  context.uiErrors={};
   Object.assign(context, {
-    $: key => { if (!nodes.has(key)) nodes.set(key, { value: '', textContent: '' }); return nodes.get(key); },
+    $$:()=>[], $: key => { if (!nodes.has(key)) nodes.set(key, { value: '', textContent: '' }); return nodes.get(key); },
     t: key => key,
-    AppToast: { show: value => messages.push(value.message) },
+    AppToast: { show: value => messages.push(value.message??value.messageKey),dismiss(){} },
     AppConfirm: { ask: () => { const value = deferred(); confirmations.push(value); return value.promise; } },
     FileReader: class { readAsDataURL(file) { this.file = file; reads.push(this); } },
     Image: class { set src(value) { this.dataUrl = value; images.push(this); } },
@@ -34,7 +35,7 @@ function runtime() {
     sheetState: { usedFirstPage: [], pageIndex: 0 },
     editorState: { elements: [], selectedId: null, history: [[]], historyIndex: 0 },
     outputState: { offsetX: 0, offsetY: 0, generatedBlob: null, generation: 0 }, layoutDrafts: {},
-    projectFileName: 'labels.labelsheet.json', editorIdCounter: 1
+    projectFileName: 'labels.labelsheet.json', editorIdCounter: 1,settingsTouched:new Set(),layoutRevision:0,storageDomains:{settings:{}},storageKeys:{settings:'settings'},APP_CONFIG:{version:'1.1.4'},setUiError:(id,key)=>{if(key)messages.push(key);}
   });
   for (const marker of ['LABEL_SHEET_CORE', 'LABEL_EDITOR_CORE', 'DATA_MERGE_CORE', 'BARCODE_MEDIA_CORE', 'PROJECT_FILE_CORE', 'SHEET_COMPOSITION_CORE', 'PDF_OUTPUT_CORE']) {
     const match = source.match(new RegExp(`/\\* ${marker}:BEGIN \\*/([\\s\\S]*?)/\\* ${marker}:END \\*/`));
@@ -45,7 +46,7 @@ function runtime() {
   context.state = { settings: clone(context.defaultSettings) };
   const importState = source.match(/^      const importState=.*;$/m);
   if (importState) vm.runInContext(importState[0], context);
-  for (const name of ['cancelLongPress', 'cancelEditorInteraction', 'resetLayoutDrafts', 'invalidateGeneratedPdf', 'invalidatePendingImports', 'editorBounds', 'applyParsedData', 'parseTextData', 'loadDataFile', 'reparseDataFile', 'applyProject', 'hasMeaningfulProjectWork', 'loadProjectFile', 'inferImageMime', 'newEditorId', 'loadImageElement']) {
+  for (const name of ['cancelLongPress', 'cancelEditorInteraction', 'resetLayoutDrafts', 'invalidateGeneratedPdf', 'invalidatePendingImports', 'editorBounds', 'applyParsedData', 'parseTextData', 'loadDataFile', 'reparseDataFile', 'applyProject', 'sameSnapshot','hasPendingLayoutDrafts','currentProject','projectIntentFingerprint','hasMeaningfulProjectWork', 'loadProjectFile', 'inferImageMime', 'newEditorId', 'loadImageElement']) {
     vm.runInContext(functionSource(name), context);
   }
   // Exercise the actual file-picker and paste handlers, including same-file reselection.

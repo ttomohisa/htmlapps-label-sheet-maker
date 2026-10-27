@@ -22,7 +22,7 @@ for (const token of [
   'projectReplaceTitle',
   'projectReplaceMessage',
   'hasMeaningfulProjectWork',
-  "AppConfirm.ask({title:t('projectReplaceTitle')"
+  "AppConfirm.ask({titleKey:'projectReplaceTitle'"
 ]) assert.ok(html.includes(token), `missing v0.7 project token: ${token}`);
 
 assert.match(html, /version-badge" id="versionBadge">v\d+\.\d+\.\d+</);

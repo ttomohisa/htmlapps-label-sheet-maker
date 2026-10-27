@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+- Embed pinned Browser Kitty shared UI 1.0.0 at build time; use explicit executable states and shared language resolution without startup writes or legacy migration.
+- Explain manual project retention and the five existing browser-storage scopes. Protect unread/corrupt data, preserve explicit default intent during read recovery, and commit named-preset changes only after successful writes.
+- Add editable project filenames, persistent scoped failures and truthful download handoff with exception-safe URL/anchor cleanup. Preserve same-content previous PDF results after failed regeneration; retain existing printable-content invalidation and filename-at-Save behavior.
+- Preserve unfinished controls, caret, selection, confirmation targets and focused Undo across language changes; reject stale project/deletion intent and scope reset Undo to its exact work.
+- Add strict whole-initializer regressions across all release variants and native combined-script parsing, preserving all seven core/schema bytes.
+
+
 - Hide the informational page footer at the existing smartphone breakpoint and move the unchanged build information to the end of Help. Preserve native disclosure and dialog dismissal.
 
 ## 1.1.4 - 2026-10-11

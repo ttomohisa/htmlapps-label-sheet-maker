@@ -52,18 +52,13 @@ test('all four dialog shells retain their existing headers, scroll containers an
   const dialogs = [...html.matchAll(/<dialog\b[^>]*>[\s\S]*?<\/dialog>/g)].map(match => match[0]);
   assert.deepEqual(dialogs.map(value => value.match(/\bid="([^"]+)"/)[1]), ['appConfirmDialog', 'saveLayoutDialog', 'saveCalibrationDialog', 'helpDialog']);
   // Rebaseline the exact build-details relocation into Help; other dialog shells remain unchanged.
-  const shells = dialogs.join('\n').replace(/      <p data-i18n="helpModalScroll">[^<]*<\/p>\n/, '');
+  const shells = dialogs.join('\n').replace(/ data-bk-button data-bk-variant="[^"]+"/g,'').replace(/      <p data-i18n="helpCommonUI">[^<]*<\/p>\n/,'').replace(/      <p data-i18n="helpModalScroll">[^<]*<\/p>\n/, '');
   assert.equal(hash(shells), 'a014e744ceab15a06f20b1a317f7e9fb70a6ab540b3af8fbf4d8ccec612f407d');
 });
 
-test('shared mobile layout preserves reviewed runtime, editor, data and PDF output', () => {
-  // The only runtime addition is the Help descendant-target guard, separately executed by mobile-build-info.test.cjs.
-  let script = html.match(/<script>\s*([\s\S]*?)<\/script>/)[1];
-  for (const [name, token] of [['APP_CONFIG', '__APP_CONFIG_JSON__'], ['BUILD_MANIFEST', '__BUILD_MANIFEST_JSON__'], ['assetBundle', '__EMBEDDED_ASSET_BUNDLE_JSON__']]) {
-    script = script.replace(new RegExp(`(const ${name} = )[\\s\\S]*?;\\n`), `$1${token};\n`);
-  }
-  script = script.replace(/helpModalScroll:'[^']*',/g, '');
-  assert.equal(hash(script), '2a542aeb3ce2d4d3c83f14c505f5a6b0693247375bcd5f70849635c9a6b5547a');
+test('shared UI retains every baseline engine and project schema byte',()=>{
+  const expected={"LABEL_SHEET_CORE": "2cb56a458cbfad33ba6f9daa432557fa5cc146cbb1e0d6933c1ada1d04d1c07b", "LABEL_EDITOR_CORE": "d715cb713bf22c701b1a2773fba1d574d1fab90f521d1763f982a8078b7d424c", "DATA_MERGE_CORE": "fafefe32fff4862a8b221a42ca60df99584b1abc12ead09d490388e3a3190a79", "BARCODE_MEDIA_CORE": "b560adba0e51f8ae4256dff91515d8fc5387586c43d3a486848983649c4731d3", "SHEET_COMPOSITION_CORE": "226a29d51cefa7c1a908c64866a3356eb3979a072e6ec4b78bde77304936a4ac", "PDF_OUTPUT_CORE": "2829ad5ffc8cc7e878e2b0b173701a6081ad9fd1aa1b71673aa9ef529aadea0a", "PROJECT_FILE_CORE": "fe1d64e8c9183dc89a0da7f1c3bbd77de53cfee412ea9d160053989ce6c61963"};
+  for(const [marker,expectedHash] of Object.entries(expected)){const core=html.split('/* '+marker+':BEGIN */')[1].split('/* '+marker+':END */')[0];assert.equal(hash(core),expectedHash,marker);}
 });
 
 test('local-processing badge retains its decorative shield and check', () => {

@@ -254,3 +254,8 @@ mobileBar.setEnabled('save', true);
 ## WebRTCの接続成立ルール
 
 `webrtc-qr-pairing.html` ではPeerConnectionの `connected` だけをアプリ接続済みとして扱いません。指定した準備完了DataChannelが `open` になって初めて `onConnected` を発火します。独自Channel構成ではreliableな制御Channelを `readyChannelLabel` に指定します。
+
+
+## Browser Kitty shared UI
+
+共通UI 1.0.0 の `ui-conventions.js` / `.css` は固定ハッシュの正本をそのまま取り込み、ビルド時に単一HTMLへ埋め込みます。言語解決・明示切替、実行ボタン状態、手動保存案内・用紙設定保存状態を接続します。保存処理・確認・対象付きUndo・エラーはアプリが所有します。ヘッダーと主要アイコン操作は44pxを目標とし、密な単位選択と物理シート位置は既存の寸法・キーボード操作を保つ例外です。

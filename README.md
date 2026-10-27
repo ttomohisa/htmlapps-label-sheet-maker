@@ -8,6 +8,10 @@
 
 A single-HTML app for defining physical label-sheet geometry, designing one label, merging local CSV / TSV data, reusing partially used sheets, and creating print-ready PDFs without uploading your files to a server.
 
+Your label work is not autosaved. Save the editable `.labelsheet.json` project (including local images and table data) to continue later; named paper/calibration presets stay in this browser. The work area identifies this scope and shows persistent browser-storage errors with Retry. A protected read is retried before writing, so unavailable or damaged browser data is not overwritten with defaults.
+
+Project and PDF filenames are editable. A download reports “Download started”; cancellation or failure retains current work. Recreating the same PDF keeps a labelled previous result if creation fails. Changing printable content still invalidates old PDFs. Language switching preserves unfinished fields, selection and work; Undo remains usable while keyboard focus is on its action.
+
 ## 🚀 Live demo
 
 ### [Open Label Sheet Maker on GitHub Pages](https://ttomohisa.github.io/htmlapps-label-sheet-maker/)

@@ -12,7 +12,8 @@ function context(){
   class Input extends Element{}class Textarea extends Element{}class Select extends Element{}
   c.Element=Element;c.HTMLElement=Element;c.HTMLInputElement=Input;c.HTMLTextAreaElement=Textarea;c.HTMLSelectElement=Select;c.$=key=>{if(!nodes.has(key))nodes.set(key,new Element(key));return nodes.get(key);};c.$$=selector=>selector==='[data-dimension], [data-integer]'?[...nodes.values()].filter(n=>n.dataset.dimension||n.dataset.integer):[];
   c.document={activeElement:null,querySelector:()=>c.modal?{}:null,createElement:()=>new Element(),body:new Element()};
-  c.t=k=>k;c.AppToast={show:o=>{c.toast=o;},dismiss(){}};c.refreshPdfValidity=()=>true;c.invalidateGeneratedPdf=()=>{};
+  Object.assign(c,{settingsTouched:new Set(),unitTouched:false,layoutRevision:0,renderCommonUI(){}});
+  c.t=k=>k;c.AppToast={refresh(){},show:o=>{c.toast=o;},dismiss(){}};c.refreshPdfValidity=()=>true;c.invalidateGeneratedPdf=()=>{};
   c.persistSettings=()=>{c.persisted=clone(c.state.settings);};c.writeStorage=()=>true;c.storageKeys={unit:'unit'};c.renderPresetOptions=()=>{};c.renderPaperLayout=()=>{};c.renderLayoutDraftFeedback=()=>{};c.renderOutputPage=()=>{};c.closeTouchContextMenu=()=>{};
   for(const marker of ['LABEL_SHEET_CORE','LABEL_EDITOR_CORE','SHEET_COMPOSITION_CORE'])vm.runInContext(source.split(`/* ${marker}:BEGIN */`)[1].split(`/* ${marker}:END */`)[0],c);
   c.defaultSettings=clone(c.LabelSheetCore.builtInPresets()[0].settings);c.state={settings:clone(c.defaultSettings),activePage:'labelPage'};c.layoutDrafts={};c.unit='mm';c.sheetState={usedFirstPage:[2],pageIndex:0};c.dataState={mode:'repeat',repeatCount:1,rows:[]};c.editorState={elements:[c.LabelEditorCore.createTextElement({id:'original',labelWidth:66,labelHeight:33.9,text:'Original'})],selectedId:'original',history:[[]],historyIndex:0,deletedSnapshot:null};

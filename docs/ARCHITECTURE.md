@@ -110,3 +110,12 @@ Keep source in one HTML while it remains understandable. When an app grows subst
 - No runtime external resource.
 - Clear state ownership.
 - A build that fails on missing input.
+
+
+## Shared UI adapter and storage ownership
+
+The standard builder expands `__BK_UI_CSS__` / `__BK_UI_JS__` through `scripts/embed-ui-conventions.ps1`, verifying `components/ui-conventions.lock.json`. Canonical dependency-free files are copied exactly and explicitly marked LF in `.gitattributes`. No runtime request is introduced.
+
+The application owns per-key read/error/dirty/confirmed/time/pending state for the existing unit, geometry, named-layout and calibration domains. Reads distinguish unavailable, malformed and absent data. Read recovery never writes; it merges geometry using an explicit touched-field set and refuses destructive geometry/used-position merges. Named candidates remain immutable captures until synchronous localStorage success, then commit to memory. Retry verifies collection and selection ownership. No background writer or new autosave domain exists.
+
+Independent keyed errors cover project import/export, data/image import, PDF creation and PDF delivery. A printable fingerprint continues to retire invalid output; same-fingerprint retries retain prior bytes/immutable metadata. Native Blob delivery has finally cleanup and delayed successful revocation. `applyLanguage` preserves actual controls, editing flags, caret and focus around rendering; confirmation and Undo retain callbacks/ownership while translating. Tests execute the real closure and source-derived strict IDs, exposing state only inside the test harness.
