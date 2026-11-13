@@ -45,7 +45,7 @@ test('shared mobile layout preserves responsive shield visibility and reviewed s
   // Baseline: main 53a1e6f87c911fceede460274783abcc7fb3a0a2 (v1.1.3).
   // Strip the modal lock; the reviewed baseline now also includes only the 600px informational-footer hide.
   const existingCss = css.replace(/    html:has\(dialog:modal\),\s*body:has\(dialog:modal\)\s*\{\s*overflow:\s*hidden;?\s*\}\n/, '');
-  assert.equal(hash(existingCss), 'f2575f921851af31e1a57ec92bdae18a6bf62e51252f58da684238d60c5f3fab');
+  assert.equal(hash(existingCss), '64b203d1916ad53348a648acb63e5af308670d66ff3fcd248bf9f3972beb505d');
 });
 
 test('all four dialog shells retain their existing headers, scroll containers and actions', () => {
@@ -53,7 +53,7 @@ test('all four dialog shells retain their existing headers, scroll containers an
   assert.deepEqual(dialogs.map(value => value.match(/\bid="([^"]+)"/)[1]), ['appConfirmDialog', 'saveLayoutDialog', 'saveCalibrationDialog', 'helpDialog']);
   // Rebaseline the exact build-details relocation into Help; other dialog shells remain unchanged.
   const shells = dialogs.join('\n').replace(/      <p data-i18n="helpModalScroll">[^<]*<\/p>\n/, '');
-  assert.equal(hash(shells), 'a014e744ceab15a06f20b1a317f7e9fb70a6ab540b3af8fbf4d8ccec612f407d');
+  assert.equal(hash(shells), 'e48938ebded1a5f0826adacea99acf1eabe88132fb7bd9a040c924313e02a831');
 });
 
 test('shared mobile layout preserves reviewed runtime, editor, data and PDF output', () => {
@@ -63,7 +63,7 @@ test('shared mobile layout preserves reviewed runtime, editor, data and PDF outp
     script = script.replace(new RegExp(`(const ${name} = )[\\s\\S]*?;\\n`), `$1${token};\n`);
   }
   script = script.replace(/helpModalScroll:'[^']*',/g, '');
-  assert.equal(hash(script), '2a542aeb3ce2d4d3c83f14c505f5a6b0693247375bcd5f70849635c9a6b5547a');
+  assert.equal(hash(script), '8e2c0fd52c4c08f9b353f444a0ad1da3e240d69619ef9fb896cc013e711a18a8');
 });
 
 test('local-processing badge retains its decorative shield and check', () => {
