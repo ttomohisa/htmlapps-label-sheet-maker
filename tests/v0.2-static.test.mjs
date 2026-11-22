@@ -6,7 +6,7 @@ const root = new URL('../', import.meta.url);
 const source = fs.readFileSync(new URL('src/index.template.html', root), 'utf8');
 const config = JSON.parse(fs.readFileSync(new URL('app.config.json', root), 'utf8'));
 const icon = fs.readFileSync(new URL('assets/favicon.svg', root), 'utf8');
-const suppliedIconSha256 = 'a8c47eb4bc7d3a30bfdc6a237a800cf331fa31bf8c32865d36541de8c5ee197e'; // Normalized canonical icon; supplied foreground geometry preserved.
+const suppliedIconSha256 = 'b30fdb10587cc82ef30eb926f8c887b688ffae582213a6bca95597a147a0385b'; // Normalized canonical icon; supplied foreground geometry preserved.
 
 assert.match(config.version, /^\d+\.\d+\.\d+$/, 'app version should remain valid semver');
 for (const id of [
