@@ -71,7 +71,7 @@ test('project files are a closed native disclosure with existing actions and dro
   const details=html.match(/<details\b[^>]*id="projectDropZone"[^>]*>[\s\S]*?<\/details>/);
   assert.ok(details);
   assert.doesNotMatch(details[0].split('>')[0], /\bopen\b/);
-  assert.match(details[0], /<summary>[\s\S]*?data-i18n="projectTitle"[\s\S]*?<\/summary>/);
+  assert.match(details[0], /<summary\b[^>]*>[\s\S]*?data-i18n="projectTitle"[\s\S]*?<\/summary>/);
   for(const id of ['projectFileName','openProjectButton','saveProjectButton','projectFileInput'])assert.ok(details[0].includes('id="'+id+'"'),id);
   assert.doesNotMatch(details[0], /class="button primary" id="saveProjectButton"/);
   assert.match(html, /<header[\s\S]*?<details class="project-bar" id="projectDropZone"[\s\S]*?<\/header>/);

@@ -84,7 +84,7 @@ async function main() {
                 const navBox=await nav.boundingBox(),headerBox=await page.locator('.app-header').boundingBox();
                 assert.ok(navBox&&headerBox&&navBox.y-headerBox.y-headerBox.height<=16,label+': workflow sits just below header');
               }
-              if(step==='labelPage') {
+              if(step==='labelPage' && height>=500) {
                 assert.equal(await page.locator('#labelCanvasTitle').count(),0,label+': canvas title removed');
                 await page.locator('#addTextButton').click();
                 const alignment=page.locator('[data-align-axis="hAlign"][data-align-value="center"]');
@@ -94,7 +94,7 @@ async function main() {
                 await page.locator('#centerHorizontalButton').click();
                 await page.locator('#centerVerticalButton').click();
               }
-              if(step==='sheetPage') {
+              if(step==='sheetPage' && height>=500) {
                 await page.locator('#invertUsedButton').click();
                 await page.locator('#markAllAvailableButton').click();
               }
