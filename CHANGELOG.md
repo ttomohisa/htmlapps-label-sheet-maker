@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+## 1.3.0 - 2026-11-25
+
+- Generate serial-number merge data with start, increment, minimum digits and prefix/suffix.
+- Set copies per data row manually or from a quantity column, including zero to skip; use the same mapping in sheet placement, PDF and preflight.
+- Optional text auto-fit with minimum size and overflow warnings.
+- Expand generic A4/Letter presets from 4 to 20.
+- Save quantity/auto-fit projects with schema 2 while retaining schema 1 compatibility for older files.
+
 ## 1.2.0 - 2026-11-25
 
 - Element list, collapsible import settings, fit-to-view, rounded coordinate display, print preflight report, drag selection with Undo, opt-in local recovery and image replacement.

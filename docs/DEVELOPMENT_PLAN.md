@@ -119,3 +119,7 @@ v1.0 explicitly excludes manufacturer product-code databases, manufacturer logos
 - Includes the unreleased v1.1.5 fixes and all eight editor usability improvements.
 - Regression focus: project recovery ownership, rounded display, overlapping elements, image replacement, drag cancellation, print preflight and release parity.
 - Release gate: main validation and Pages deployment must succeed before creating the version tag and GitHub Release. Physical print/scan checks remain separate from software regression.
+
+## v1.3.0 — Batch labels
+
+- Serial generation, per-row quantities, text auto-fit and expanded generic presets. Regression gates include print mapping, schema compatibility, both languages, offline builds and mobile layout.

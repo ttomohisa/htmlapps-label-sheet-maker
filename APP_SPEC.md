@@ -39,7 +39,7 @@ Japanese name: **ラベルシート作成**
 
 Repository: `ttomohisa/htmlapps-label-sheet-maker`
 
-Current development milestone: **v1.2.0 — Editor usability**
+Current development milestone: **v1.3.0 — Batch labels**
 
 ## 2. Product principles
 
@@ -548,3 +548,11 @@ Physical printer alignment, paper feed tolerances, and scan reliability still re
 - The existing build-information disclosure is the final item inside the scrollable Help body, retaining its metadata IDs, population, and desktop/mobile availability.
 
 - Mobile selection actions update on every step change, preserving the selected element. Compact action row; on the narrowest phones use the fixed selection bar without duplicate canvas controls. Mobile image selection offers photo or file only after Add image; desktop opens its file picker directly. Shorten data-drop and output copy.
+
+## v1.3.0 — Batch labels
+
+- Generate an ordinary merge table with a stable `serial` column; ascending/descending non-negative integer range 0–999999999999, nonzero integer step, 1–10000 rows, 1–12 minimum digits, prefix/suffix each <=128 characters. Preview endpoints, confirm replacement of existing data, retire stale imports. Use the existing text/code field binding. Generated rows persist in project files; generator form itself does not.
+- Quantity array indexed by original row; absent/empty means one copy per row. Integer 0–10000; 0 excludes. Explicit total <= max(10000, source row count). Column apply is atomic, manual edit uses original row navigation, reset or new import restores one. Map physical item indexes to original rows without expanding table records. Keep first-sheet used slots independent. Print check and required code validation skip excluded rows. Fingerprint includes quantities.
+- Opt-in per-element text auto-fit, maximum existing font size, minimum >=4pt (default 6, no larger than maximum); choose largest fitting half-point size, otherwise use minimum and report remaining overflow. Shared layout for canvas, sheet, output and preflight. Preserve geometry and original configured font size.
+- Preserve 4 existing neutral presets and add 16 centered generic A4/Letter grids. All must pass geometry validation; no manufacturer compatibility claims.
+- Schema 2 is written when non-default quantities or enabled auto-fit are present; reader supports 1/2, default projects keep schema 1. Autosave uses same project normalization. Do not silently downgrade custom print quantities in old readers.

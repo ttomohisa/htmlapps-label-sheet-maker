@@ -80,6 +80,14 @@ Python, Node.js, and a local web server are not required for the standard Window
 
 Built-in presets describe physical dimensions and grid counts only. They are not manufacturer-official templates.
 
+### Batch labels
+
+- Expand **Generate serial numbers** in Label and enter start, increment, count, minimum digits, prefix and suffix. Generate up to 10,000 non-negative serial numbers as a `serial` data column; existing merge data is replaced only after confirmation. Add the column as text or bind it to a QR/barcode field.
+- Expand **Copies per row** in merge mode. Set the current row's copies, or apply an integer quantity column to all rows. Zero excludes a row; the initial quantity is one. Invalid values leave previous quantities unchanged. Explicit quantities allow up to 10,000 copies per row and a total of 10,000 (or the original row count if larger). New data imports reset quantities.
+- In Text style, enable **Shrink text to fit** and choose a minimum font size (4 pt or more). The same per-row layout is used in the editor, sheet and print PDF. Text that still does not fit at the minimum is flagged by the print check; review the final preview.
+- Choose from 20 generic A4/Letter layouts (formerly four); check actual stock dimensions and margins before printing.
+- Projects that use custom quantities or auto-fit are saved with schema version 2 to prevent older app versions silently dropping these settings. v1.3.0 reads schema 1 and 2; other projects remain schema 1.
+
 ### Editing features
 
 - Expand **Elements** to select overlapping objects. Use Fit to view to reset the canvas zoom.

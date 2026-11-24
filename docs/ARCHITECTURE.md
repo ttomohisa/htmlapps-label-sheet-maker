@@ -114,3 +114,7 @@ Keep source in one HTML while it remains understandable. When an app grows subst
 ## Label Sheet Maker state and output
 
 The application embeds the paper, editor, data merge, media, project, sheet and PDF cores. The schema-1 project carries geometry, elements, data, used slots and output settings. Optional recovery saves one normalized snapshot in localStorage; no recovery data is sent over the network. It is disabled by default, and quota failures are reported. Print output is generated from an immutable snapshot at 300 dpi, with a 128 MiB cumulative JPEG limit. The optional preflight report estimates text clipping and image resolution and does not replace the mandatory code/data checks at PDF generation.
+
+## v1.3.0 batch data
+
+Generated serials are ordinary merge rows. An optional quantity array maps physical printed item indexes to original data rows by cumulative counts, with the same mapping in frozen PDF snapshots. Auto-fit derives a font size at render time and never changes geometry or the configured font size. Schema 2 protects projects that use these features from older readers; schema 1 remains supported.
