@@ -223,3 +223,10 @@ test('completed image read retires partial drag before selecting the new image',
   const work=c.loadImageElement({name:'synthetic.png',type:'image/png'});finishRead(h.reads[0]);await microtasks();finishImage(h.images[0]);await work;
   assert.equal(c.editorState.interaction,null);assert.equal(c.editorState.elements[0].x,original.x);assert.equal(c.editorState.elements.length,2);assert.equal(c.editorState.elements[1].type,'image');
 });
+
+test('replace image preserves id, frame, fit and ordering; stale replacement cannot add a new element',async()=>{
+ const h=runtime(),c=h.context;const original=c.BarcodeMediaCore.createImageElement({id:'img',dataUrl:'data:image/png;base64,AAAA',mime:'image/png',fileName:'before.png',naturalWidth:100,naturalHeight:50});original.fit='cover';c.editorState.elements=[{id:'first',type:'text'},original,{id:'last',type:'text'}];
+ const work=c.loadImageElement({name:'after.png',type:'image/png'},'img');finishRead(h.reads[0],'data:image/png;base64,BBBB');await microtasks();finishImage(h.images[0]);await work;
+ const actual=c.editorState.elements[1];for(const key of ['id','x','y','width','height','fit'])assert.equal(actual[key],original[key]);assert.equal(actual.fileName,'after.png');assert.equal(actual.dataUrl,'data:image/png;base64,BBBB');assert.deepEqual(c.editorState.elements.map(e=>e.id),['first','img','last']);
+ const stale=c.loadImageElement({name:'late.png',type:'image/png'},'img');finishRead(h.reads[1]);await microtasks();c.editorState.elements.splice(1,1);finishImage(h.images[1]);await stale;assert.deepEqual(c.editorState.elements.map(e=>e.id),['first','last']);
+});

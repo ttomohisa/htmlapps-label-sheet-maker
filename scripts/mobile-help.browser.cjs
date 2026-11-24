@@ -21,11 +21,64 @@ async function smoke(page,results,file){
  console.log('PASS synthetic label to edited-name PDF '+file);
 }
 
+
+async function editorUsabilitySmoke(browser,results) {
+ const context=await browser.newContext({viewport:{width:1360,height:900},locale:'ja',reducedMotion:'reduce'});
+ const page=await context.newPage(),errors=[],requests=[];
+ page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>{if(/^https?:/.test(r.url()))requests.push(r.url());});
+ try {
+  await page.goto(pathToFileURL(path.resolve(__dirname,'..','dist/index.html')).href);
+  const nav=page.locator('#desktopStepNav');
+  await nav.locator('[data-page="labelPage"]').click();
+  await page.locator('#addTextButton').click();
+  await page.locator('#textContent').fill('Long text that does not fit in this tiny label frame');
+  await page.locator('#elementWidth').fill('2');await page.locator('#elementWidth').press('Tab');
+  await page.locator('#elementListDetails summary').click();
+  assert.equal(await page.locator('#elementList button').count(),1);
+  const png={name:'before.png',mimeType:'image/png',buffer:Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aUPsAAAAASUVORK5CYII=','base64')};
+  const pick=page.waitForEvent('filechooser');await page.locator('#addImageButton').click();await (await pick).setFiles(png);
+  await page.waitForFunction(()=>document.querySelector('#elementListCount').textContent==='2');
+  const geom=async()=>Promise.all(['elementX','elementY','elementWidth','elementHeight'].map(id=>page.locator('#'+id).inputValue()));
+  const before=await geom();
+  const replacement=page.waitForEvent('filechooser');await page.locator('#replaceImageButton').click();await (await replacement).setFiles({...png,name:'after.png'});
+  await page.waitForFunction(()=>document.querySelector('#imageFileName').textContent==='after.png');
+  assert.deepEqual(await geom(),before);assert.equal(await page.locator('#elementList button').count(),2);
+  await page.locator('#elementList button').last().click();
+  assert.equal(await page.locator('#textContent').inputValue(),'Long text that does not fit in this tiny label frame');
+  await nav.locator('[data-page="sheetPage"]').click();
+  await page.locator('#sheetDragMode').click();
+  const slot1=page.locator('#sheetPreviewSvg [data-sheet-slot="1"]'),slot2=page.locator('#sheetPreviewSvg [data-sheet-slot="2"]');
+  await slot1.scrollIntoViewIfNeeded();
+  const a=await slot1.boundingBox(),b=await slot2.boundingBox();assert.ok(a&&b);
+  await page.mouse.move(a.x+a.width/2,a.y+a.height/2);await page.mouse.down();await page.mouse.move(b.x+b.width/2,b.y+b.height/2,{steps:12});await page.mouse.up();
+  assert.equal(await page.locator('#sheetSummaryUsed').textContent(),'2','drag marks both positions');
+  await page.locator('#markAllAvailableButton').click();
+  await nav.locator('[data-page="outputPage"]').click();
+  await page.locator('#printCheckButton').click();
+  await page.waitForFunction(()=>!document.querySelector('#printCheckButton').disabled);
+  const issue=page.locator('#printCheckIssues button').filter({hasText:'文字が枠からはみ出す可能性'});
+  assert.ok(await issue.count(),'text overflow detected');
+  await issue.first().click();
+  assert.equal(await page.locator('#labelPage').isVisible(),true);assert.equal(await page.locator('#textContent').inputValue(),'Long text that does not fit in this tiny label frame');
+  await page.locator('#projectDropZone summary').click();await page.locator('#autoRecoveryToggle').check();
+  await page.waitForFunction(()=>localStorage.getItem('labelSheetMaker.recovery.v1')!==null);
+  await page.reload();await page.locator('#helpButton').waitFor();
+  await page.locator('#projectDropZone summary').click();await page.locator('#restoreWorkButton').click();
+  await nav.locator('[data-page="labelPage"]').click();
+  assert.equal(await page.locator('#elementListCount').textContent(),'2','recovered both elements');
+  await page.locator('#projectDropZone summary').click();await page.locator('#autoRecoveryToggle').uncheck();
+  assert.equal(await page.evaluate(()=>localStorage.getItem('labelSheetMaker.recovery.v1')),null);
+  assert.deepEqual(errors,[]);assert.deepEqual(requests,[]);
+  console.log('PASS editor usability smoke');
+ } catch(error){await page.screenshot({path:path.join(results,'failure-editor-usability.png')}).catch(()=>{});throw error;} finally {await context.close();}
+}
+
 async function main() {
   const results = path.resolve(__dirname, '..', 'test-results', 'mobile-help');
   fs.mkdirSync(results, { recursive: true });
   const browser = await chromium.launch();
   try {
+    await editorUsabilitySmoke(browser,results);
     for (const file of ['dist/index.html', 'dist/index.self-extract.html', 'label-sheet-maker.html']) {
       for (const language of ['ja', 'en']) {
         for (const [width, height] of [[1360, 900], [821, 700], [820, 700], [601, 568], [600, 568], [390, 844], [360, 640], [320, 568], [393, 252]]) {
