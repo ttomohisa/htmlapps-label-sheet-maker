@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Correct QR alignment positions, validate every printable merge/code value, reject malformed CSV/TSV, and allow explicit delimiter selection.
+- Enforce grid limits, restore full reset Undo state, reject duplicate element IDs, remove image hitbox color from print, omit fully used sheets, and bound accumulated JPEG memory.
+
 - Hide the informational page footer at the existing smartphone breakpoint and move the unchanged build information to the end of Help. Preserve native disclosure and dialog dismissal.
 
 ## 1.1.4 - 2026-10-11

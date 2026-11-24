@@ -438,7 +438,7 @@
       <div class="brand">
         <div class="brand-mark" aria-hidden="true"><img id="appBrandIcon" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjM2LjM1NzQyIDM2LjM1NzQyIDEwMjIuMjg1MTYgMTAyMi4yODUxNiIgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4IiBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIj48cmVjdCB4PSIzNyIgeT0iMzciIHdpZHRoPSIxMDIxIiBoZWlnaHQ9IjEwMjEiIHJ4PSIyNTUuMjUiIGZpbGw9IiMxNjYyNGYiLz48cGF0aCBmaWxsPSIjZmJmY2ZiIiBkPSJNMjYwIDE2NWg0NDlsMTY2IDE2NHY1NTVxMCA0NS00NSA0NUgyNjFxLTQ1IDAtNDUtNDVWMjEwcTAtNDUgNDQtNDV6Ii8+PGcgZmlsbD0iIzE2NjI0ZiI+PHBhdGggZD0iTTcxMCAxODZ2ODhxMCA0NyA0NyA0N2g4OHoiLz48ZGVmcz48cmVjdCBpZD0iYSIgd2lkdGg9IjE3OSIgaGVpZ2h0PSIxMTkiIHJ4PSIyNSIvPjwvZGVmcz48dXNlIGhyZWY9IiNhIiB4PSIyNTkiIHk9IjI3MiIvPjx1c2UgaHJlZj0iI2EiIHg9IjQ1OCIgeT0iMjcyIi8+PHVzZSBocmVmPSIjYSIgeD0iMjU5IiB5PSI0MTgiLz48dXNlIGhyZWY9IiNhIiB4PSI0NTgiIHk9IjQxOCIvPjx1c2UgaHJlZj0iI2EiIHg9IjI1OSIgeT0iNTYzIi8+PHVzZSBocmVmPSIjYSIgeD0iNDU4IiB5PSI1NjMiLz48dXNlIGhyZWY9IiNhIiB4PSI2NTkiIHk9IjU2MyIvPjx1c2UgaHJlZj0iI2EiIHg9IjI1OSIgeT0iNzA4Ii8+PHVzZSBocmVmPSIjYSIgeD0iNDU4IiB5PSI3MDgiLz48dXNlIGhyZWY9IiNhIiB4PSI2NTkiIHk9IjcwOCIvPjwvZz48cGF0aCBmaWxsPSIjZmJmY2ZiIiBkPSJNNjc2IDQ1NXEtMTMgNTcgMTcgODNoMzBxLTMzLTE5LTI4LTczeiIvPjxnIHRyYW5zZm9ybT0icm90YXRlKC0xMiA4MDAgNDU1KSI+PHJlY3QgeD0iNjgwIiB5PSIzOTEiIHdpZHRoPSIyMjAiIGhlaWdodD0iMTMyIiByeD0iMjgiIGZpbGw9IiNmYmZjZmIiLz48cmVjdCB4PSI2OTMiIHk9IjQwNCIgd2lkdGg9IjE5NCIgaGVpZ2h0PSIxMDYiIHJ4PSIyMiIgZmlsbD0iIzE2NjI0ZiIvPjwvZz48L3N2Zz4K" alt=""></div>
         <div class="brand-copy">
-          <p class="brand-name"><span id="brandName">Label Sheet Maker</span><span class="version-badge" id="versionBadge">v1.1.4</span></p>
+          <p class="brand-name"><span id="brandName">Label Sheet Maker</span><span class="version-badge" id="versionBadge">v1.1.5</span></p>
           <p class="brand-meta" data-i18n="brandMeta">Set sheet dimensions and label positions precisely</p>
         </div>
       </div>
@@ -609,6 +609,7 @@
               <p class="data-section-title" data-i18n="dataSourceTitle">差し込みデータ</p>
               <label class="data-drop-zone" id="dataDropZone" for="dataFileInput"><strong data-i18n="dataDropTitle">CSV / TSVをここにドロップ</strong><span data-i18n="dataDropBody">またはクリックしてファイルを選択</span></label>
               <input class="sr-only" id="dataFileInput" type="file" accept=".csv,.tsv,.txt,text/csv,text/tab-separated-values,text/plain">
+              <div class="field" style="margin-top:8px"><label for="delimiterSelect" data-i18n="delimiterLabel">区切り文字</label><select id="delimiterSelect"><option value="auto" data-i18n="encodingAuto">自動判定</option><option value="," data-i18n="delimiterCsv">カンマ (CSV)</option><option value="&#9;" data-i18n="delimiterTsv">タブ (TSV)</option></select></div>
               <div class="field" style="margin-top:8px"><label for="encodingSelect" data-i18n="encoding">文字コード</label><select id="encodingSelect"><option value="auto" data-i18n="encodingAuto">自動判定</option><option value="utf-8">UTF-8</option><option value="shift_jis">Shift_JIS</option></select></div>
               <div class="field" style="margin-top:8px"><label for="pasteDataInput" data-i18n="pasteDataLabel">表を貼り付け</label><textarea class="data-paste" id="pasteDataInput" data-i18n-placeholder="pasteDataPlaceholder" placeholder="name&#9;price&#10;Mug&#9;1980"></textarea></div>
               <button class="button" id="pasteDataButton" type="button" style="width:100%;margin-top:7px" data-i18n="usePastedData">貼り付けた表を使う</button>
@@ -841,7 +842,7 @@
       <h3 data-i18n="helpBasicsTitle">基本操作</h3>
       <ol><li data-i18n="helpStep1">プリセットを選ぶか、用紙とラベルの寸法を入力します。</li><li data-i18n="helpStep2">シートプレビューで枚数と配置を確認します。右・下余白は入力値から自動計算されます。</li><li data-i18n="helpStep3">よく使う寸法は「この用紙設定を保存」から端末内に保存できます。</li><li data-i18n="helpStep4">「シート」で使いかけ用紙の使用済み位置を指定し、配置順とページ数を確認します。</li><li data-i18n="helpStep5">「出力」で位置合わせ用PDFを確認し、必要ならX/Y補正を保存してから印刷用PDFを作成します。</li><li data-i18n="helpStep6">上部の「作業ファイルを保存」から現在の作業を保存し、後から再開できます。</li></ol>
       <h3 data-i18n="helpPrivacyTitle">プライバシー</h3><p data-i18n="helpPrivacyBody">入力した寸法、CSV、画像、コード内容、PDF生成はすべてブラウザー内で処理され、このアプリから外部サーバーへ送信されません。</p>
-      <h3 data-i18n="helpNotesTitle">注意事項</h3><ul><li data-i18n="helpNote1">スマホでは選択中の要素の操作バーや長押しメニューを使えます。スナップは切り替えでき、Altを押しながらドラッグすると一時的に無効になります。</li><li data-i18n="helpNote2">内蔵プリセットはメーカー公式テンプレートではなく、寸法ベースの汎用設定です。実際の用紙寸法を確認して使用してください。</li><li data-i18n="helpNote3">ブラウザーのサイトデータを削除すると、端末内に保存した用紙設定も消える場合があります。</li><li data-i18n="qrTrademark">QRコードは株式会社デンソーウェーブの登録商標です。</li></ul>
+      <h3 data-i18n="helpNotesTitle">注意事項</h3><ul><li data-i18n="helpNote1">スマホでは選択中の要素の操作バーや長押しメニューを使えます。スナップは切り替えでき、Altを押しながらドラッグすると一時的に無効になります。</li><li data-i18n="helpNote2">内蔵プリセットはメーカー公式テンプレートではなく、寸法ベースの汎用設定です。実際の用紙寸法を確認して使用してください。</li><li data-i18n="helpNote3">ブラウザーのサイトデータを削除すると、端末内に保存した用紙設定も消える場合があります。</li><li data-i18n="helpPrintChecks">CSVやコードの内容を確認してから印刷してください。</li><li data-i18n="qrTrademark">QRコードは株式会社デンソーウェーブの登録商標です。</li></ul>
       <p class="dialog-note" data-i18n="helpOffline">配布用HTMLはネットワーク接続なしでも開ける構成です。</p>
       <p data-i18n="helpReliability">用紙寸法は有効な値で入力を終えた時に反映します。空欄や数値として扱えない寸法は、プレビューの寸法表示で「—」になります。内容や印刷設定を変更した後はPDFを作り直してください。</p>
       <section><h3 data-i18n="positionSize">位置とサイズ</h3><p data-i18n="helpGeometry"></p></section>
@@ -861,8 +862,8 @@
   <script>
     (() => {
       'use strict';
-      const APP_CONFIG = {"$schema":"./schemas/app-config.schema.json","name":"Label Sheet Maker","nameJa":"ラベルシート作成","slug":"label-sheet-maker","version":"1.1.4","description":"Create precise label sheets with local data merge, images, codes, used-position selection, print calibration, print-ready PDF output, portable project files, and a keyboard/touch-friendly label editor.","descriptionJa":"ラベル用紙を実寸で設定し、差し込みデータ・画像・コード・使いかけ位置・印刷補正を反映した印刷用PDFと作業ファイルを、操作しやすいラベル編集UIでブラウザー内に作成します。","defaultLanguage":"auto","repository":{"owner":"ttomohisa","name":"htmlapps-label-sheet-maker"},"build":{"output":"dist/index.html","blockRuntimeNetwork":true,"selfExtract":{"enabled":true,"output":"dist/index.self-extract.html"},"sizeBudget":{"readableWarningMb":25,"selfExtractWarningMb":12}}};
-      const BUILD_MANIFEST = {"schemaVersion":2,"builder":"single-html-app-template/1.3","generatedAtUtc":"2026-11-22T16:28:47.6231269Z","app":{"name":"Label Sheet Maker","slug":"label-sheet-maker","version":"1.1.4"},"dependencies":[]};
+      const APP_CONFIG = {"$schema":"./schemas/app-config.schema.json","name":"Label Sheet Maker","nameJa":"ラベルシート作成","slug":"label-sheet-maker","version":"1.1.5","description":"Create precise label sheets with local data merge, images, codes, used-position selection, print calibration, print-ready PDF output, portable project files, and a keyboard/touch-friendly label editor.","descriptionJa":"ラベル用紙を実寸で設定し、差し込みデータ・画像・コード・使いかけ位置・印刷補正を反映した印刷用PDFと作業ファイルを、操作しやすいラベル編集UIでブラウザー内に作成します。","defaultLanguage":"auto","repository":{"owner":"ttomohisa","name":"htmlapps-label-sheet-maker"},"build":{"output":"dist/index.html","blockRuntimeNetwork":true,"selfExtract":{"enabled":true,"output":"dist/index.self-extract.html"},"sizeBudget":{"readableWarningMb":25,"selfExtractWarningMb":12}}};
+      const BUILD_MANIFEST = {"schemaVersion":2,"builder":"single-html-app-template/1.3","generatedAtUtc":"2026-11-22T16:28:47.6231269Z","app":{"name":"Label Sheet Maker","slug":"label-sheet-maker","version":"1.1.5"},"dependencies":[]};
       const assetBundle = {"schemaVersion":2,"dependencies":{}};
       const blobUrls = new Set();
       const assetByteCache = new Map();
@@ -903,8 +904,8 @@
           const s={...settings}; const errors=[]; const dimensions=['paperWidth','paperHeight','labelWidth','labelHeight'];
           for(const key of dimensions){if(!Number.isFinite(Number(s[key]))||Number(s[key])<=0) errors.push(`invalid-${key}`);}
           for(const key of ['leftMargin','topMargin','columnGap','rowGap']){if(!Number.isFinite(Number(s[key]))||Number(s[key])<0) errors.push(`invalid-${key}`);}
-          if(!Number.isInteger(Number(s.columns))||Number(s.columns)<1) errors.push('invalid-columns');
-          if(!Number.isInteger(Number(s.rows))||Number(s.rows)<1) errors.push('invalid-rows');
+          if(!Number.isInteger(Number(s.columns))||Number(s.columns)<1||Number(s.columns)>100) errors.push('invalid-columns');
+          if(!Number.isInteger(Number(s.rows))||Number(s.rows)<1||Number(s.rows)>100) errors.push('invalid-rows');
           const paperWidth=Number(s.paperWidth)||0,paperHeight=Number(s.paperHeight)||0,labelWidth=Number(s.labelWidth)||0,labelHeight=Number(s.labelHeight)||0,columns=Number(s.columns)||0,rows=Number(s.rows)||0,leftMargin=Number(s.leftMargin)||0,topMargin=Number(s.topMargin)||0,columnGap=Number(s.columnGap)||0,rowGap=Number(s.rowGap)||0;
           const usedWidth=leftMargin+columns*labelWidth+Math.max(0,columns-1)*columnGap;
           const usedHeight=topMargin+rows*labelHeight+Math.max(0,rows-1)*rowGap;
@@ -912,7 +913,7 @@
           if(rightMargin < -1e-7) errors.push('horizontal-overflow');
           if(bottomMargin < -1e-7) errors.push('vertical-overflow');
           const labels=[];
-          if(columns>0&&rows>0&&columns*rows<=10000){for(let row=0;row<rows;row+=1){for(let column=0;column<columns;column+=1){labels.push({index:row*columns+column+1,x:round(leftMargin+column*(labelWidth+columnGap),4),y:round(topMargin+row*(labelHeight+rowGap),4),width:labelWidth,height:labelHeight});}}}
+          if(Number.isInteger(columns)&&Number.isInteger(rows)&&columns>0&&rows>0&&columns<=100&&rows<=100&&columns*rows<=10000){for(let row=0;row<rows;row+=1){for(let column=0;column<columns;column+=1){labels.push({index:row*columns+column+1,x:round(leftMargin+column*(labelWidth+columnGap),4),y:round(topMargin+row*(labelHeight+rowGap),4),width:labelWidth,height:labelHeight});}}}
           return {valid:errors.length===0,errors:[...new Set(errors)],rightMargin,bottomMargin,labels,usedWidth:round(usedWidth,4),usedHeight:round(usedHeight,4)};
         }
         return Object.freeze({paperSizeMm,toDisplayUnit,fromDisplayUnit,builtInPresets,computeLayout});
@@ -968,23 +969,34 @@
           return bases.map(base=>{let name=base,suffix=2;while(used.has(name)){name=`${base}_${suffix++}`;while(reserved.has(name))name=`${base}_${suffix++}`;}used.add(name);return name;});
         }
         function parseRecords(text,delimiter){
-          const rows=[];let row=[],field='',quoted=false;
+          const rows=[];let row=[],field='',quoted=false,closed=false,started=false,line=1,recordLine=1;
           const input=String(text??'').replace(/^\ufeff/,'');
-          for(let i=0;i<input.length;i+=1){
+          const fail=()=>{const error=new Error('DATA_INVALID_QUOTE');error.line=line;throw error;};
+          const finishField=()=>{row.push(field);field='';closed=false;};
+          const finishRow=()=>{if(started||row.length||field!==''){finishField();rows.push({cells:row,line:recordLine});}row=[];field='';closed=false;started=false;};
+          for(let i=0;i<input.length;i++){
             const ch=input[i];
-            if(quoted){if(ch==='"'&&input[i+1]==='"'){field+='"';i+=1;}else if(ch==='"')quoted=false;else field+=ch;continue;}
-            if(ch==='"'&&field===''){quoted=true;continue;}
-            if(ch===delimiter){row.push(field);field='';continue;}
-            if(ch==='\n'){row.push(field.replace(/\r$/,''));rows.push(row);row=[];field='';continue;}
-            field+=ch;
+            if(quoted){if(ch==='"'&&input[i+1]==='"'){field+='"';i++;}else if(ch==='"'){quoted=false;closed=true;}else {field+=ch;if(ch==='\n'||(ch==='\r'&&input[i+1]!=='\n'))line++;}continue;}
+            if(ch===delimiter){started=true;finishField();continue;}
+            if(ch==='\n'||ch==='\r'){finishRow();if(ch==='\r'&&input[i+1]==='\n')i++;line++;recordLine=line;continue;}
+            if(closed)fail();
+            if(ch==='"'){if(field!=='')fail();quoted=true;started=true;continue;}
+            started=true;field+=ch;
           }
-          if(field!==''||row.length){row.push(field.replace(/\r$/,''));rows.push(row);}
-          return rows.filter(cells=>cells.some(value=>String(value).length>0));
+          if(quoted)fail();
+          finishRow();return rows;
         }
-        function guessDelimiter(text){const first=String(text??'').split(/\r?\n/,1)[0]||'';return (first.match(/\t/g)||[]).length>(first.match(/,/g)||[]).length?'\t':',';}
+        function guessDelimiter(text){
+          const input=String(text??'').replace(/^\ufeff/,'');let quoted=false,commas=0,tabs=0,started=false;
+          for(let i=0;i<input.length;i++){const ch=input[i];if(ch==='"'){started=true;if(quoted&&input[i+1]==='"'){i++;continue;}quoted=!quoted;continue;}if(quoted)continue;if(ch==='\r'||ch==='\n'){if(started)break;continue;}started=true;if(ch===',')commas++;else if(ch==='\t')tabs++;}
+          return tabs>commas?'\t':',';
+        }
         function parseDelimited(text,delimiter='auto'){
-          const sep=delimiter==='auto'?guessDelimiter(text):delimiter;const records=parseRecords(text,sep);if(!records.length)return {headers:[],rows:[],delimiter:sep};
-          const headers=normalizeHeaders(records[0]);const rows=records.slice(1).map(cells=>Object.fromEntries(headers.map((header,index)=>[header,String(cells[index]??'')])));return {headers,rows,delimiter:sep};
+          const sep=delimiter==='auto'?guessDelimiter(text):delimiter,records=parseRecords(text,sep);
+          if(!records.length)return {headers:[],rows:[],delimiter:sep};
+          const headers=normalizeHeaders(records[0].cells);
+          const rows=records.slice(1).map(({cells,line})=>{if(cells.length!==headers.length){const error=new Error('DATA_COLUMN_COUNT');error.line=line;throw error;}return Object.fromEntries(headers.map((header,index)=>[header,String(cells[index])]));});
+          return {headers,rows,delimiter:sep};
         }
         function detectEncoding(bytes){const array=bytes instanceof Uint8Array?bytes:new Uint8Array(bytes||[]);if(array.length>=3&&array[0]===0xef&&array[1]===0xbb&&array[2]===0xbf)return 'utf-8';try{new TextDecoder('utf-8',{fatal:true}).decode(array);return 'utf-8';}catch{return 'shift_jis';}}
         function decodeBytes(bytes,encoding='utf-8'){const label=encoding==='shift_jis'?'shift_jis':'utf-8';return new TextDecoder(label).decode(bytes instanceof Uint8Array?bytes:new Uint8Array(bytes||[])).replace(/^\ufeff/,'');}
@@ -992,7 +1004,7 @@
           const width=Math.min(Math.max(4,labelWidth*.58),Math.max(.1,labelWidth)),height=Math.min(Math.max(3,labelHeight*.28),Math.max(.1,labelHeight));
           return {id,type:'text',sourceType:'field',fieldName:String(fieldName),text:'',x:Math.max(0,(labelWidth-width)/2),y:Math.max(0,(labelHeight-height)/2),width:Math.min(width,labelWidth),height:Math.min(height,labelHeight),fontFamily:'sans',fontSize:12,bold:false,hAlign:'left',vAlign:'top',wrap:true};
         }
-        function resolveElementText(element,row){if(element?.sourceType==='field')return String(row?.[element.fieldName]??'');return String(element?.text??'');}
+        function resolveElementText(element,row){if(element?.sourceType==='field')return String(row&&Object.hasOwn(row,element.fieldName)?row[element.fieldName]??'':'');return String(element?.text??'');}
         function clampRowIndex(index,rowCount){const count=Math.max(0,Number(rowCount)||0);if(count<=0)return 0;return Math.min(count-1,Math.max(0,Math.trunc(Number(index)||0)));}
         return Object.freeze({normalizeHeaders,parseDelimited,detectEncoding,decodeBytes,createFieldElement,resolveElementText,clampRowIndex});
       })();
@@ -1045,12 +1057,12 @@
         }
         function normalizeElements(elements){
           if(!Array.isArray(elements))throw new Error('PROJECT_INVALID_STRUCTURE');
-          return elements.map(element=>{
+          const ids=new Set(),clipIds=new Set();return elements.map(element=>{
             if(!element||typeof element!=='object'||Array.isArray(element))throw new Error('PROJECT_INVALID_STRUCTURE');
             const type=String(element.type??'');
             if(!['text','image','code'].includes(type))throw new Error('PROJECT_INVALID_STRUCTURE');
             const id=String(element.id??'').trim();
-            if(!id)throw new Error('PROJECT_INVALID_STRUCTURE');
+            const clipId=id.replace(/[^a-zA-Z0-9_-]/g,'');if(!id||!clipId||ids.has(id)||clipIds.has(clipId))throw new Error('PROJECT_INVALID_STRUCTURE');ids.add(id);clipIds.add(clipId);
             for(const key of ['x','y','width','height'])if(!Number.isFinite(Number(element[key])))throw new Error('PROJECT_INVALID_STRUCTURE');
             const out=clone(element);
             out.id=id;out.type=type;
@@ -1156,7 +1168,7 @@
           const lw=Math.max(.1,Number(labelWidth)||.1),lh=Math.max(.1,Number(labelHeight)||.1),isQr=kind==='qr',width=Math.min(lw,isQr?Math.max(12,lh*.55):Math.max(24,lw*.68)),height=Math.min(lh,isQr?width:Math.max(10,lh*.42));
           return {id,type:'code',kind:['qr','code128','code39'].includes(kind)?kind:'qr',sourceType:sourceType==='field'?'field':'fixed',fieldName:String(fieldName),value:String(value),x:Math.max(0,(lw-width)/2),y:Math.max(0,(lh-height)/2),width,height,showText:!isQr};
         }
-        function resolveCodeValue(element,row){return element?.sourceType==='field'?String(row?.[element.fieldName]??''):String(element?.value??'');}
+        function resolveCodeValue(element,row){return element?.sourceType==='field'?String(row&&Object.hasOwn(row,element.fieldName)?row[element.fieldName]??'':''):String(element?.value??'');}
         function validateCode39(value){return /^[0-9A-Z .$/+%-]*$/.test(String(value??''));}
         function encodeCode39(value){const text=String(value??'').toUpperCase();if(!validateCode39(text))throw new Error('CODE39_INVALID');const sequence=['*',...text,'*'];return {text,sequence,patterns:sequence.map(ch=>CODE39_PATTERNS[ch])};}
         function validateCode128B(value){return [...String(value??'')].every(ch=>{const code=ch.charCodeAt(0);return code>=32&&code<=126;});}
@@ -1171,7 +1183,7 @@
           for(let i=0;i<numBlocks;i+=1){const datLen=shortBlockLen-blockEccLen+(i<numShortBlocks?0:1),dat=data.slice(k,k+datLen);k+=datLen;const ecc=rsRemainder(dat,div);if(i<numShortBlocks)dat.push(0);blocks.push(dat.concat(ecc));}
           const result=[];for(let i=0;i<blocks[0].length;i+=1){for(let j=0;j<blocks.length;j+=1){if(i!==shortBlockLen-blockEccLen||j>=numShortBlocks)result.push(blocks[j][i]);}}return result;
         }
-        function alignmentPatternPositions(version){if(version===1)return [];const numAlign=Math.floor(version/7)+2,step=version===32?26:Math.ceil((version*4+numAlign*2+1)/(numAlign*2-2))*2,result=[6];for(let pos=version*4+10;result.length<numAlign;pos-=step)result.splice(1,0,pos);return result;}
+        function alignmentPatternPositions(version){if(version===1)return [];const numAlign=Math.floor(version/7)+2,step=version===32?26:Math.floor((version*4+numAlign*2+1)/(numAlign*2-2))*2,result=[6];for(let pos=version*4+10;result.length<numAlign;pos-=step)result.splice(1,0,pos);return result;}
         function formatBits(mask){const data=mask;let rem=data;for(let i=0;i<10;i+=1)rem=(rem<<1)^((rem>>>9)*0x537);return ((data<<10)|rem)^0x5412;}
         function versionBits(version){let rem=version;for(let i=0;i<12;i+=1)rem=(rem<<1)^((rem>>>11)*0x1f25);return (version<<12)|rem;}
         function setCell(matrix,x,y,dark){if(y>=0&&y<matrix.length&&x>=0&&x<matrix.length)matrix[y][x]=!!dark;}
@@ -1191,10 +1203,28 @@
         function penaltyScore(matrix){const size=matrix.length;let score=0;const runScore=line=>{let runColor=line[0],runLen=1,total=0;for(let i=1;i<line.length;i+=1){if(line[i]===runColor)runLen+=1;else{if(runLen>=5)total+=3+(runLen-5);runColor=line[i];runLen=1;}}if(runLen>=5)total+=3+(runLen-5);return total;};for(let y=0;y<size;y++)score+=runScore(matrix[y]);for(let x=0;x<size;x++)score+=runScore(matrix.map(row=>row[x]));for(let y=0;y<size-1;y++)for(let x=0;x<size-1;x++){const c=matrix[y][x];if(matrix[y][x+1]===c&&matrix[y+1][x]===c&&matrix[y+1][x+1]===c)score+=3;}
           const p1='10111010000',p2='00001011101';const patternScore=line=>{const s=line.map(v=>v?'1':'0').join('');let total=0;for(let i=0;i<=s.length-11;i+=1){const sub=s.slice(i,i+11);if(sub===p1||sub===p2)total+=40;}return total;};for(let y=0;y<size;y++)score+=patternScore(matrix[y]);for(let x=0;x<size;x++)score+=patternScore(matrix.map(row=>row[x]));let dark=0;for(const row of matrix)for(const cell of row)if(cell)dark+=1;const total=size*size;score+=Math.floor(Math.abs(dark*20-total*10)/total)*10;return score;
         }
-        function encodeQrMatrix(text){const bytes=Array.from(new TextEncoder().encode(String(text??'')));let version=0;for(let v=1;v<=40;v+=1){const countBits=v<10?8:16;if(bytes.length>=(1<<countBits))continue;const needed=4+countBits+bytes.length*8;if(needed<=getNumDataCodewords(v)*8){version=v;break;}}if(!version)throw new Error('QR_TOO_LONG');const capacity=getNumDataCodewords(version)*8,countBits=version<10?8:16,bits=[];appendBits(bits,0x4,4);appendBits(bits,bytes.length,countBits);bytes.forEach(byte=>appendBits(bits,byte,8));appendBits(bits,0,Math.min(4,capacity-bits.length));while(bits.length%8)bits.push(false);const data=[];for(let i=0;i<bits.length;i+=8){let value=0;for(let j=0;j<8;j+=1)value=(value<<1)|(bits[i+j]?1:0);data.push(value);}for(let pad=0;data.length<getNumDataCodewords(version);pad+=1)data.push(pad%2===0?0xec:0x11);const codewords=addEccAndInterleave(data,version),base=setupFunctionPatterns(version);drawCodewords(base.matrix,base.isFunction,codewords);let best=null,bestScore=Infinity;for(let mask=0;mask<8;mask+=1){const candidate=applyMask(base.matrix,base.isFunction,mask),score=penaltyScore(candidate);if(score<bestScore){bestScore=score;best=candidate;}}return {version,size:version*4+17,matrix:best};}
+        function qrVersionForBytes(length){for(let v=1;v<=40;v++){const countBits=v<10?8:16;if(length<(1<<countBits)&&4+countBits+length*8<=getNumDataCodewords(v)*8)return v;}return 0;}
+        function validatePrint(elements,data){
+          if(!elements.length)return {key:'printEmptyLabel',row:1};
+          const count=data.mode==='merge'?data.rows.length:1;
+          for(let i=0;i<count;i++){
+            const rowIndex=data.mode==='merge'?i:data.rowIndex,row=data.rows[rowIndex]||{};
+            for(const element of elements){
+              if(element.sourceType==='field'&&(!data.headers.includes(element.fieldName)||!Object.hasOwn(row,element.fieldName)))return {key:'printMissingField',row:rowIndex+1,field:element.fieldName};
+              if(element.type!=='code')continue;
+              const value=resolveCodeValue(element,row);
+              if(!value)return {key:'codeEmpty',row:rowIndex+1};
+              if(element.kind==='code39'&&!validateCode39(value))return {key:'invalidCode39',row:rowIndex+1};
+              if(element.kind==='code128'&&!validateCode128B(value))return {key:'invalidCode128',row:rowIndex+1};
+              if(element.kind==='qr'&&!qrVersionForBytes(new TextEncoder().encode(value).length))return {key:'qrTooLong',row:rowIndex+1};
+            }
+          }
+          return null;
+        }
+        function encodeQrMatrix(text){const bytes=Array.from(new TextEncoder().encode(String(text??''))),version=qrVersionForBytes(bytes.length);if(!version)throw new Error('QR_TOO_LONG');const capacity=getNumDataCodewords(version)*8,countBits=version<10?8:16,bits=[];appendBits(bits,0x4,4);appendBits(bits,bytes.length,countBits);bytes.forEach(byte=>appendBits(bits,byte,8));appendBits(bits,0,Math.min(4,capacity-bits.length));while(bits.length%8)bits.push(false);const data=[];for(let i=0;i<bits.length;i+=8){let value=0;for(let j=0;j<8;j+=1)value=(value<<1)|(bits[i+j]?1:0);data.push(value);}for(let pad=0;data.length<getNumDataCodewords(version);pad+=1)data.push(pad%2===0?0xec:0x11);const codewords=addEccAndInterleave(data,version),base=setupFunctionPatterns(version);drawCodewords(base.matrix,base.isFunction,codewords);let best=null,bestScore=Infinity;for(let mask=0;mask<8;mask+=1){const candidate=applyMask(base.matrix,base.isFunction,mask),score=penaltyScore(candidate);if(score<bestScore){bestScore=score;best=candidate;}}return {version,size:version*4+17,matrix:best};}
         function barcodeRunsFromCode39(value,wideRatio=2.5){const encoded=encodeCode39(value),runs=[];encoded.patterns.forEach((pattern,index)=>{[...pattern].forEach((flag,i)=>runs.push({bar:i%2===0,width:flag==='1'?wideRatio:1}));if(index<encoded.patterns.length-1)runs.push({bar:false,width:1});});return runs;}
         function barcodeRunsFromCode128(value){const encoded=encodeCode128B(value),runs=[];encoded.patterns.forEach(pattern=>{[...pattern].forEach((digit,i)=>runs.push({bar:i%2===0,width:Number(digit)}));});return runs;}
-        return Object.freeze({isSupportedImageMime,createImageElement,createCodeElement,resolveCodeValue,validateCode39,encodeCode39,validateCode128B,encodeCode128B,encodeQrMatrix,barcodeRunsFromCode39,barcodeRunsFromCode128});
+        return Object.freeze({isSupportedImageMime,createImageElement,createCodeElement,resolveCodeValue,validateCode39,encodeCode39,validateCode128B,encodeCode128B,encodeQrMatrix,alignmentPatternPositions,qrVersionForBytes,validatePrint,barcodeRunsFromCode39,barcodeRunsFromCode128});
       })();
       /* BARCODE_MEDIA_CORE:END */
 
@@ -1309,6 +1339,8 @@
       Object.assign(translations.en,{snapToggleLabel:'Snap',touchMenuLabel:'Element menu',shortcutMoveLarge:'Move 1 mm',shortcutSnapBypass:'Disable snap',});
       Object.assign(translations.ja,{pdfPendingLayout:'「用紙」の入力を有効な値に修正してからPDFを作成してください。プレビューは最後に確定した用紙設定です。',helpReliability:'用紙寸法は入力途中には確定せず、有効な値で入力を終えた時に反映します。空欄や数値として扱えない寸法は、プレビューの寸法表示で「—」になります。内容・枚数・使用済み位置・印刷補正を変更した後はPDFを作り直してください。保存時のファイル名は直前まで編集できます。'});
       Object.assign(translations.en,{pdfPendingLayout:'Finish valid values in Paper before creating a PDF. The preview uses the last committed paper settings.',helpReliability:'Paper dimensions are committed only after you finish entering valid values. Empty or non-finite dimensions appear as “—” in preview measurements. After changing content, counts, used positions, or calibration, create a new PDF. You can edit the filename immediately before saving.'});
+      Object.assign(translations.ja,{fieldUnassigned:'未割り当て — 列を選択',delimiterLabel:'区切り文字',delimiterCsv:'カンマ (CSV)',delimiterTsv:'タブ (TSV)',dataInvalidQuote:'{line} 行目付近の引用符を確認してください。以前のデータは保持されています。',dataColumnCount:'{line} 行目の列数が見出しと一致しません。以前のデータは保持されています。',printEmptyLabel:'ラベルに文字や画像などを追加してください。',printMissingField:'差し込み列「{field}」が見つかりません。',printPreflightFailed:'印刷できません（データ行 {row}）：{message}',qrTooLong:'QRコードの内容が長すぎます。',pdfMemoryLimit:'PDFが大きすぎます。印刷するデータを分けてください。',helpPrintChecks:'CSVの引用符や列数に誤りがある場合は読み込みを中止します。未割り当ての差し込み列や無効なコードがある場合は印刷用PDFを作成できません。全面使用済みの用紙は印刷用PDFから除きます。大きなPDFはデータを分けて作成してください。'});
+      Object.assign(translations.en,{fieldUnassigned:'Unassigned — choose a column',delimiterLabel:'Delimiter',delimiterCsv:'Comma (CSV)',delimiterTsv:'Tab (TSV)',dataInvalidQuote:'Check the quotes near line {line}. Your previous data is unchanged.',dataColumnCount:'Line {line} has a different number of columns from the header. Your previous data is unchanged.',printEmptyLabel:'Add text, an image or another element to the label.',printMissingField:'Merge column “{field}” was not found.',printPreflightFailed:'Cannot print (data row {row}): {message}',qrTooLong:'The QR code content is too long.',pdfMemoryLimit:'The PDF is too large. Split the print job into smaller batches.',helpPrintChecks:'Files with malformed quotes or inconsistent column counts are rejected. Assign missing merge columns and correct invalid codes before creating a print PDF. A fully used sheet is omitted from print PDFs. Split large print jobs into smaller batches.'});
       function readStorage(key){try{return localStorage.getItem(key);}catch{return null;}}
       function writeStorage(key,value){try{localStorage.setItem(key,value);return true;}catch{return false;}}
       function removeStorage(key){try{localStorage.removeItem(key);return true;}catch{return false;}}
@@ -1357,7 +1389,7 @@
         cancelEditorInteraction({restore:false});invalidatePendingImports();invalidateGeneratedPdf();resetLayoutDrafts();editorState.deletedSnapshot=null;
         state.settings={...defaultSettings,...project.settings};state.activePresetId='custom';const restoredLayout=LabelSheetCore.computeLayout(state.settings);
         editorState.elements=JSON.parse(JSON.stringify(project.editor.elements));if(restoredLayout.valid)editorState.elements=editorState.elements.map(element=>LabelEditorCore.clampElement(element,editorBounds()));editorState.selectedId=null;editorState.history=[JSON.parse(JSON.stringify(editorState.elements))];editorState.historyIndex=0;editorState.interaction=null;editorState.panInteraction=null;
-        dataState.mode=project.data.mode;dataState.repeatCount=project.data.repeatCount;dataState.headers=[...project.data.headers];dataState.rows=JSON.parse(JSON.stringify(project.data.rows));dataState.rowIndex=project.data.rowIndex;dataState.fileBytes=null;dataState.fileName=project.data.fileName;dataState.encoding=project.data.encoding;dataState.detectedEncoding=project.data.detectedEncoding;
+        dataState.mode=project.data.mode;dataState.repeatCount=project.data.repeatCount;dataState.headers=[...project.data.headers];dataState.rows=JSON.parse(JSON.stringify(project.data.rows));dataState.rowIndex=project.data.rowIndex;dataState.fileBytes=null;dataState.fileName=project.data.fileName;dataState.encoding=project.data.encoding;dataState.detectedEncoding=project.data.detectedEncoding;dataState.delimiterMode='auto';
         sheetState.usedFirstPage=restoredLayout.valid?SheetCompositionCore.normalizeUsed(project.sheet.usedFirstPage,restoredLayout.labels.length):[...project.sheet.usedFirstPage];sheetState.pageIndex=0;
         outputState.offsetX=project.output.offsetX;outputState.offsetY=project.output.offsetY;outputState.pageIndex=0;outputState.activeCalibrationId='custom';outputState.generatedBlob=null;outputState.generatedFilename=PdfOutputCore.sanitizePdfFilename(project.output.filename);outputState.generatedKind='print';
         $('#outputFilename').value=PdfOutputCore.sanitizePdfFilename(project.output.filename);projectFileName=ProjectFileCore.sanitizeProjectFilename(fileName||projectFileName);$('#projectFileName').textContent=projectFileName;
@@ -1437,14 +1469,14 @@
         visibleLines.forEach((line,index)=>{const tspan=createSvg('tspan',{x,dy:index===0?0:lineHeight});tspan.textContent=line;text.append(tspan);});group.append(text);appendSelectionHandles(group,element,selected);svg.append(group);
       }
       function renderImageElement(svg,defs,element,selected,idPrefix=''){
-        const group=createSvg('g',{'data-element-id':element.id});const clipId=`clip-${idPrefix}${element.id.replace(/[^a-zA-Z0-9_-]/g,'')}`;const clip=createSvg('clipPath',{id:clipId});clip.append(createSvg('rect',{x:element.x,y:element.y,width:element.width,height:element.height}));defs.append(clip);group.append(createSvg('rect',{x:element.x,y:element.y,width:element.width,height:element.height,fill:'#f7f7f4','pointer-events':'all','data-element-hitbox':'true','data-element-id':element.id,cursor:'move'}));const image=createSvg('image',{x:element.x,y:element.y,width:element.width,height:element.height,href:element.dataUrl||'','preserveAspectRatio':element.fit==='cover'?'xMidYMid slice':'xMidYMid meet','clip-path':`url(#${clipId})`,'pointer-events':'none'});group.append(image);appendSelectionHandles(group,element,selected);svg.append(group);
+        const group=createSvg('g',{'data-element-id':element.id});const clipId=`clip-${idPrefix}${element.id.replace(/[^a-zA-Z0-9_-]/g,'')}`;const clip=createSvg('clipPath',{id:clipId});clip.append(createSvg('rect',{x:element.x,y:element.y,width:element.width,height:element.height}));defs.append(clip);group.append(createSvg('rect',{x:element.x,y:element.y,width:element.width,height:element.height,fill:'transparent','pointer-events':'all','data-element-hitbox':'true','data-element-id':element.id,cursor:'move'}));const image=createSvg('image',{x:element.x,y:element.y,width:element.width,height:element.height,href:element.dataUrl||'','preserveAspectRatio':element.fit==='cover'?'xMidYMid slice':'xMidYMid meet','clip-path':`url(#${clipId})`,'pointer-events':'none'});group.append(image);appendSelectionHandles(group,element,selected);svg.append(group);
       }
       function renderCodePlaceholder(group,element,message){group.append(createSvg('rect',{x:element.x,y:element.y,width:element.width,height:element.height,rx:Math.min(1.2,element.height*.08),fill:'#fff6f4',stroke:'#c75045','stroke-width':'.3','stroke-dasharray':'1 1','vector-effect':'non-scaling-stroke'}));const text=createSvg('text',{x:element.x+element.width/2,y:element.y+element.height/2,'text-anchor':'middle','dominant-baseline':'middle','font-size':Math.max(1.4,Math.min(2.6,element.height*.16)),fill:'#9c3931','pointer-events':'none'});text.textContent=message;group.append(text);}
       function renderQrCode(group,element,value){const encoded=BarcodeMediaCore.encodeQrMatrix(value),quiet=4,total=encoded.size+quiet*2,module=Math.min(element.width,element.height)/total,codeSize=module*total,ox=element.x+(element.width-codeSize)/2,oy=element.y+(element.height-codeSize)/2;group.append(createSvg('rect',{x:ox,y:oy,width:codeSize,height:codeSize,fill:'#fff','pointer-events':'none'}));for(let y=0;y<encoded.size;y+=1)for(let x=0;x<encoded.size;x+=1)if(encoded.matrix[y][x])group.append(createSvg('rect',{x:ox+(x+quiet)*module,y:oy+(y+quiet)*module,width:module+.01,height:module+.01,fill:'#111','pointer-events':'none'}));}
       function renderLinearCode(group,element,value,kind){const showText=element.showText!==false,runs=kind==='code39'?BarcodeMediaCore.barcodeRunsFromCode39(value):BarcodeMediaCore.barcodeRunsFromCode128(value),quiet=10,total=runs.reduce((sum,run)=>sum+run.width,quiet*2),textHeight=showText?Math.min(3.5,element.height*.23):0,barHeight=Math.max(1,element.height-textHeight-.8),module=element.width/total;let cursor=element.x+quiet*module;group.append(createSvg('rect',{x:element.x,y:element.y,width:element.width,height:element.height,fill:'#fff','pointer-events':'none'}));for(const run of runs){if(run.bar)group.append(createSvg('rect',{x:cursor,y:element.y+.25,width:Math.max(.04,run.width*module+.01),height:barHeight-.5,fill:'#111','pointer-events':'none'}));cursor+=run.width*module;}if(showText){const label=createSvg('text',{x:element.x+element.width/2,y:element.y+element.height-.3,'text-anchor':'middle','font-family':'ui-monospace, SFMono-Regular, Menlo, Consolas, monospace','font-size':Math.max(1.3,Math.min(2.8,textHeight*.75)),fill:'#20211f','pointer-events':'none'});label.textContent=value;group.append(label);}}
-      function codeValidation(element,row=currentDataRow(),translate=t){const value=BarcodeMediaCore.resolveCodeValue(element,row);if(!value)return {level:'error',message:translate('codeEmpty')};if(element.kind==='code39'&&!BarcodeMediaCore.validateCode39(value))return {level:'error',message:translate('invalidCode39')};if(element.kind==='code128'&&!BarcodeMediaCore.validateCode128B(value))return {level:'error',message:translate('invalidCode128')};if(element.kind==='qr'&&Math.min(element.width,element.height)<15)return {level:'warning',message:translate('qrTooSmall')};return {level:'ok',message:translate('codeReady')};}
+      function codeValidation(element,row=currentDataRow(),translate=t){const value=BarcodeMediaCore.resolveCodeValue(element,row);if(!value)return {level:'error',message:translate('codeEmpty')};if(element.kind==='code39'&&!BarcodeMediaCore.validateCode39(value))return {level:'error',message:translate('invalidCode39')};if(element.kind==='code128'&&!BarcodeMediaCore.validateCode128B(value))return {level:'error',message:translate('invalidCode128')};if(element.kind==='qr'&&!BarcodeMediaCore.qrVersionForBytes(new TextEncoder().encode(value).length))return {level:'error',message:translate('qrTooLong')};if(element.kind==='qr'&&Math.min(element.width,element.height)<15)return {level:'warning',message:translate('qrTooSmall')};return {level:'ok',message:translate('codeReady')};}
       function renderCodeElement(svg,element,selected,row=currentDataRow(),translate=t){const group=createSvg('g',{'data-element-id':element.id});group.append(createSvg('rect',{x:element.x,y:element.y,width:element.width,height:element.height,fill:'transparent','pointer-events':'all','data-element-hitbox':'true','data-element-id':element.id,cursor:'move'}));const value=BarcodeMediaCore.resolveCodeValue(element,row);try{const validation=codeValidation(element,row,translate);if(validation.level==='error')renderCodePlaceholder(group,element,validation.message);else if(element.kind==='qr')renderQrCode(group,element,value);else renderLinearCode(group,element,value,element.kind);}catch(error){renderCodePlaceholder(group,element,translate('codeGenerationFailed'));}appendSelectionHandles(group,element,selected);svg.append(group);}
-      function renderDataFieldSelect(selected='',selector='#dataFieldSelect'){const select=$(selector);if(!select)return;select.replaceChildren();if(!dataState.headers.length){const option=document.createElement('option');option.value='';option.textContent=t('noDataFields');select.append(option);select.disabled=true;return;}select.disabled=false;for(const header of dataState.headers){const option=document.createElement('option');option.value=header;option.textContent=header;select.append(option);}select.value=dataState.headers.includes(selected)?selected:dataState.headers[0];}
+      function renderDataFieldSelect(selected='',selector='#dataFieldSelect'){const select=$(selector);if(!select)return;select.replaceChildren();if(!dataState.headers.length){const option=document.createElement('option');option.value='';option.textContent=t('noDataFields');select.append(option);select.disabled=true;return;}select.disabled=false;for(const header of dataState.headers){const option=document.createElement('option');option.value=header;option.textContent=header;select.append(option);}if(!dataState.headers.includes(selected)){const option=document.createElement('option');option.value='';option.textContent=t('fieldUnassigned');option.disabled=true;select.prepend(option);select.value='';}else select.value=selected;}
       function setGeometryInputError(input,message){
         input.setCustomValidity(message);input.setAttribute('aria-invalid',String(!!message));const field=input.closest('.field');let error=field?.querySelector('.layout-input-error');if(!error&&message&&field){error=document.createElement('span');error.className='layout-input-error';error.id=`${input.id}-error`;field.append(error);input.setAttribute('aria-describedby',error.id);}if(error){error.textContent=message;error.hidden=!message;}
       }
@@ -1478,7 +1510,7 @@
       function currentDataRow(){return dataState.rows[dataState.rowIndex]||{};}
       function renderDataPanel(){
         refreshPdfValidity();
-        $('#dataModeSelect').value=dataState.mode;$('#repeatCount').value=String(dataState.repeatCount);$('#repeatCountField').hidden=dataState.mode!=='repeat';$('#dataSection').hidden=dataState.mode!=='merge';$('#encodingSelect').value=dataState.encoding;
+        $('#dataModeSelect').value=dataState.mode;$('#repeatCount').value=String(dataState.repeatCount);$('#repeatCountField').hidden=dataState.mode!=='repeat';$('#dataSection').hidden=dataState.mode!=='merge';$('#encodingSelect').value=dataState.encoding;$('#delimiterSelect').value=dataState.delimiterMode||'auto';
         const hasData=dataState.headers.length>0;const status=$('#dataStatus');status.classList.toggle('has-data',hasData);status.textContent=hasData?t('dataLoaded',{rows:dataState.rows.length,cols:dataState.headers.length,name:dataState.fileName||t('pastedData')}):t('dataEmpty');const guideStatus=$('#dataGuideStatus');guideStatus.classList.toggle('has-data',hasData);guideStatus.textContent=hasData?t('dataGuideLoaded',{rows:dataState.rows.length,cols:dataState.headers.length}):t('dataGuideEmpty');
         $('#dataPreview').hidden=!hasData;$('#dataRowNav').hidden=!hasData;$('#dataFieldArea').hidden=!hasData;
         if(hasData){const head=$('#dataPreviewHead'),body=$('#dataPreviewBody');head.replaceChildren();body.replaceChildren();const trh=document.createElement('tr');for(const header of dataState.headers){const th=document.createElement('th');th.textContent=header;trh.append(th);}head.append(trh);const start=Math.max(0,dataState.rowIndex-1),end=Math.min(dataState.rows.length,start+3);for(let i=start;i<end;i+=1){const tr=document.createElement('tr');if(i===dataState.rowIndex)tr.setAttribute('aria-current','true');for(const header of dataState.headers){const td=document.createElement('td');td.textContent=dataState.rows[i]?.[header]??'';tr.append(td);}body.append(tr);}$('#dataRowIndex').value=String(dataState.rows.length?dataState.rowIndex+1:1);$('#dataRowIndex').max=String(Math.max(1,dataState.rows.length));$('#dataRowPrev').disabled=dataState.rowIndex<=0;$('#dataRowNext').disabled=dataState.rowIndex>=dataState.rows.length-1;const list=$('#dataFieldList');list.replaceChildren();for(const header of dataState.headers){const button=document.createElement('button');button.type='button';button.className='data-field-button';button.textContent=`+ ${header}`;button.title=header;button.addEventListener('click',()=>addDataFieldElement(header));list.append(button);}}
@@ -1531,7 +1563,7 @@
       // display units and the editable filename do not change an existing PDF.
       function pdfContentFingerprint(){return JSON.stringify({settings:state.settings,elements:editorState.elements,data:{mode:dataState.mode,repeatCount:dataState.repeatCount,headers:dataState.headers,rows:dataState.rows,rowIndex:dataState.mode==='repeat'&&editorState.elements.some(element=>element.sourceType==='field')?dataState.rowIndex:0},usedFirstPage:sheetState.usedFirstPage,output:{offsetX:outputState.offsetX,offsetY:outputState.offsetY}});}
       function capturePdfSnapshot(){
-        const snapshot=JSON.parse(pdfContentFingerprint());snapshot.layout=LabelSheetCore.computeLayout(snapshot.settings);snapshot.composition=SheetCompositionCore.compose({slotCount:snapshot.layout.valid?snapshot.layout.labels.length:0,itemCount:SheetCompositionCore.itemCountForMode({mode:snapshot.data.mode,repeatCount:snapshot.data.repeatCount,rowCount:snapshot.data.rows.length}),usedFirstPage:snapshot.usedFirstPage});snapshot.messages=Object.fromEntries(['codeEmpty','invalidCode39','invalidCode128','qrTooSmall','codeReady','codeGenerationFailed'].map(key=>[key,t(key)]));const freeze=value=>{if(value&&typeof value==='object'){Object.values(value).forEach(freeze);Object.freeze(value);}return value;};return freeze(snapshot);
+        const snapshot=JSON.parse(pdfContentFingerprint());snapshot.layout=LabelSheetCore.computeLayout(snapshot.settings);snapshot.composition=SheetCompositionCore.compose({slotCount:snapshot.layout.valid?snapshot.layout.labels.length:0,itemCount:SheetCompositionCore.itemCountForMode({mode:snapshot.data.mode,repeatCount:snapshot.data.repeatCount,rowCount:snapshot.data.rows.length}),usedFirstPage:snapshot.usedFirstPage});snapshot.messages=Object.fromEntries(['codeEmpty','invalidCode39','invalidCode128','qrTooSmall','codeReady','codeGenerationFailed','qrTooLong'].map(key=>[key,t(key)]));const freeze=value=>{if(value&&typeof value==='object'){Object.values(value).forEach(freeze);Object.freeze(value);}return value;};return freeze(snapshot);
       }
       function invalidateGeneratedPdf(){
         outputState.generation+=1;outputState.busy=false;outputState.sourceFingerprint=null;outputState.generatedBlob=null;outputState.generatedMetadata=null;$('#outputResult').hidden=true;$('#outputProgress').hidden=true;$('#saveGeneratedPdf').disabled=true;
@@ -1544,28 +1576,28 @@
       }
       function renderOutputPage(){
         const validDraft=refreshPdfValidity();$('#outputLayoutPending').hidden=validDraft;$('#outputLayoutPending').textContent=t('pdfPendingLayout');
-        const root=$('#outputPreviewSvg');if(!root)return;const {layout,composition}=sheetComposition();const totalPages=Math.max(1,composition.pageCount);outputState.pageIndex=Math.max(0,Math.min(outputState.pageIndex,totalPages-1));$('#outputSummaryCount').textContent=String(composition.itemCount);$('#outputSummaryPages').textContent=String(totalPages);$('#outputSummaryPaper').textContent=paperSummaryName();$('#outputSummaryUsed').textContent=String(composition.usedCount);$('#outputOffsetX').value=String(outputState.offsetX);$('#outputOffsetY').value=String(outputState.offsetY);$('#outputPageIndicator').textContent=`${outputState.pageIndex+1} / ${totalPages}`;$('#outputPagePrev').disabled=outputState.pageIndex<=0;$('#outputPageNext').disabled=outputState.pageIndex>=totalPages-1;$('#createCalibrationPdf').disabled=!validDraft||!layout.valid||outputState.busy;$('#createPrintPdf').disabled=!validDraft||!layout.valid||composition.itemCount===0||outputState.busy;renderCalibrationPresets();renderOutputResult(composition);
-        try{const printable=renderPrintablePageSvg(outputState.pageIndex);root.setAttribute('viewBox',printable.getAttribute('viewBox'));root.replaceChildren(...Array.from(printable.childNodes).map(node=>node.cloneNode(true)));}catch{root.setAttribute('viewBox',`0 0 ${Math.max(1,Number(state.settings.paperWidth)||1)} ${Math.max(1,Number(state.settings.paperHeight)||1)}`);root.replaceChildren();const text=createSvg('text',{x:'50%',y:'50%','text-anchor':'middle','dominant-baseline':'middle',fill:'#7a5400','font-size':'4'});text.textContent=t('pdfInvalidLayout');root.append(text);}
+        const root=$('#outputPreviewSvg');if(!root)return;const {layout,composition}=sheetComposition();const printPages=composition.pages.map((page,index)=>page.slots.some(slot=>slot.status==='assigned')?index:-1).filter(index=>index>=0),totalPages=Math.max(1,printPages.length);outputState.pageIndex=Math.max(0,Math.min(outputState.pageIndex,totalPages-1));$('#outputSummaryCount').textContent=String(composition.itemCount);$('#outputSummaryPages').textContent=String(totalPages);$('#outputSummaryPaper').textContent=paperSummaryName();$('#outputSummaryUsed').textContent=String(composition.usedCount);$('#outputOffsetX').value=String(outputState.offsetX);$('#outputOffsetY').value=String(outputState.offsetY);$('#outputPageIndicator').textContent=`${outputState.pageIndex+1} / ${totalPages}`;$('#outputPagePrev').disabled=outputState.pageIndex<=0;$('#outputPageNext').disabled=outputState.pageIndex>=totalPages-1;$('#createCalibrationPdf').disabled=!validDraft||!layout.valid||outputState.busy;$('#createPrintPdf').disabled=!validDraft||!layout.valid||composition.itemCount===0||outputState.busy;renderCalibrationPresets();renderOutputResult(composition);
+        try{const printable=renderPrintablePageSvg(printPages[outputState.pageIndex]??0);root.setAttribute('viewBox',printable.getAttribute('viewBox'));root.replaceChildren(...Array.from(printable.childNodes).map(node=>node.cloneNode(true)));}catch{root.setAttribute('viewBox',`0 0 ${Math.max(1,Number(state.settings.paperWidth)||1)} ${Math.max(1,Number(state.settings.paperHeight)||1)}`);root.replaceChildren();const text=createSvg('text',{x:'50%',y:'50%','text-anchor':'middle','dominant-baseline':'middle',fill:'#7a5400','font-size':'4'});text.textContent=t('pdfInvalidLayout');root.append(text);}
       }
       async function rasterizeSvgToJpeg(svg,settings=state.settings){
         const metrics=PdfOutputCore.pageMetrics(settings.paperWidth,settings.paperHeight,300);if(metrics.widthPx>16384||metrics.heightPx>16384||metrics.widthPx*metrics.heightPx>65000000)throw new Error('PAGE_TOO_LARGE');await document.fonts?.ready;const xml=new XMLSerializer().serializeToString(svg),url=URL.createObjectURL(new Blob([xml],{type:'image/svg+xml'}));blobUrls.add(url);try{const image=await new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=()=>reject(new Error('SVG_RENDER'));img.src=url;});const canvas=document.createElement('canvas');canvas.width=metrics.widthPx;canvas.height=metrics.heightPx;const ctx=canvas.getContext('2d',{alpha:false});if(!ctx)throw new Error('CANVAS');ctx.fillStyle='#fff';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.drawImage(image,0,0,canvas.width,canvas.height);const blob=await new Promise((resolve,reject)=>canvas.toBlob(value=>value?resolve(value):reject(new Error('JPEG')),'image/jpeg',.98));const bytes=new Uint8Array(await blob.arrayBuffer());canvas.width=1;canvas.height=1;return {jpegBytes:bytes,pixelWidth:metrics.widthPx,pixelHeight:metrics.heightPx};}finally{URL.revokeObjectURL(url);blobUrls.delete(url);}
       }
       async function createPdfDocument(kind='print'){
-        if(!refreshPdfValidity()){AppToast.show({message:t('pdfInvalidLayout')});return;}if(outputState.busy)return;const snapshot=capturePdfSnapshot(),{layout,composition}=snapshot;if(!layout.valid){AppToast.show({message:t('pdfInvalidLayout')});return;}if(kind==='print'&&composition.itemCount===0){AppToast.show({message:t('pdfNoData')});return;}
+        if(!refreshPdfValidity()){AppToast.show({message:t('pdfInvalidLayout')});return;}if(outputState.busy)return;const snapshot=capturePdfSnapshot(),{layout,composition}=snapshot;if(!layout.valid){AppToast.show({message:t('pdfInvalidLayout')});return;}if(kind==='print'&&composition.itemCount===0){AppToast.show({message:t('pdfNoData')});return;}if(kind==='print'){const problem=BarcodeMediaCore.validatePrint(snapshot.elements,snapshot.data);if(problem){AppToast.show({message:t('printPreflightFailed',{row:problem.row,message:t(problem.key,{field:problem.field||''})}),duration:7000});return;}}
         invalidateGeneratedPdf();const generation=outputState.generation;outputState.sourceFingerprint=pdfContentFingerprint();outputState.busy=true;$('#outputProgress').hidden=false;$('#outputProgressBar').value=0;renderOutputPage();
         const isCurrent=()=>refreshPdfValidity()&&generation===outputState.generation;
         try{
-          const total=kind==='calibration'?1:composition.pageCount,pages=[];
+          const pageIndices=kind==='calibration'?[0]:composition.pages.map((page,index)=>page.slots.some(slot=>slot.status==='assigned')?index:-1).filter(index=>index>=0),total=pageIndices.length,pages=[];let jpegTotal=0;
           for(let i=0;i<total;i+=1){
             if(!isCurrent())return;$('#outputProgressText').textContent=t('pdfRendering',{current:i+1,total});$('#outputProgressBar').value=Math.round(i/Math.max(1,total)*100);
             await new Promise(resolve=>requestAnimationFrame(()=>resolve()));if(!isCurrent())return;
-            const page=await rasterizeSvgToJpeg(renderPrintablePageSvg(i,{calibration:kind==='calibration',snapshot}),snapshot.settings);if(!isCurrent())return;pages.push(page);
+            const page=await rasterizeSvgToJpeg(renderPrintablePageSvg(pageIndices[i],{calibration:kind==='calibration',snapshot}),snapshot.settings);if(!isCurrent())return;jpegTotal+=page.jpegBytes.length;if(jpegTotal>128*1024*1024)throw new Error('PDF_MEMORY_LIMIT');pages.push(page);
           }
           $('#outputProgressText').textContent=t('pdfPreparing');$('#outputProgressBar').value=96;
           const bytes=PdfOutputCore.buildPdf(pages,snapshot.settings.paperWidth,snapshot.settings.paperHeight),blob=new Blob([bytes],{type:'application/pdf'});if(!isCurrent())return;
           outputState.generatedBlob=blob;outputState.generatedKind=kind;outputState.generatedMetadata=Object.freeze({kind,itemCount:composition.itemCount,pageCount:total,paperWidth:snapshot.settings.paperWidth,paperHeight:snapshot.settings.paperHeight,offsetX:snapshot.output.offsetX,offsetY:snapshot.output.offsetY});
           const base=PdfOutputCore.sanitizePdfFilename($('#outputFilename').value);outputState.generatedFilename=kind==='calibration'?base.replace(/\.pdf$/i,'-calibration.pdf'):base;$('#outputFilename').value=base;$('#outputProgressBar').value=100;renderOutputResult();
-        }catch(error){if(isCurrent()){console.error(error);AppToast.show({message:error?.message==='PAGE_TOO_LARGE'?t('pdfTooLarge'):t('pdfFailed')});}}
+        }catch(error){if(isCurrent()){console.error(error);AppToast.show({message:error?.message==='PAGE_TOO_LARGE'?t('pdfTooLarge'):error?.message==='PDF_MEMORY_LIMIT'?t('pdfMemoryLimit'):t('pdfFailed')});}}
         finally{if(generation===outputState.generation){outputState.busy=false;$('#outputProgress').hidden=true;renderOutputPage();}}
       }
       function saveGeneratedPdf(){if(!refreshPdfValidity()||!outputState.generatedBlob)return;const base=PdfOutputCore.sanitizePdfFilename($('#outputFilename').value);outputState.generatedFilename=outputState.generatedMetadata.kind==='calibration'?base.replace(/\.pdf$/i,'-calibration.pdf'):base;$('#outputFilename').value=base;const url=URL.createObjectURL(outputState.generatedBlob),a=document.createElement('a');a.href=url;a.download=outputState.generatedFilename;a.style.display='none';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);}
@@ -1574,13 +1606,13 @@
       function applyParsedData(parsed,{name=''}={}){dataState.headers=parsed.headers;dataState.rows=parsed.rows;dataState.rowIndex=0;dataState.fileName=name;dataState.mode='merge';renderLabelEditor();if(parsed.headers.length)AppToast.show({message:t('dataLoadedToast',{rows:parsed.rows.length})});else AppToast.show({message:t('dataParseEmpty')});}
       function parseTextData(text,{name='',fileBytes=null,encoding='auto',detectedEncoding='utf-8'}={}){
         importState.dataRequest+=1;
-        try{const parsed=DataMergeCore.parseDelimited(text,'auto');dataState.fileBytes=fileBytes;dataState.encoding=encoding;dataState.detectedEncoding=detectedEncoding;applyParsedData(parsed,{name});}catch(error){console.error(error);AppToast.show({message:t('dataParseFailed')});}
+        try{const parsed=DataMergeCore.parseDelimited(text,dataState.delimiterMode||'auto');if(!parsed.headers.length){AppToast.show({message:t('dataParseEmpty')});return false;}dataState.fileBytes=fileBytes;dataState.encoding=encoding;dataState.detectedEncoding=detectedEncoding;applyParsedData(parsed,{name});return true;}catch(error){console.error(error);const key=error.message==='DATA_INVALID_QUOTE'?'dataInvalidQuote':error.message==='DATA_COLUMN_COUNT'?'dataColumnCount':'dataParseFailed';AppToast.show({message:t(key,{line:error.line||1}),duration:6500});return false;}
       }
       async function loadDataFile(file){
         if(!file)return;const request=++importState.dataRequest;
         try{const bytes=new Uint8Array(await file.arrayBuffer());if(request!==importState.dataRequest)return;const detected=DataMergeCore.detectEncoding(bytes),encoding=dataState.encoding==='auto'?detected:dataState.encoding;parseTextData(DataMergeCore.decodeBytes(bytes,encoding),{name:file.name||'',fileBytes:bytes,encoding:dataState.encoding,detectedEncoding:detected});}catch(error){if(request!==importState.dataRequest)return;console.error(error);AppToast.show({message:t('dataReadFailed')});}
       }
-      function reparseDataFile(){if(!dataState.fileBytes)return;const encoding=dataState.encoding==='auto'?DataMergeCore.detectEncoding(dataState.fileBytes):dataState.encoding;parseTextData(DataMergeCore.decodeBytes(dataState.fileBytes,encoding),{name:dataState.fileName,fileBytes:dataState.fileBytes,encoding:dataState.encoding,detectedEncoding:encoding});}
+      function reparseDataFile(){if(!dataState.fileBytes)return;const encoding=dataState.encoding==='auto'?DataMergeCore.detectEncoding(dataState.fileBytes):dataState.encoding;return parseTextData(DataMergeCore.decodeBytes(dataState.fileBytes,encoding),{name:dataState.fileName,fileBytes:dataState.fileBytes,encoding:dataState.encoding,detectedEncoding:encoding});}
       function setDataRow(index){dataState.rowIndex=DataMergeCore.clampRowIndex(index,dataState.rows.length);renderLabelEditor();}
       function addDataFieldElement(fieldName){if(!fieldName)return;cancelEditorInteraction();const bounds=editorBounds(),element=DataMergeCore.createFieldElement({id:newEditorId('text'),fieldName,labelWidth:bounds.width,labelHeight:bounds.height});editorState.elements.push(element);editorState.selectedId=element.id;pushEditorHistory();renderLabelEditor();}
 
@@ -1627,7 +1659,8 @@
       $('#openDataSectionButton').addEventListener('click',focusDataSection);$$('[data-open-data-section]').forEach(button=>button.addEventListener('click',focusDataSection));
       $('#repeatCount').addEventListener('change',event=>{dataState.repeatCount=Math.max(1,Math.min(10000,Math.trunc(Number(event.target.value)||1)));sheetState.pageIndex=0;renderDataPanel();renderSheetPage();});
       $('#dataFileInput').addEventListener('change',event=>{loadDataFile(event.target.files?.[0]);event.target.value='';});
-      $('#encodingSelect').addEventListener('change',event=>{dataState.encoding=event.target.value;reparseDataFile();renderDataPanel();});
+      $('#encodingSelect').addEventListener('change',event=>{const previous=dataState.encoding;dataState.encoding=event.target.value;if(reparseDataFile()===false)dataState.encoding=previous;renderDataPanel();});
+      $('#delimiterSelect').addEventListener('change',event=>{const previous=dataState.delimiterMode||'auto';dataState.delimiterMode=event.target.value;if(reparseDataFile()===false)dataState.delimiterMode=previous;renderDataPanel();});
       $('#pasteDataButton').addEventListener('click',()=>{const text=$('#pasteDataInput').value;if(!text.trim()){importState.dataRequest+=1;AppToast.show({message:t('pasteDataEmpty')});return;}parseTextData(text,{name:t('pastedData')});});
       const dataDropZone=$('#dataDropZone');
       dataDropZone.addEventListener('dragover',event=>{event.preventDefault();dataDropZone.classList.add('is-dragover');});
@@ -1670,7 +1703,7 @@
       $('#sheetPreviewSvg').addEventListener('click',event=>{const slot=sheetSlotFromEvent(event);if(slot)toggleUsedSlot(slot);});
       $('#sheetPreviewSvg').addEventListener('keydown',event=>{if(event.key!=='Enter'&&event.key!==' ')return;const slot=sheetSlotFromEvent(event);if(!slot)return;event.preventDefault();toggleUsedSlot(slot);});
       $('#outputPagePrev').addEventListener('click',()=>{outputState.pageIndex=Math.max(0,outputState.pageIndex-1);renderOutputPage();});
-      $('#outputPageNext').addEventListener('click',()=>{const {composition}=sheetComposition();outputState.pageIndex=Math.min(Math.max(0,composition.pageCount-1),outputState.pageIndex+1);renderOutputPage();});
+      $('#outputPageNext').addEventListener('click',()=>{const {composition}=sheetComposition();outputState.pageIndex=Math.min(Math.max(0,composition.pages.filter(page=>page.slots.some(slot=>slot.status==='assigned')).length-1),outputState.pageIndex+1);renderOutputPage();});
       function applyOutputOffset(axis,value){const next=PdfOutputCore.normalizeOffset(value);if(axis==='x')outputState.offsetX=next;else outputState.offsetY=next;outputState.activeCalibrationId='custom';renderOutputPage();}
       $('#outputOffsetX').addEventListener('change',event=>applyOutputOffset('x',event.target.value));$('#outputOffsetY').addEventListener('change',event=>applyOutputOffset('y',event.target.value));
       $('#outputCalibrationPreset').addEventListener('change',event=>{const preset=outputState.calibrationPresets.find(item=>item.id===event.target.value);if(preset){outputState.activeCalibrationId=preset.id;outputState.offsetX=PdfOutputCore.normalizeOffset(preset.x);outputState.offsetY=PdfOutputCore.normalizeOffset(preset.y);}else outputState.activeCalibrationId='custom';renderOutputPage();});
@@ -1694,7 +1727,16 @@
       $$('[data-integer]').forEach(input=>{input.addEventListener('input',()=>updateIntegerInput(input));input.addEventListener('change',()=>updateIntegerInput(input,{commit:true}));input.addEventListener('blur',()=>commitLayoutDrafts());});
       $('#presetSelect').addEventListener('change',event=>{selectPreset(event.target.value);$('#deleteLayoutButton').disabled=!state.savedPresets.some(item=>item.id===event.target.value);});
       $('#deleteLayoutButton').addEventListener('click',deleteCurrentSavedLayout);
-      $('#resetLayoutButton').addEventListener('click',()=>{const before=currentSettingsSnapshot();setSettings(defaultSettings,{presetId:'a4-24-66x33.9'});AppToast.show({message:t('resetDone'),actionLabel:t('undo'),duration:5000,onAction:()=>{setSettings(before,{presetId:'custom'});AppToast.show({message:t('undone')});}});});
+      $('#resetLayoutButton').addEventListener('click',()=>{
+        cancelEditorInteraction();
+        const before=JSON.parse(JSON.stringify({settings:state.settings,preset:state.activePresetId,elements:editorState.elements,selectedId:editorState.selectedId,history:editorState.history,historyIndex:editorState.historyIndex,used:sheetState.usedFirstPage,drafts:layoutDrafts,sheetPage:sheetState.pageIndex,outputPage:outputState.pageIndex}));
+        setSettings(defaultSettings,{presetId:'a4-24-66x33.9'});
+        const after=pdfContentFingerprint(),history=editorState.history,index=editorState.historyIndex,settings=state.settings;
+        AppToast.show({message:t('resetDone'),actionLabel:t('undo'),duration:5000,onAction:()=>{
+          if(state.settings!==settings||editorState.history!==history||editorState.historyIndex!==index||pdfContentFingerprint()!==after||hasPendingLayoutDrafts())return;
+          cancelEditorInteraction({restore:false});state.settings=before.settings;state.activePresetId=before.preset;editorState.elements=before.elements;editorState.selectedId=before.selectedId;editorState.history=before.history;editorState.historyIndex=before.historyIndex;editorState.deletedSnapshot=null;sheetState.usedFirstPage=before.used;sheetState.pageIndex=before.sheetPage;outputState.pageIndex=before.outputPage;resetLayoutDrafts();Object.assign(layoutDrafts,before.drafts);persistSettings();invalidateGeneratedPdf();renderPresetOptions();render();AppToast.show({message:t('undone')});
+        }});
+      });
       const saveLayoutDialog=$('#saveLayoutDialog'),layoutName=$('#layoutName');
       $('#saveLayoutButton').addEventListener('click',()=>{layoutName.value='';saveLayoutDialog.showModal();requestAnimationFrame(()=>layoutName.focus());});
       $('#closeSaveLayout').addEventListener('click',()=>saveLayoutDialog.close());

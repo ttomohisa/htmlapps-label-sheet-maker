@@ -206,3 +206,7 @@ Bug reports and feature proposals are welcome through GitHub Issues. See [CONTRI
 Copyright © 2026 ttomohisa
 
 Licensed under the [MIT License](LICENSE).
+
+### Print and data checks (v1.1.5)
+
+Malformed quoted data or inconsistent column counts are rejected without replacing the previous data. Choose comma or tab explicitly if auto detection is wrong. Assign missing columns and correct invalid codes before generating a print PDF. A fully used first sheet is omitted from the print PDF; the Sheet step still shows it. Large print jobs may need to be split (128 MiB accumulated JPEG limit).

@@ -1,5 +1,12 @@
 # Label Sheet Maker / ラベルシート作成 — Product Specification
 
+## v1.1.5 — Print and data integrity
+
+- Validate QR alignment centres for versions 1–40, capacity, merge column availability and all printable code values. Reject empty labels and invalid print jobs before rasterization; calibration PDF remains available.
+- Reject malformed quoted records and inconsistent column counts without replacing previous data; support explicit comma/tab selection and quote-aware auto detection. Preserve explicitly empty records.
+- Enforce 1–100 rows and columns. Restore the full layout/editor/used-position state on reset Undo; retire stale Undo actions. Reject duplicate/colliding element IDs.
+- Use transparent image hitboxes; omit fully used sheets from print output and preview while keeping first-sheet editing in Sheet. Limit accumulated JPEG output to 128 MiB with a localized error.
+
 ## v1.1.4 — Modal background scrolling
 
 - While Help, Save paper layout, Save calibration preset, or the confirmation dialog is open modally, lock both document scroll containers with `html:has(dialog:modal), body:has(dialog:modal) { overflow: hidden; }`. Closing the last modal restores ordinary page scrolling without JavaScript scroll state.
@@ -20,7 +27,7 @@ Japanese name: **ラベルシート作成**
 
 Repository: `ttomohisa/htmlapps-label-sheet-maker`
 
-Current development milestone: **v1.1.4 — Modal background scrolling**
+Current development milestone: **v1.1.5 — Print and data integrity**
 
 ## 2. Product principles
 
@@ -218,7 +225,7 @@ File decoding supports UTF-8, UTF-8 BOM, and Shift_JIS. Auto detection prefers a
 
 ### 7.3 Parsing and headers
 
-CSV parsing supports quoted fields, embedded delimiters, escaped double quotes, and embedded line breaks. TSV is selected automatically when tabs dominate the first row.
+CSV parsing supports quoted fields, embedded delimiters, escaped double quotes, and embedded line breaks. TSV is selected automatically when tabs outside quotes dominate the first logical record; users can also explicitly choose comma or tab.
 
 The first row is used as column names. Empty or duplicate names are normalized without discarding source columns, for example `column_3` and `name_2`.
 
