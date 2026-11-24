@@ -499,6 +499,12 @@
     .recovery-settings p { color:var(--muted); font-size:11px; margin:4px 0; }
     #recoveryActions:not([hidden]) { display:flex; gap:6px; flex-wrap:wrap; margin-top:6px; }
     @media (max-width:600px) { .fit-canvas-button { flex-basis:28px; } .zoom-control { gap:3px; } .element-list button { min-height:44px; } }
+    .batch-note { font-size:11px; color:var(--muted); overflow-wrap:anywhere; margin:7px 0; }
+    .batch-actions { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:5px; margin-top:8px; }
+    .batch-actions .button { white-space:normal; min-width:0; padding-inline:5px; }
+    .auto-fit-settings { margin-top:8px; display:grid; gap:5px; }
+    .auto-fit-settings .check-control { font-size:12px; }
+    .auto-fit-settings .field { max-width:140px; }
     @media (prefers-reduced-motion: reduce) {
       *,*::before,*::after { scroll-behavior:auto !important; transition-duration:.01ms !important; animation-duration:.01ms !important; }
     }
@@ -510,7 +516,7 @@
       <div class="brand">
         <div class="brand-mark" aria-hidden="true"><img id="appBrandIcon" src="__APP_ICON_DATA_URI__" alt=""></div>
         <div class="brand-copy">
-          <p class="brand-name"><span id="brandName">Label Sheet Maker</span><span class="version-badge" id="versionBadge">v1.2.0</span></p>
+          <p class="brand-name"><span id="brandName">Label Sheet Maker</span><span class="version-badge" id="versionBadge">v1.3.0</span></p>
           <p class="brand-meta" data-i18n="brandMeta">Set sheet dimensions and label positions precisely</p>
         </div>
       </div>
@@ -675,6 +681,18 @@
             <div class="data-section">
               <p class="data-section-title" data-i18n="dataModeTitle">印刷内容</p>
               <div class="field"><label for="dataModeSelect" data-i18n="dataModeLabel">モード</label><select id="dataModeSelect"><option value="repeat" data-i18n="modeRepeat">同じラベルを繰り返す</option><option value="merge" data-i18n="modeMerge">データを差し込む</option></select></div>
+              <details class="editor-disclosure" id="serialDetails"><summary data-i18n="serialTitle">連番を作成</summary>
+                <div class="field-grid" style="margin-top:8px">
+                  <div class="field"><label for="serialStart" data-i18n="serialStart">開始番号</label><input id="serialStart" type="number" min="0" max="999999999999" step="1" value="1"></div>
+                  <div class="field"><label for="serialStep" data-i18n="serialStep">増分</label><input id="serialStep" type="number" step="1" value="1"></div>
+                  <div class="field"><label for="serialCount" data-i18n="repeatCount">印刷枚数</label><input id="serialCount" type="number" min="1" max="10000" step="1" value="24"></div>
+                  <div class="field"><label for="serialDigits" data-i18n="serialDigits">最小桁数</label><input id="serialDigits" type="number" min="1" max="12" step="1" value="3"></div>
+                  <div class="field"><label for="serialPrefix" data-i18n="serialPrefix">接頭辞</label><input id="serialPrefix" type="text" maxlength="128" placeholder="A-"></div>
+                  <div class="field"><label for="serialSuffix" data-i18n="serialSuffix">接尾辞</label><input id="serialSuffix" type="text" maxlength="128"></div>
+                </div><p class="batch-note" id="serialPreview" aria-live="polite"></p>
+                <button class="button" id="generateSerialButton" type="button" data-i18n="generateSerial" style="width:100%">連番データを作成</button>
+                <p class="batch-note" data-i18n="serialHint">作成した serial 列を文字やコードに使えます。</p>
+              </details>
               <div class="field" id="repeatCountField" style="margin-top:8px"><label for="repeatCount" data-i18n="repeatCount">印刷枚数</label><input id="repeatCount" type="number" min="1" max="10000" step="1" value="1" inputmode="numeric"></div>
             </div>
 
@@ -691,6 +709,12 @@
               <div class="data-status" id="dataStatus" data-i18n="dataEmpty">まだデータを読み込んでいません。</div>
               <div class="data-preview-wrap" id="dataPreview" hidden><table class="data-preview"><thead id="dataPreviewHead"></thead><tbody id="dataPreviewBody"></tbody></table></div>
               <div class="data-row-nav" id="dataRowNav" hidden><button id="dataRowPrev" type="button" data-i18n-aria-label="previousRow" aria-label="前の行">←</button><input id="dataRowIndex" type="number" min="1" step="1" value="1" inputmode="numeric" data-i18n-aria-label="rowNumber" aria-label="行番号"><button id="dataRowNext" type="button" data-i18n-aria-label="nextRow" aria-label="次の行">→</button></div>
+              <details class="editor-disclosure" id="quantityDetails" hidden><summary data-i18n="quantityTitle">行ごとの印刷枚数</summary>
+                <div class="field" style="margin-top:8px"><label for="rowQuantity" data-i18n="rowQuantity">表示中の行の枚数（0で除外）</label><input id="rowQuantity" type="number" min="0" max="10000" step="1" value="1" inputmode="numeric"></div>
+                <div class="field" style="margin-top:8px"><label for="quantityColumn" data-i18n="quantityColumn">枚数に使う列</label><select id="quantityColumn"></select></div>
+                <div class="batch-actions"><button class="button small" id="applyQuantityColumn" type="button" data-i18n="applyQuantityColumn">列から設定</button><button class="button small" id="resetQuantities" type="button" data-i18n="resetQuantities">全行1枚に戻す</button></div>
+                <p class="batch-note" id="quantityTotal" aria-live="polite"></p>
+              </details>
               <div id="dataFieldArea" hidden><p class="data-section-title" style="margin-top:12px" data-i18n="addDataField">データ項目を追加</p><div class="data-field-list" id="dataFieldList"></div></div>
             </div>
 
@@ -757,6 +781,10 @@
               <div class="inspector-font-grid">
                 <div class="field"><label for="fontFamily" data-i18n="fontFamily">書体</label><select id="fontFamily"><option value="sans" data-i18n="fontSans">ゴシック</option><option value="meiryo" data-i18n="fontMeiryo">メイリオ</option><option value="yu-gothic" data-i18n="fontYuGothic">游ゴシック</option><option value="hiragino-kaku" data-i18n="fontHiraginoKaku">ヒラギノ角ゴ</option><option value="maru" data-i18n="fontMaru">丸ゴシック</option><option value="serif" data-i18n="fontSerif">明朝</option><option value="yu-mincho" data-i18n="fontYuMincho">游明朝</option><option value="hiragino-mincho" data-i18n="fontHiraginoMincho">ヒラギノ明朝</option><option value="mono" data-i18n="fontMono">等幅</option><option value="system" data-i18n="fontSystem">システム</option></select></div>
                 <div class="field"><label for="fontSize" data-i18n="fontSize">文字サイズ</label><div class="input-with-unit"><input id="fontSize" type="number" min="4" max="96" step="1" inputmode="decimal"><span class="unit-suffix font-size-suffix">pt</span></div></div>
+              </div>
+              <div class="auto-fit-settings">
+                <label class="check-control"><input type="checkbox" id="autoFitToggle"><span data-i18n="autoFit">文字サイズを自動縮小</span></label>
+                <div class="field" id="minFontField" hidden><label for="minFontSize" data-i18n="minFontSize">最小文字サイズ</label><div class="input-with-unit"><input id="minFontSize" type="number" min="4" max="96" step="0.5" value="6"><span class="unit-suffix font-size-suffix">pt</span></div></div>
               </div>
               <div class="alignment-grid">
                 <div class="field"><span class="field-label" id="hAlignLabel" data-i18n="hAlign">横位置</span><div class="alignment-options" role="group" aria-labelledby="hAlignLabel"><button type="button" data-align-axis="hAlign" data-align-value="left" data-i18n-title="alignLeft" data-i18n-aria-label="alignLeft" title="左" aria-label="左" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16M4 10h10M4 15h16M4 20h10"/></svg></button><button type="button" data-align-axis="hAlign" data-align-value="center" data-i18n-title="alignCenter" data-i18n-aria-label="alignCenter" title="中央" aria-label="中央" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16M7 10h10M4 15h16M7 20h10"/></svg></button><button type="button" data-align-axis="hAlign" data-align-value="right" data-i18n-title="alignRight" data-i18n-aria-label="alignRight" title="右" aria-label="右" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16M10 10h10M4 15h16M10 20h10"/></svg></button></div></div>
@@ -927,7 +955,7 @@
     <div class="dialog-body">
       <!-- APP:HELP:BEGIN -->
       <h3 data-i18n="helpBasicsTitle">基本操作</h3>
-      <ol><li data-i18n="helpStep1">プリセットを選ぶか、用紙とラベルの寸法を入力します。</li><li data-i18n="helpStep2">シートプレビューで枚数と配置を確認します。右・下余白は入力値から自動計算されます。</li><li data-i18n="helpStep3">よく使う寸法は「この用紙設定を保存」から端末内に保存できます。</li><li data-i18n="helpStep4">「シート」で使いかけ用紙の使用済み位置を指定し、配置順とページ数を確認します。</li><li data-i18n="helpStep5">「出力」で位置合わせ用PDFを確認し、必要ならX/Y補正を保存してから印刷用PDFを作成します。</li><li data-i18n="helpUx">要素一覧から重なった要素を選択できます。自動保存は作業ファイルから有効にできます。</li><li data-i18n="helpStep6">上部の「作業ファイル」を開くと、作業の保存・再開ができます。</li></ol>
+      <ol><li data-i18n="helpStep1">プリセットを選ぶか、用紙とラベルの寸法を入力します。</li><li data-i18n="helpStep2">シートプレビューで枚数と配置を確認します。右・下余白は入力値から自動計算されます。</li><li data-i18n="helpStep3">よく使う寸法は「この用紙設定を保存」から端末内に保存できます。</li><li data-i18n="helpStep4">「シート」で使いかけ用紙の使用済み位置を指定し、配置順とページ数を確認します。</li><li data-i18n="helpStep5">「出力」で位置合わせ用PDFを確認し、必要ならX/Y補正を保存してから印刷用PDFを作成します。</li><li data-i18n="helpBatch">連番を作成し、文字やコードに割り当てます。</li><li data-i18n="helpUx">要素一覧から重なった要素を選択できます。自動保存は作業ファイルから有効にできます。</li><li data-i18n="helpStep6">上部の「作業ファイル」を開くと、作業の保存・再開ができます。</li></ol>
       <h3 data-i18n="helpPrivacyTitle">プライバシー</h3><p data-i18n="helpPrivacyBody">入力した寸法、CSV、画像、コード内容、PDF生成はすべてブラウザー内で処理され、このアプリから外部サーバーへ送信されません。</p>
       <h3 data-i18n="helpNotesTitle">注意事項</h3><ul><li data-i18n="helpNote1">スマホでは選択中の要素の操作バーや長押しメニューを使えます。スナップは切り替えでき、Altを押しながらドラッグすると一時的に無効になります。</li><li data-i18n="helpNote2">内蔵プリセットはメーカー公式テンプレートではなく、寸法ベースの汎用設定です。実際の用紙寸法を確認して使用してください。</li><li data-i18n="helpNote3">ブラウザーのサイトデータを削除すると、端末内に保存した用紙設定も消える場合があります。</li><li data-i18n="helpPrintChecks">CSVやコードの内容を確認してから印刷してください。</li><li data-i18n="qrTrademark">QRコードは株式会社デンソーウェーブの登録商標です。</li></ul>
       <p class="dialog-note" data-i18n="helpOffline">配布用HTMLはネットワーク接続なしでも開ける構成です。</p>
@@ -989,7 +1017,12 @@
           {id:'a4-21-70x38.1',nameJa:'A4 / 21面 / 70 × 38.1 mm / 3 × 7',nameEn:'A4 / 21 labels / 70 × 38.1 mm / 3 × 7',settings:{paperType:'a4',paperWidth:210,paperHeight:297,labelWidth:70,labelHeight:38.1,columns:3,rows:7,leftMargin:0,topMargin:15.15,columnGap:0,rowGap:0}},
           {id:'a4-12-86x42',nameJa:'A4 / 12面 / 86 × 42 mm / 2 × 6',nameEn:'A4 / 12 labels / 86 × 42 mm / 2 × 6',settings:{paperType:'a4',paperWidth:210,paperHeight:297,labelWidth:86,labelHeight:42,columns:2,rows:6,leftMargin:19,topMargin:22.5,columnGap:0,rowGap:0}},
           {id:'letter-30-66.7x25.4',nameJa:'Letter / 30面 / 66.7 × 25.4 mm / 3 × 10',nameEn:'Letter / 30 labels / 66.7 × 25.4 mm / 3 × 10',settings:{paperType:'letter',paperWidth:215.9,paperHeight:279.4,labelWidth:66.7,labelHeight:25.4,columns:3,rows:10,leftMargin:7.9,topMargin:12.7,columnGap:0,rowGap:0}}
-        ]);}
+        ].concat([
+          ['a4',1,2,190,138,0,4],['a4',2,2,99,139,2,3],['a4',2,4,99,67,2,3],['a4',2,5,99,55,2,2],['a4',2,7,99,38,2,2],['a4',3,6,63,45,2,2],['a4',3,9,63,30,2,2],['a4',3,12,63,22,2,2],['a4',4,10,48,25,2,2],['a4',4,12,48,21,2,2],['a4',5,13,38,20,2,2],['a4',5,16,38,16,2,2],['letter',2,5,101.6,50.8,3.2,0],['letter',2,7,101.6,33.8,3.2,2],['letter',4,10,48,25.4,2,0],['letter',3,11,66,22,2,2]
+        ].map(([paperType,columns,rows,labelWidth,labelHeight,columnGap,rowGap])=>{
+          const {width:paperWidth,height:paperHeight}=paperSizeMm(paperType),count=columns*rows,label=paperType==='a4'?'A4':'Letter',dimensions=labelWidth+' × '+labelHeight+' mm / '+columns+' × '+rows;
+          return {id:paperType+'-'+count+'-'+labelWidth+'x'+labelHeight,nameJa:label+' / '+count+'面 / '+dimensions,nameEn:label+' / '+count+' labels / '+dimensions,settings:{paperType,paperWidth,paperHeight,labelWidth,labelHeight,columns,rows,leftMargin:round((paperWidth-columns*labelWidth-(columns-1)*columnGap)/2,4),topMargin:round((paperHeight-rows*labelHeight-(rows-1)*rowGap)/2,4),columnGap,rowGap}};
+        }))); }
         function computeLayout(settings){
           const s={...settings}; const errors=[]; const dimensions=['paperWidth','paperHeight','labelWidth','labelHeight'];
           for(const key of dimensions){if(!Number.isFinite(Number(s[key]))||Number(s[key])<=0) errors.push(`invalid-${key}`);}
@@ -1096,7 +1129,15 @@
         }
         function resolveElementText(element,row){if(element?.sourceType==='field')return String(row&&Object.hasOwn(row,element.fieldName)?row[element.fieldName]??'':'');return String(element?.text??'');}
         function clampRowIndex(index,rowCount){const count=Math.max(0,Number(rowCount)||0);if(count<=0)return 0;return Math.min(count-1,Math.max(0,Math.trunc(Number(index)||0)));}
-        return Object.freeze({normalizeHeaders,parseDelimited,detectEncoding,decodeBytes,createFieldElement,resolveElementText,clampRowIndex});
+        function generateSerial({start=1,step=1,count=24,digits=3,prefix='',suffix=''}={}){
+          if(![start,step,count,digits].every(Number.isSafeInteger)||start<0||start>999999999999||step===0||Math.abs(step)>999999999999||count<1||count>10000||digits<1||digits>12)throw new Error('SERIAL_INVALID');
+          const last=start+(count-1)*step;if(!Number.isSafeInteger(last)||last<0||last>999999999999)throw new Error('SERIAL_INVALID');
+          prefix=String(prefix);suffix=String(suffix);if(prefix.length>128||suffix.length>128)throw new Error('SERIAL_INVALID');
+          return {headers:['serial'],rows:Array.from({length:count},(_,i)=>({serial:prefix+String(start+i*step).padStart(digits,'0')+suffix}))};
+        }
+        function parseQuantity(value){const text=String(value??'').trim();if(!/^\d+$/.test(text))throw new Error('QUANTITY_INVALID');const n=Number(text);if(!Number.isSafeInteger(n)||n>10000)throw new Error('QUANTITY_INVALID');return n;}
+        function validateQuantities(values,rowCount){if(!Array.isArray(values)||values.length!==rowCount)throw new Error('QUANTITY_INVALID');const quantities=values.map(parseQuantity);if(quantities.reduce((a,b)=>a+b,0)>Math.max(10000,rowCount))throw new Error('QUANTITY_LIMIT');return quantities;}
+        return Object.freeze({normalizeHeaders,parseDelimited,detectEncoding,decodeBytes,createFieldElement,resolveElementText,clampRowIndex,generateSerial,parseQuantity,validateQuantities});
       })();
       /* DATA_MERGE_CORE:END */
 
@@ -1130,6 +1171,7 @@
             mode:data.mode==='merge'?'merge':'repeat',
             repeatCount:clamp(Math.trunc(finite(data.repeatCount,1)),1,10000),
             headers,rows,rowIndex,
+            ...(Array.isArray(data.quantities)&&data.quantities.length?{quantities:(()=>{if(data.quantities.length!==rows.length||data.quantities.some(n=>!Number.isInteger(n)||n<0||n>10000)||data.quantities.reduce((a,b)=>a+b,0)>Math.max(10000,rows.length))throw new Error('PROJECT_INVALID_STRUCTURE');return [...data.quantities];})()}:{}),
             fileName:String(data.fileName??''),
             encoding:['auto','utf-8','shift_jis'].includes(data.encoding)?data.encoding:'auto',
             detectedEncoding:data.detectedEncoding==='shift_jis'?'shift_jis':'utf-8'
@@ -1167,6 +1209,7 @@
               out.sourceType=element.sourceType==='field'?'field':'fixed';
               out.fieldName=String(element.fieldName??'');
               out.text=String(element.text??'');
+              if(element.autoFit===true){out.autoFit=true;out.minFontSize=clamp(finite(element.minFontSize,6),4,96);}
             }else{
               const kind=String(element.kind??'');
               if(!['qr','code128','code39'].includes(kind))throw new Error('PROJECT_INVALID_STRUCTURE');
@@ -1299,6 +1342,7 @@
           const count=data.mode==='merge'?data.rows.length:1;
           for(let i=0;i<count;i++){
             const rowIndex=data.mode==='merge'?i:data.rowIndex,row=data.rows[rowIndex]||{};
+            if(data.mode==='merge'&&data.quantities?.[rowIndex]===0)continue;
             for(const element of elements){
               if(element.sourceType==='field'&&(!data.headers.includes(element.fieldName)||!Object.hasOwn(row,element.fieldName)))return {key:'printMissingField',row:rowIndex+1,field:element.fieldName};
               if(element.type!=='code')continue;
@@ -1324,7 +1368,9 @@
         function normalizeUsed(values,slotCount){const count=positiveInt(slotCount);const seen=new Set();for(const raw of Array.isArray(values)?values:[]){const n=Math.floor(Number(raw));if(n>=1&&n<=count)seen.add(n);}return [...seen].sort((a,b)=>a-b);}
         function allUsed(slotCount){const count=positiveInt(slotCount);return Array.from({length:count},(_,index)=>index+1);}
         function invertUsed(values,slotCount){const used=new Set(normalizeUsed(values,slotCount));return allUsed(slotCount).filter(index=>!used.has(index));}
-        function itemCountForMode({mode='repeat',repeatCount=1,rowCount=0}={}){if(mode==='merge')return Math.max(0,Math.floor(Number(rowCount)||0));return Math.max(1,Math.floor(Number(repeatCount)||1));}
+        function itemCountForMode({mode='repeat',repeatCount=1,rowCount=0,quantities=[]}={}){if(mode==='merge')return quantities.length===rowCount&&quantities.length?quantities.reduce((sum,n)=>sum+n,0):Math.max(0,Math.floor(Number(rowCount)||0));return Math.max(1,Math.floor(Number(repeatCount)||1));}
+        const quantityMaps=new WeakMap();
+        function rowIndexForItem(data,itemIndex){if(data.mode!=='merge')return data.rowIndex||0;const q=data.quantities;if(!q?.length||q.length!==data.rows.length)return itemIndex;let ends=quantityMaps.get(q);if(!ends){let n=0;ends=q.map(x=>n+=x);quantityMaps.set(q,ends);}let lo=0,hi=ends.length;while(lo<hi){const mid=(lo+hi)>>1;if(ends[mid]<=itemIndex)lo=mid+1;else hi=mid;}return lo;}
         function compose({slotCount,itemCount,usedFirstPage=[]}={}){
           const slotsPerPage=positiveInt(slotCount);const totalItems=Math.max(0,Math.floor(Number(itemCount)||0));
           if(!slotsPerPage)return {slotCount:0,itemCount:totalItems,usedCount:0,firstPageAvailable:0,pageCount:0,pages:[]};
@@ -1334,7 +1380,7 @@
           for(let pageIndex=0;pageIndex<pageCount;pageIndex+=1){const slots=[];for(let slotIndex=1;slotIndex<=slotsPerPage;slotIndex+=1){const isUsed=pageIndex===0&&usedSet.has(slotIndex);if(isUsed){slots.push({slotIndex,status:'used',itemIndex:null});continue;}if(itemIndex<totalItems){slots.push({slotIndex,status:'assigned',itemIndex});itemIndex+=1;}else slots.push({slotIndex,status:'empty',itemIndex:null});}pages.push({pageNumber:pageIndex+1,slots});}
           return {slotCount:slotsPerPage,itemCount:totalItems,usedCount:used.length,firstPageAvailable,pageCount,pages};
         }
-        return Object.freeze({normalizeUsed,allUsed,invertUsed,itemCountForMode,compose});
+        return Object.freeze({normalizeUsed,allUsed,invertUsed,itemCountForMode,rowIndexForItem,compose});
       })();
       /* SHEET_COMPOSITION_CORE:END */
 
@@ -1435,6 +1481,8 @@
       Object.assign(translations.en,{choosePhoto:'Choose a photo',keyboardShortcuts:'Keyboard shortcuts',centerHorizontalShort:'Center X',centerVerticalShort:'Center Y',brandMeta:'Label sheets and print PDFs'});
       Object.assign(translations.ja,{helpUx:'要素一覧から重なった要素を選べます。作業ファイルで自動保存を有効にすると、画像や表データもブラウザー内に保存されます。不要になったら自動保存を解除してください。シートの「なぞって選択」は、最初に触れた位置の使用状態に合わせて連続選択します。印刷前チェックの結果は目安です。',elementList:'要素一覧',noElements:'要素なし',dataOptions:'読み込み設定',fitCanvas:'全体を表示',replaceImage:'画像を差し替え',imageReplaced:'画像を差し替えました',dragSelect:'なぞって選択',printCheck:'印刷前チェック',checkRunning:'確認中…',checkOk:'問題は見つかりませんでした。',checkCount:'{count} 件の確認事項（先頭100件まで表示）',checkRow:'データ行 {row}：{message}',checkEmptyText:'文字が空欄です。',checkTextOverflow:'文字が枠からはみ出す可能性があります。',checkOffset:'ラベル枠が用紙の外に出ます。',checkImageResolution:'画像が粗く印刷される可能性があります（150dpi未満）。',autoRecovery:'作業を自動保存',autoRecoveryNote:'画像や表データもこのブラウザーに保存されます。',restoreWork:'前回の作業を復元',discardWork:'破棄',recoverySaved:'自動保存済み',recoveryFailed:'自動保存できません。作業ファイルを保存してください。',recoveryPending:'前回の作業が残っています。',recoveryDiscardTitle:'保存した作業を破棄',recoveryDiscardMessage:'このブラウザーに保存された復元用データを削除します。',recoveryReplaceTitle:'前回の作業を復元',recoveryReplaceMessage:'現在の作業を前回の内容で置き換えます。',recoveryRestored:'前回の作業を復元しました'});
       Object.assign(translations.en,{helpUx:'Use Elements to select overlapping items. Autosave in Project file stores images and table data in your browser. Turn it off when no longer needed. Drag to select marks or clears positions according to the first position touched. Print-check results are estimates.',elementList:'Elements',noElements:'No elements',dataOptions:'Import settings',fitCanvas:'Fit to view',replaceImage:'Replace image',imageReplaced:'Image replaced',dragSelect:'Drag to select',printCheck:'Check before printing',checkRunning:'Checking…',checkOk:'No issues found.',checkCount:'{count} issues (showing up to 100)',checkRow:'Data row {row}: {message}',checkEmptyText:'Text is empty.',checkTextOverflow:'Text may overflow its frame.',checkOffset:'A label frame extends beyond the paper.',checkImageResolution:'Image may print at low resolution (below 150 dpi).',autoRecovery:'Autosave work',autoRecoveryNote:'Images and table data are also stored in this browser.',restoreWork:'Restore previous work',discardWork:'Discard',recoverySaved:'Autosaved',recoveryFailed:'Autosave failed. Save a project file instead.',recoveryPending:'Previous work is available.',recoveryDiscardTitle:'Discard saved work',recoveryDiscardMessage:'Delete the recovery data stored in this browser.',recoveryReplaceTitle:'Restore previous work',recoveryReplaceMessage:'Replace current work with the previous session.',recoveryRestored:'Previous work restored'});
+      Object.assign(translations.ja,{"serialTitle":"連番を作成","serialStart":"開始番号","serialStep":"増分","serialDigits":"最小桁数","serialPrefix":"接頭辞","serialSuffix":"接尾辞","generateSerial":"連番データを作成","serialHint":"作成した serial 列を文字やコードに使えます。","serialInvalid":"番号・増分・枚数・桁数を確認してください。","serialReplaceTitle":"差し込みデータを置き換え","serialReplaceMessage":"現在の表と印刷枚数を連番データで置き換えます。","quantityTitle":"行ごとの印刷枚数","rowQuantity":"表示中の行の枚数（0で除外）","quantityColumn":"枚数に使う列","quantityChoose":"列を選択","applyQuantityColumn":"列から設定","resetQuantities":"全行1枚に戻す","quantityTotal":"合計 {count} 枚","quantityInvalid":"枚数は0〜10000の整数を指定してください。","quantityLimit":"印刷枚数の上限を超えています。","autoFit":"文字サイズを自動縮小","minFontSize":"最小文字サイズ","helpBatch":"連番を作成すると serial 列が追加されます。文字やコードに割り当ててください。行ごとの枚数は0で除外できます。自動縮小は最小文字サイズまで調整します。"});
+      Object.assign(translations.en,{"serialTitle":"Generate serial numbers","serialStart":"Start number","serialStep":"Increment","serialDigits":"Minimum digits","serialPrefix":"Prefix","serialSuffix":"Suffix","generateSerial":"Generate serial data","serialHint":"Use the generated serial column in text or codes.","serialInvalid":"Check the number, increment, count and digits.","serialReplaceTitle":"Replace merge data","serialReplaceMessage":"Replace the current table and print quantities with serial data.","quantityTitle":"Copies per row","rowQuantity":"Copies of current row (0 to skip)","quantityColumn":"Quantity column","quantityChoose":"Choose a column","applyQuantityColumn":"Apply column","resetQuantities":"Reset to one per row","quantityTotal":"Total: {count} labels","quantityInvalid":"Enter whole numbers from 0 to 10000.","quantityLimit":"The print quantity limit was exceeded.","autoFit":"Shrink text to fit","minFontSize":"Minimum font size","helpBatch":"Generate a serial column and bind it to text or codes. Set a row quantity to 0 to skip it. Auto-fit shrinks text down to the minimum font size."});
       function readStorage(key){try{return localStorage.getItem(key);}catch{return null;}}
       function writeStorage(key,value){try{localStorage.setItem(key,value);return true;}catch{return false;}}
       function removeStorage(key){try{localStorage.removeItem(key);return true;}catch{return false;}}
@@ -1453,7 +1501,7 @@
       const SNAP_TOLERANCE_MM=1.2;
       const LONG_PRESS_MS=520;
       const LONG_PRESS_MOVE_PX=10;
-      const dataState={mode:'repeat',repeatCount:1,headers:[],rows:[],rowIndex:0,fileBytes:null,fileName:'',encoding:'auto',detectedEncoding:'utf-8'};
+      const dataState={mode:'repeat',repeatCount:1,headers:[],rows:[],quantities:[],rowIndex:0,fileBytes:null,fileName:'',encoding:'auto',detectedEncoding:'utf-8'};
       // Each import family has one owner; committing a project retires every pending import.
       const importState={dataRequest:0,projectRequest:0,imageRequest:0};
       const sheetState={usedFirstPage:[],pageIndex:0};
@@ -1476,7 +1524,7 @@
       function persistSettings(){if(!writeStorage(storageKeys.settings,JSON.stringify(state.settings))) AppToast.show({message:t('storageUnavailable')});}
       function persistSavedPresets(){if(!writeStorage(storageKeys.presets,JSON.stringify(state.savedPresets))) AppToast.show({message:t('storageUnavailable')});}
       function persistCalibrationPresets(){if(!writeStorage(storageKeys.calibrationPresets,JSON.stringify(outputState.calibrationPresets)))AppToast.show({message:t('storageUnavailable')});}
-      function currentProject(){return ProjectFileCore.createProject({appVersion:APP_CONFIG.version,settings:state.settings,elements:editorState.elements,data:{mode:dataState.mode,repeatCount:dataState.repeatCount,headers:dataState.headers,rows:dataState.rows,rowIndex:dataState.rowIndex,fileName:dataState.fileName,encoding:dataState.encoding,detectedEncoding:dataState.detectedEncoding},sheet:{usedFirstPage:sheetState.usedFirstPage},output:{offsetX:outputState.offsetX,offsetY:outputState.offsetY,filename:$('#outputFilename').value||'label-sheet.pdf'}});}
+      function currentProject(){return ProjectFileCore.createProject({appVersion:APP_CONFIG.version,settings:state.settings,elements:editorState.elements,data:{mode:dataState.mode,repeatCount:dataState.repeatCount,headers:dataState.headers,rows:dataState.rows,quantities:dataState.quantities||[],rowIndex:dataState.rowIndex,fileName:dataState.fileName,encoding:dataState.encoding,detectedEncoding:dataState.detectedEncoding},sheet:{usedFirstPage:sheetState.usedFirstPage},output:{offsetX:outputState.offsetX,offsetY:outputState.offsetY,filename:$('#outputFilename').value||'label-sheet.pdf'}});}
       function downloadTextFile(text,fileName){const blob=new Blob([text],{type:'application/json;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');blobUrls.add(url);a.href=url;a.download=fileName;a.style.display='none';document.body.append(a);a.click();a.remove();setTimeout(()=>{URL.revokeObjectURL(url);blobUrls.delete(url);},1000);}
       function saveProjectFile(){if(!commitLayoutDrafts()){AppToast.show({message:t('invalidLayout')});return;}try{const project=currentProject();projectFileName=ProjectFileCore.sanitizeProjectFilename(projectFileName);downloadTextFile(ProjectFileCore.serializeProject(project),projectFileName);$('#projectFileName').textContent=projectFileName;AppToast.show({message:t('projectSaved')});}catch(error){console.error(error);AppToast.show({message:t('projectReadFailed')});}}
       function invalidatePendingImports(){importState.dataRequest+=1;importState.projectRequest+=1;importState.imageRequest+=1;}
@@ -1484,7 +1532,7 @@
         cancelEditorInteraction({restore:false});invalidatePendingImports();invalidateGeneratedPdf();resetLayoutDrafts();editorState.deletedSnapshot=null;
         state.settings={...defaultSettings,...project.settings};state.activePresetId='custom';const restoredLayout=LabelSheetCore.computeLayout(state.settings);
         editorState.elements=JSON.parse(JSON.stringify(project.editor.elements));if(restoredLayout.valid)editorState.elements=editorState.elements.map(element=>LabelEditorCore.clampElement(element,editorBounds()));editorState.selectedId=null;editorState.history=[JSON.parse(JSON.stringify(editorState.elements))];editorState.historyIndex=0;editorState.interaction=null;editorState.panInteraction=null;
-        dataState.mode=project.data.mode;dataState.repeatCount=project.data.repeatCount;dataState.headers=[...project.data.headers];dataState.rows=JSON.parse(JSON.stringify(project.data.rows));dataState.rowIndex=project.data.rowIndex;dataState.fileBytes=null;dataState.fileName=project.data.fileName;dataState.encoding=project.data.encoding;dataState.detectedEncoding=project.data.detectedEncoding;dataState.delimiterMode='auto';
+        dataState.mode=project.data.mode;dataState.repeatCount=project.data.repeatCount;dataState.headers=[...project.data.headers];dataState.rows=JSON.parse(JSON.stringify(project.data.rows));dataState.quantities=[...(project.data.quantities||[])];dataState.rowIndex=project.data.rowIndex;dataState.fileBytes=null;dataState.fileName=project.data.fileName;dataState.encoding=project.data.encoding;dataState.detectedEncoding=project.data.detectedEncoding;dataState.delimiterMode='auto';
         sheetState.usedFirstPage=restoredLayout.valid?SheetCompositionCore.normalizeUsed(project.sheet.usedFirstPage,restoredLayout.labels.length):[...project.sheet.usedFirstPage];sheetState.pageIndex=0;
         outputState.offsetX=project.output.offsetX;outputState.offsetY=project.output.offsetY;outputState.pageIndex=0;outputState.activeCalibrationId='custom';outputState.generatedBlob=null;outputState.generatedFilename=PdfOutputCore.sanitizePdfFilename(project.output.filename);outputState.generatedKind='print';
         $('#outputFilename').value=PdfOutputCore.sanitizePdfFilename(project.output.filename);projectFileName=ProjectFileCore.sanitizeProjectFilename(fileName||projectFileName);$('#projectFileName').textContent=projectFileName;
@@ -1549,6 +1597,16 @@
         const pxPerMm=96/25.4;textMeasureContext.font=`${element.bold?'700':'400'} ${fontMm*pxPerMm}px ${fontFamilyCss(element.fontFamily)}`;const lines=[];
         for(const paragraph of text.split(/\r?\n/)){if(paragraph===''){lines.push('');continue;}let line='';for(const char of Array.from(paragraph)){const candidate=line+char;if(line&&textMeasureContext.measureText(candidate).width>maxWidth*pxPerMm){lines.push(line);line=char;}else line=candidate;}lines.push(line);}return lines.length?lines:[''];
       }
+      function textLayout(element,row){
+        const max=Math.max(4,Math.min(96,Number(element.fontSize)||12)),min=Math.min(max,Math.max(4,Number(element.minFontSize)||6));
+        function measure(size){const fontMm=size*25.4/72,lineHeight=fontMm*1.2,pxPerMm=96/25.4,lines=wrapElementText({...element,fontSize:size},row);
+          textMeasureContext.font=(element.bold?'700':'400')+' '+fontMm*pxPerMm+'px '+fontFamilyCss(element.fontFamily);
+          const fits=lines.length*lineHeight<=element.height+.0001&&fontMm+.25<=element.height&&lines.every(line=>textMeasureContext.measureText(line).width<=Math.max(.2,element.width-.8)*pxPerMm+.01);
+          return {fontMm,lineHeight,lines,fits,size};}
+        const full=measure(max);if(!element.autoFit||full.fits)return full;
+        let best=measure(min);if(!best.fits)return best;
+        let lo=Math.ceil(min*2),hi=Math.floor(max*2);while(lo<=hi){const mid=(lo+hi)>>1,trial=measure(mid/2);if(trial.fits){best=trial;lo=mid+1;}else hi=mid-1;}return best;
+      }
       function createSvg(tag,attrs={}){const el=document.createElementNS('http://www.w3.org/2000/svg',tag);for(const [name,value] of Object.entries(attrs))el.setAttribute(name,String(value));return el;}
       function isCoarsePointer(){return !!window.matchMedia?.('(pointer: coarse)').matches;}
       function appendSelectionHandles(group,element,selected){
@@ -1557,7 +1615,7 @@
       function renderTextElement(svg,defs,element,selected,row=currentDataRow(),idPrefix=''){
         const group=createSvg('g',{'data-element-id':element.id});const clipId=`clip-${idPrefix}${element.id.replace(/[^a-zA-Z0-9_-]/g,'')}`;const clip=createSvg('clipPath',{id:clipId});clip.append(createSvg('rect',{x:element.x,y:element.y,width:element.width,height:element.height}));defs.append(clip);
         const hit=createSvg('rect',{x:element.x,y:element.y,width:element.width,height:element.height,fill:'transparent','pointer-events':'all','data-element-hitbox':'true','data-element-id':element.id,cursor:'move'});group.append(hit);
-        const fontMm=Math.max(1,Number(element.fontSize)||12)*25.4/72,lineHeight=fontMm*1.2,lines=wrapElementText(element,row),maxLines=Math.max(1,Math.floor(element.height/lineHeight));const visibleLines=lines.slice(0,maxLines);const totalHeight=visibleLines.length*lineHeight;
+        const {fontMm,lineHeight,lines}=textLayout(element,row),maxLines=Math.max(1,Math.floor(element.height/lineHeight));const visibleLines=lines.slice(0,maxLines);const totalHeight=visibleLines.length*lineHeight;
         let firstBaseline=element.y+fontMm+.25;if(element.vAlign==='middle')firstBaseline=element.y+(element.height-totalHeight)/2+fontMm;else if(element.vAlign==='bottom')firstBaseline=element.y+element.height-totalHeight+fontMm-.2;
         let x=element.x+.4,anchor='start';if(element.hAlign==='center'){x=element.x+element.width/2;anchor='middle';}else if(element.hAlign==='right'){x=element.x+element.width-.4;anchor='end';}
         const text=createSvg('text',{x,y:firstBaseline,'text-anchor':anchor,'font-family':fontFamilyCss(element.fontFamily),'font-size':fontMm,'font-weight':element.bold?'700':'400',fill:'#20211f','clip-path':`url(#${clipId})`,'pointer-events':'none'});
@@ -1589,7 +1647,7 @@
         if(axis!=='x'&&axis!=='y')return;const cancelled=cancelEditorInteraction(),element=selectedElement();if(!element)return;const bounds=editorBounds(),size=axis==='x'?'width':'height',value=Math.max(0,(bounds[size]-element[size])/2);if(element[axis]===value){if(cancelled)renderLabelEditor();return;}updateSelectedProperty(axis,value,{commit:true});
       }
       function renderInspector(){const element=selectedElement(),empty=$('#inspectorEmpty'),fields=$('#inspectorFields');empty.hidden=!!element;fields.hidden=!element;renderEditorGeometry(element);if(!element)return;const isText=element.type==='text',isImage=element.type==='image',isCode=element.type==='code';$('#textElementSettings').hidden=!isText;$('#textStyleSection').hidden=!isText;$('#imageElementSettings').hidden=!isImage;$('#codeElementSettings').hidden=!isCode;
-        if(isText){const sourceType=element.sourceType==='field'?'field':'fixed';$('#elementSourceType').value=sourceType;renderDataFieldSelect(element.fieldName);$('#dataFieldSelectField').hidden=sourceType!=='field';$('#textContentField').hidden=sourceType==='field';$('#textContent').value=element.text??'';$('#fieldPreviewBadge').hidden=sourceType!=='field';$('#fieldPreviewBadge').textContent=sourceType==='field'?`${element.fieldName || t('dataField')}: ${DataMergeCore.resolveElementText(element,currentDataRow()) || '—'}`:'';$('#fontFamily').value=element.fontFamily||'sans';$('#fontSize').value=String(element.fontSize||12);$('#boldToggle').checked=!!element.bold;$('#hAlign').value=element.hAlign||'left';$('#vAlign').value=element.vAlign||'top';$$('[data-align-axis]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.alignValue===($('#'+button.dataset.alignAxis).value))));$('#wrapToggle').checked=element.wrap!==false;}
+        if(isText){const sourceType=element.sourceType==='field'?'field':'fixed';$('#elementSourceType').value=sourceType;renderDataFieldSelect(element.fieldName);$('#dataFieldSelectField').hidden=sourceType!=='field';$('#textContentField').hidden=sourceType==='field';$('#textContent').value=element.text??'';$('#fieldPreviewBadge').hidden=sourceType!=='field';$('#fieldPreviewBadge').textContent=sourceType==='field'?`${element.fieldName || t('dataField')}: ${DataMergeCore.resolveElementText(element,currentDataRow()) || '—'}`:'';$('#fontFamily').value=element.fontFamily||'sans';$('#fontSize').value=String(element.fontSize||12);$('#autoFitToggle').checked=element.autoFit===true;$('#minFontField').hidden=element.autoFit!==true;$('#minFontSize').max=String(element.fontSize||12);$('#minFontSize').value=String(Math.min(element.fontSize||12,element.minFontSize||6));$('#boldToggle').checked=!!element.bold;$('#hAlign').value=element.hAlign||'left';$('#vAlign').value=element.vAlign||'top';$$('[data-align-axis]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.alignValue===($('#'+button.dataset.alignAxis).value))));$('#wrapToggle').checked=element.wrap!==false;}
         if(isImage){$('#imageFileName').textContent=element.fileName||t('imageUnnamed');$('#imageFileName').title=element.fileName||'';$('#imageFitSelect').value=element.fit==='cover'?'cover':'contain';}
         if(isCode){const sourceType=element.sourceType==='field'?'field':'fixed';$('#codeKindBadge').textContent=element.kind==='qr'?'QR':element.kind==='code39'?'Code 39':'Code 128';$('#codeSourceType').value=sourceType;renderDataFieldSelect(element.fieldName,'#codeDataFieldSelect');$('#codeDataFieldSelectField').hidden=sourceType!=='field';$('#codeValueField').hidden=sourceType==='field';$('#codeValueInput').value=element.value??'';$('#showHumanTextField').hidden=element.kind==='qr';$('#showHumanTextToggle').checked=element.showText!==false;const validation=codeValidation(element),status=$('#codeValidation');status.textContent=validation.message;status.classList.toggle('is-warning',validation.level==='warning');status.classList.toggle('is-error',validation.level==='error');}
         $$('.editor-unit-suffix').forEach(el=>el.textContent=unitLabel());}
@@ -1618,15 +1676,29 @@
         $('#dataPreview').hidden=!hasData;$('#dataRowNav').hidden=!hasData;$('#dataFieldArea').hidden=!hasData;
         if(hasData){const head=$('#dataPreviewHead'),body=$('#dataPreviewBody');head.replaceChildren();body.replaceChildren();const trh=document.createElement('tr');for(const header of dataState.headers){const th=document.createElement('th');th.textContent=header;trh.append(th);}head.append(trh);const start=Math.max(0,dataState.rowIndex-1),end=Math.min(dataState.rows.length,start+3);for(let i=start;i<end;i+=1){const tr=document.createElement('tr');if(i===dataState.rowIndex)tr.setAttribute('aria-current','true');for(const header of dataState.headers){const td=document.createElement('td');td.textContent=dataState.rows[i]?.[header]??'';tr.append(td);}body.append(tr);}$('#dataRowIndex').value=String(dataState.rows.length?dataState.rowIndex+1:1);$('#dataRowIndex').max=String(Math.max(1,dataState.rows.length));$('#dataRowPrev').disabled=dataState.rowIndex<=0;$('#dataRowNext').disabled=dataState.rowIndex>=dataState.rows.length-1;const list=$('#dataFieldList');list.replaceChildren();for(const header of dataState.headers){const button=document.createElement('button');button.type='button';button.className='data-field-button';button.textContent=`+ ${header}`;button.title=header;button.addEventListener('click',()=>addDataFieldElement(header));list.append(button);}}
         renderDataFieldSelect(selectedElement()?.fieldName||'');
+        renderQuantityControls();
       }
-      function sheetItemCount(){return SheetCompositionCore.itemCountForMode({mode:dataState.mode,repeatCount:dataState.repeatCount,rowCount:dataState.rows.length});}
+      function serialOptions(){const number=id=>{const raw=$('#'+id).value.trim();return raw===''?NaN:Number(raw);};return {start:number('serialStart'),step:number('serialStep'),count:number('serialCount'),digits:number('serialDigits'),prefix:$('#serialPrefix').value,suffix:$('#serialSuffix').value};}
+      function renderSerialPreview(){const options=serialOptions(),preview=$('#serialPreview');try{const data=DataMergeCore.generateSerial(options);preview.textContent=data.rows[0].serial+(data.rows.length>1?' … '+data.rows.at(-1).serial:'');$('#generateSerialButton').disabled=false;}catch{preview.textContent=t('serialInvalid');$('#generateSerialButton').disabled=true;}}
+      async function generateSerialData(){
+        let parsed;try{parsed=DataMergeCore.generateSerial(serialOptions());}catch{AppToast.show({message:t('serialInvalid')});return;}
+        const request=++importState.dataRequest;
+        if(dataState.headers.length&&!await AppConfirm.ask({title:t('serialReplaceTitle'),message:t('serialReplaceMessage'),confirmLabel:t('generateSerial')}))return;
+        if(request!==importState.dataRequest)return;
+        dataState.fileBytes=null;dataState.encoding='auto';dataState.detectedEncoding='utf-8';dataState.delimiterMode='auto';applyParsedData(parsed,{name:t('serialTitle')});sheetState.pageIndex=0;
+        $('#serialDetails').open=false;
+        $('#dataSection').scrollIntoView({block:'nearest',behavior:'instant'});
+      }
+      function renderQuantityControls(){const panel=$('#quantityDetails'),count=dataState.rows.length;panel.hidden=!count||dataState.mode!=='merge';if(panel.hidden)return;const quantities=dataState.quantities||[];$('#rowQuantity').value=String(quantities[dataState.rowIndex]??1);const select=$('#quantityColumn'),previous=select.value;select.replaceChildren();const blank=document.createElement('option');blank.value='';blank.textContent=t('quantityChoose');select.append(blank);for(const name of dataState.headers){const option=document.createElement('option');option.value=name;option.textContent=name;select.append(option);}select.value=dataState.headers.includes(previous)?previous:'';$('#applyQuantityColumn').disabled=!select.value;$('#quantityTotal').textContent=t('quantityTotal',{count:sheetItemCount()});}
+      function setQuantities(values){try{const q=DataMergeCore.validateQuantities(values,dataState.rows.length);dataState.quantities=q.every(n=>n===1)?[]:q;sheetState.pageIndex=0;outputState.pageIndex=0;renderLabelEditor();renderSheetPage();return true;}catch(error){AppToast.show({message:t(error.message==='QUANTITY_LIMIT'?'quantityLimit':'quantityInvalid')});renderQuantityControls();return false;}}
+      function sheetItemCount(){return SheetCompositionCore.itemCountForMode({mode:dataState.mode,repeatCount:dataState.repeatCount,rowCount:dataState.rows.length,quantities:dataState.quantities||[]});}
       function sheetComposition(){
         const layout=LabelSheetCore.computeLayout(state.settings);const slotCount=layout.valid?layout.labels.length:0;const composition=SheetCompositionCore.compose({slotCount,itemCount:sheetItemCount(),usedFirstPage:sheetState.usedFirstPage});if(composition.pageCount<=0)sheetState.pageIndex=0;else sheetState.pageIndex=Math.max(0,Math.min(sheetState.pageIndex,composition.pageCount-1));return {layout,composition};
       }
-      function sheetRowForItem(itemIndex){return dataState.mode==='merge'?(dataState.rows[itemIndex]||{}):currentDataRow();}
+      function sheetRowForItem(itemIndex){return dataState.mode==='merge'?(dataState.rows[SheetCompositionCore.rowIndexForItem(dataState,itemIndex)]||{}):currentDataRow();}
       function renderSheetLabelContent(parent,slot,itemIndex,prefix,snapshot=null){
         const bounds=snapshot?{width:snapshot.settings.labelWidth,height:snapshot.settings.labelHeight}:editorBounds(),elements=snapshot?snapshot.elements:editorState.elements;
-        const nested=createSvg('svg',{x:slot.x,y:slot.y,width:slot.width,height:slot.height,viewBox:`0 0 ${bounds.width} ${bounds.height}`,overflow:'hidden','pointer-events':'none'});const defs=createSvg('defs');nested.append(defs);const row=snapshot?(snapshot.data.rows[snapshot.data.mode==='merge'?itemIndex:snapshot.data.rowIndex]||{}):sheetRowForItem(itemIndex);
+        const nested=createSvg('svg',{x:slot.x,y:slot.y,width:slot.width,height:slot.height,viewBox:`0 0 ${bounds.width} ${bounds.height}`,overflow:'hidden','pointer-events':'none'});const defs=createSvg('defs');nested.append(defs);const row=snapshot?(snapshot.data.rows[SheetCompositionCore.rowIndexForItem(snapshot.data,itemIndex)]||{}):sheetRowForItem(itemIndex);
         for(const element of elements){if(element.type==='text')renderTextElement(nested,defs,element,false,row,prefix);else if(element.type==='image')renderImageElement(nested,defs,element,false,prefix);else if(element.type==='code')renderCodeElement(nested,element,false,row,snapshot?key=>snapshot.messages[key]:t);}
         parent.append(nested);
       }
@@ -1664,9 +1736,9 @@
       }
       // Only printable state participates: preview navigation, selection, language,
       // display units and the editable filename do not change an existing PDF.
-      function pdfContentFingerprint(){return JSON.stringify({settings:state.settings,elements:editorState.elements,data:{mode:dataState.mode,repeatCount:dataState.repeatCount,headers:dataState.headers,rows:dataState.rows,rowIndex:dataState.mode==='repeat'&&editorState.elements.some(element=>element.sourceType==='field')?dataState.rowIndex:0},usedFirstPage:sheetState.usedFirstPage,output:{offsetX:outputState.offsetX,offsetY:outputState.offsetY}});}
+      function pdfContentFingerprint(){return JSON.stringify({settings:state.settings,elements:editorState.elements,data:{mode:dataState.mode,repeatCount:dataState.repeatCount,headers:dataState.headers,rows:dataState.rows,quantities:dataState.quantities||[],rowIndex:dataState.mode==='repeat'&&editorState.elements.some(element=>element.sourceType==='field')?dataState.rowIndex:0},usedFirstPage:sheetState.usedFirstPage,output:{offsetX:outputState.offsetX,offsetY:outputState.offsetY}});}
       function capturePdfSnapshot(){
-        const snapshot=JSON.parse(pdfContentFingerprint());snapshot.layout=LabelSheetCore.computeLayout(snapshot.settings);snapshot.composition=SheetCompositionCore.compose({slotCount:snapshot.layout.valid?snapshot.layout.labels.length:0,itemCount:SheetCompositionCore.itemCountForMode({mode:snapshot.data.mode,repeatCount:snapshot.data.repeatCount,rowCount:snapshot.data.rows.length}),usedFirstPage:snapshot.usedFirstPage});snapshot.messages=Object.fromEntries(['codeEmpty','invalidCode39','invalidCode128','qrTooSmall','codeReady','codeGenerationFailed','qrTooLong'].map(key=>[key,t(key)]));const freeze=value=>{if(value&&typeof value==='object'){Object.values(value).forEach(freeze);Object.freeze(value);}return value;};return freeze(snapshot);
+        const snapshot=JSON.parse(pdfContentFingerprint());snapshot.layout=LabelSheetCore.computeLayout(snapshot.settings);snapshot.composition=SheetCompositionCore.compose({slotCount:snapshot.layout.valid?snapshot.layout.labels.length:0,itemCount:SheetCompositionCore.itemCountForMode({mode:snapshot.data.mode,repeatCount:snapshot.data.repeatCount,rowCount:snapshot.data.rows.length,quantities:snapshot.data.quantities||[]}),usedFirstPage:snapshot.usedFirstPage});snapshot.messages=Object.fromEntries(['codeEmpty','invalidCode39','invalidCode128','qrTooSmall','codeReady','codeGenerationFailed','qrTooLong'].map(key=>[key,t(key)]));const freeze=value=>{if(value&&typeof value==='object'){Object.values(value).forEach(freeze);Object.freeze(value);}return value;};return freeze(snapshot);
       }
       function invalidateGeneratedPdf(){
         outputState.generation+=1;outputState.busy=false;outputState.sourceFingerprint=null;outputState.generatedBlob=null;outputState.generatedMetadata=null;$('#outputResult').hidden=true;$('#outputProgress').hidden=true;$('#saveGeneratedPdf').disabled=true;
@@ -1687,10 +1759,7 @@
         const metrics=PdfOutputCore.pageMetrics(settings.paperWidth,settings.paperHeight,300);if(metrics.widthPx>16384||metrics.heightPx>16384||metrics.widthPx*metrics.heightPx>65000000)throw new Error('PAGE_TOO_LARGE');await document.fonts?.ready;const xml=new XMLSerializer().serializeToString(svg),url=URL.createObjectURL(new Blob([xml],{type:'image/svg+xml'}));blobUrls.add(url);try{const image=await new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=()=>reject(new Error('SVG_RENDER'));img.src=url;});const canvas=document.createElement('canvas');canvas.width=metrics.widthPx;canvas.height=metrics.heightPx;const ctx=canvas.getContext('2d',{alpha:false});if(!ctx)throw new Error('CANVAS');ctx.fillStyle='#fff';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.drawImage(image,0,0,canvas.width,canvas.height);const blob=await new Promise((resolve,reject)=>canvas.toBlob(value=>value?resolve(value):reject(new Error('JPEG')),'image/jpeg',.98));const bytes=new Uint8Array(await blob.arrayBuffer());canvas.width=1;canvas.height=1;return {jpegBytes:bytes,pixelWidth:metrics.widthPx,pixelHeight:metrics.heightPx};}finally{URL.revokeObjectURL(url);blobUrls.delete(url);}
       }
       function textMayOverflow(element,row){
-        const value=DataMergeCore.resolveElementText(element,row);if(!value)return false;
-        const fontMm=Math.max(1,Number(element.fontSize)||12)*25.4/72,pxPerMm=96/25.4,lines=wrapElementText(element,row),lineHeight=fontMm*1.2;
-        textMeasureContext.font=(element.bold?'700':'400')+' '+fontMm*pxPerMm+'px '+fontFamilyCss(element.fontFamily);
-        return lines.length>Math.max(1,Math.floor(element.height/lineHeight))||fontMm+.25>element.height||lines.some(line=>textMeasureContext.measureText(line).width>Math.max(.2,element.width-.8)*pxPerMm+.01);
+        return !!DataMergeCore.resolveElementText(element,row)&&!textLayout(element,row).fits;
       }
       async function runPrintCheck(){
         const button=$('#printCheckButton'),result=$('#printCheckResult'),summary=$('#printCheckSummary'),list=$('#printCheckIssues');if(button.disabled)return;
@@ -1701,14 +1770,15 @@
           if(!snapshot.layout.valid||hadDrafts)add('pdfInvalidLayout');
           if(!snapshot.elements.length)add('printEmptyLabel');
           if(!snapshot.composition.itemCount)add('pdfNoData');
-          const count=snapshot.data.mode==='merge'?snapshot.data.rows.length:1;
+          const count=snapshot.data.mode==='merge'?snapshot.data.rows.length:1,firstPrintable=snapshot.data.mode==='merge'?snapshot.data.rows.findIndex((_,index)=>snapshot.data.quantities?.[index]!==0):0;
           for(let i=0;i<count;i++){
             const rowIndex=snapshot.data.mode==='merge'?i:snapshot.data.rowIndex,row=snapshot.data.rows[rowIndex]||{};
+            if(snapshot.data.mode==='merge'&&snapshot.data.quantities?.[rowIndex]===0)continue;
             for(const element of snapshot.elements){
               if(element.sourceType==='field'&&(!snapshot.data.headers.includes(element.fieldName)||!Object.hasOwn(row,element.fieldName))){add('printMissingField',rowIndex,element.id,element.fieldName);continue;}
               if(element.type==='text'){const value=DataMergeCore.resolveElementText(element,row);if(!value.trim())add('checkEmptyText',rowIndex,element.id);else if(textMayOverflow(element,row))add('checkTextOverflow',rowIndex,element.id);}
               if(element.type==='code'){const validation=codeValidation(element,row,key=>key);if(validation.level!=='ok')add(validation.message,rowIndex,element.id);}
-              if(i===0&&element.type==='image'&&(element.fit==='cover'?Math.min:Math.max)(element.naturalWidth/element.width,element.naturalHeight/element.height)*25.4<150)add('checkImageResolution',null,element.id);
+              if(i===firstPrintable&&element.type==='image'&&(element.fit==='cover'?Math.min:Math.max)(element.naturalWidth/element.width,element.naturalHeight/element.height)*25.4<150)add('checkImageResolution',null,element.id);
             }
             if(i%100===99){await new Promise(resolve=>setTimeout(resolve,0));if(state.activePage!=='outputPage'||fingerprint!==pdfContentFingerprint()||hasPendingLayoutDrafts()!==hadDrafts){result.hidden=true;return;}}
           }
@@ -1739,7 +1809,7 @@
       function saveGeneratedPdf(){if(!refreshPdfValidity()||!outputState.generatedBlob)return;const base=PdfOutputCore.sanitizePdfFilename($('#outputFilename').value);outputState.generatedFilename=outputState.generatedMetadata.kind==='calibration'?base.replace(/\.pdf$/i,'-calibration.pdf'):base;$('#outputFilename').value=base;const url=URL.createObjectURL(outputState.generatedBlob),a=document.createElement('a');a.href=url;a.download=outputState.generatedFilename;a.style.display='none';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);}
 
 
-      function applyParsedData(parsed,{name=''}={}){dataState.headers=parsed.headers;dataState.rows=parsed.rows;dataState.rowIndex=0;dataState.fileName=name;dataState.mode='merge';renderLabelEditor();if(parsed.headers.length)AppToast.show({message:t('dataLoadedToast',{rows:parsed.rows.length})});else AppToast.show({message:t('dataParseEmpty')});}
+      function applyParsedData(parsed,{name=''}={}){dataState.headers=parsed.headers;dataState.rows=parsed.rows;dataState.quantities=[];dataState.rowIndex=0;dataState.fileName=name;dataState.mode='merge';renderLabelEditor();if(parsed.headers.length)AppToast.show({message:t('dataLoadedToast',{rows:parsed.rows.length})});else AppToast.show({message:t('dataParseEmpty')});}
       function parseTextData(text,{name='',fileBytes=null,encoding='auto',detectedEncoding='utf-8'}={}){
         importState.dataRequest+=1;
         try{const parsed=DataMergeCore.parseDelimited(text,dataState.delimiterMode||'auto');if(!parsed.headers.length){AppToast.show({message:t('dataParseEmpty')});return false;}dataState.fileBytes=fileBytes;dataState.encoding=encoding;dataState.detectedEncoding=detectedEncoding;applyParsedData(parsed,{name});return true;}catch(error){console.error(error);const key=error.message==='DATA_INVALID_QUOTE'?'dataInvalidQuote':error.message==='DATA_COLUMN_COUNT'?'dataColumnCount':'dataParseFailed';AppToast.show({message:t(key,{line:error.line||1}),duration:6500});return false;}
@@ -1791,6 +1861,12 @@
       function focusDataSection(){dataState.mode='merge';sheetState.pageIndex=0;renderDataPanel();const section=$('#dataSection');section.hidden=false;requestAnimationFrame(()=>{section.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'});section.classList.remove('is-target');void section.offsetWidth;section.classList.add('is-target');setTimeout(()=>section.classList.remove('is-target'),1200);});}
       function handleEditorKeydown(event){const target=event.target;if(state.activePage!=='labelPage'||document.querySelector('dialog[open]')||!(target instanceof Element)||!target.closest('#labelEditorSvg'))return;if(target instanceof HTMLInputElement||target instanceof HTMLTextAreaElement||target instanceof HTMLSelectElement||target?.isContentEditable)return;const mod=event.ctrlKey||event.metaKey;if(mod&&event.key.toLowerCase()==='z'){event.preventDefault();event.shiftKey?redoEditor():undoEditor();return;}if(event.key==='Delete'||event.key==='Backspace'){if(editorState.selectedId){event.preventDefault();deleteSelectedElement();focusLabelCanvas();}return;}if(event.key==='Escape'){cancelEditorInteraction();editorState.selectedId=null;renderLabelEditor();focusLabelCanvas();return;}if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(event.key)&&editorState.selectedId){event.preventDefault();const amount=event.shiftKey?1:.2,n={ArrowLeft:[-amount,0],ArrowRight:[amount,0],ArrowUp:[0,-amount],ArrowDown:[0,amount]}[event.key];nudgeSelected(n[0],n[1]);}}
 
+      for(const id of ['serialStart','serialStep','serialCount','serialDigits','serialPrefix','serialSuffix'])$('#'+id).addEventListener('input',renderSerialPreview);
+      $('#generateSerialButton').addEventListener('click',generateSerialData);
+      $('#rowQuantity').addEventListener('change',event=>{if(!dataState.rows.length)return;const values=dataState.quantities?.length?[...dataState.quantities]:dataState.rows.map(()=>1);values[dataState.rowIndex]=event.target.value;setQuantities(values);});
+      $('#quantityColumn').addEventListener('change',event=>{$('#applyQuantityColumn').disabled=!event.target.value;});
+      $('#applyQuantityColumn').addEventListener('click',()=>{const field=$('#quantityColumn').value;if(dataState.headers.includes(field))setQuantities(dataState.rows.map(row=>row[field]));});
+      $('#resetQuantities').addEventListener('click',()=>setQuantities(dataState.rows.map(()=>1)));
       $('#dataModeSelect').addEventListener('change',event=>{dataState.mode=event.target.value==='merge'?'merge':'repeat';sheetState.pageIndex=0;renderDataPanel();renderSheetPage();});
       $('#openDataSectionButton').addEventListener('click',focusDataSection);$$('[data-open-data-section]').forEach(button=>button.addEventListener('click',focusDataSection));
       $('#repeatCount').addEventListener('change',event=>{dataState.repeatCount=Math.max(1,Math.min(10000,Math.trunc(Number(event.target.value)||1)));sheetState.pageIndex=0;renderDataPanel();renderSheetPage();});
@@ -1828,6 +1904,8 @@
       $('#touchContextEdit').addEventListener('click',()=>{closeTouchContextMenu();focusSelectedTextEditor();});$('#touchContextDuplicate').addEventListener('click',()=>{closeTouchContextMenu();duplicateSelectedElement();});$('#touchContextBringFront').addEventListener('click',()=>{closeTouchContextMenu();bringSelectedFront();});$('#touchContextSendBack').addEventListener('click',()=>{closeTouchContextMenu();sendSelectedBack();});$('#touchContextDelete').addEventListener('click',()=>{closeTouchContextMenu();deleteSelectedElement();});
       $('#textContent').addEventListener('input',event=>updateSelectedProperty('text',event.target.value));$('#textContent').addEventListener('change',pushEditorHistory);
       $('#fontFamily').addEventListener('change',event=>updateSelectedProperty('fontFamily',event.target.value,{commit:true}));$('#fontSize').addEventListener('change',event=>updateSelectedProperty('fontSize',Math.max(4,Math.min(96,Number(event.target.value)||12)),{commit:true}));
+      $('#autoFitToggle').addEventListener('change',event=>updateSelectedProperty('autoFit',event.target.checked,{commit:true}));
+      $('#minFontSize').addEventListener('change',event=>{const element=selectedElement();if(element?.type==='text')updateSelectedProperty('minFontSize',Math.max(4,Math.min(element.fontSize||12,Number(event.target.value)||6)),{commit:true});});
       $('#boldToggle').addEventListener('change',event=>updateSelectedProperty('bold',event.target.checked,{commit:true}));$('#wrapToggle').addEventListener('change',event=>updateSelectedProperty('wrap',event.target.checked,{commit:true}));$('#hAlign').addEventListener('change',event=>updateSelectedProperty('hAlign',event.target.value,{commit:true}));$('#vAlign').addEventListener('change',event=>updateSelectedProperty('vAlign',event.target.value,{commit:true}));
       $$('[data-align-axis]').forEach(button=>button.addEventListener('click',()=>{if(selectedElement()?.type!=='text')return;const axis=button.dataset.alignAxis,value=button.dataset.alignValue;if($('#'+axis).value!==value)updateSelectedProperty(axis,value,{commit:true});}));
       $$('[data-editor-geometry]').forEach(input=>{input.addEventListener('input',()=>{input.dataset.geometryEditing='true';setGeometryInputError(input,'');});input.addEventListener('change',()=>commitEditorGeometryInput(input));input.addEventListener('blur',()=>{if(input.dataset.geometryEditing==='true')commitEditorGeometryInput(input);});});
@@ -1929,7 +2007,7 @@
       document.addEventListener('visibilitychange',()=>{if(document.hidden)saveRecovery();});
       startRecoveryTimer();
       $('#versionBadge').textContent=`v${APP_CONFIG.version}`;$('#buildVersion').textContent=APP_CONFIG.version;$('#builtAt').textContent=BUILD_MANIFEST.generatedAtUtc||'—';$('#dependencyCount').textContent=String(BUILD_MANIFEST.dependencies?.length||0);
-      $('#outputFilename').value=outputState.generatedFilename;renderPresetOptions();applyLanguage();renderLabelEditor();setPage('paperPage');if(pendingRecovery)AppToast.show({message:t('recoveryPending'),actionLabel:t('restoreWork'),duration:8000,onAction:()=>{$('#projectDropZone').open=true;$('#restoreWorkButton').focus();}});
+      $('#outputFilename').value=outputState.generatedFilename;renderPresetOptions();applyLanguage();renderSerialPreview();renderLabelEditor();setPage('paperPage');if(pendingRecovery)AppToast.show({message:t('recoveryPending'),actionLabel:t('restoreWork'),duration:8000,onAction:()=>{$('#projectDropZone').open=true;$('#restoreWorkButton').focus();}});
     })();
   </script>
 </body>
