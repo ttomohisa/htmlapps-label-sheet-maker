@@ -538,3 +538,5 @@ Physical printer alignment, paper feed tolerances, and scan reliability still re
 
 - Hide only the informational page footer at the existing smartphone breakpoint (600px); preserve functional bottom navigation/actions and Help controls.
 - The existing build-information disclosure is the final item inside the scrollable Help body, retaining its metadata IDs, population, and desktop/mobile availability.
+
+- Mobile selection actions update on every step change, preserving the selected element. Compact action row; on the narrowest phones use the fixed selection bar without duplicate canvas controls. Mobile image selection offers photo or file only after Add image; desktop opens its file picker directly. Shorten data-drop and output copy.

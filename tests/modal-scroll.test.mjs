@@ -49,14 +49,15 @@ test('workflow navigation hides the introduction permanently and narrow layouts 
   assert.match(html, /state\.activePage=pageId;\$\$\('\.app-page'\)\.forEach\(page=>page\.classList\.toggle\('is-active',page\.id===pageId\)\)/);
 });
 
-test('all four dialog shells retain their headers, scroll containers and actions', () => {
+test('all five dialog shells retain their headers, scroll containers and actions', () => {
   const dialogs = [...html.matchAll(/<dialog\b[^>]*>[\s\S]*?<\/dialog>/g)].map(match => match[0]);
-  assert.deepEqual(dialogs.map(value => value.match(/\bid="([^"]+)"/)[1]), ['appConfirmDialog', 'saveLayoutDialog', 'saveCalibrationDialog', 'helpDialog']);
+  assert.deepEqual(dialogs.map(value => value.match(/\bid="([^"]+)"/)[1]), ['appConfirmDialog', 'saveLayoutDialog', 'saveCalibrationDialog', 'imageSourceDialog', 'helpDialog']);
   for (const [index,header,body,ids] of [
     [0,'app-confirm-header','app-confirm-body',['appConfirmTitle','appConfirmClose','appConfirmMessage','appConfirmCancel','appConfirmOk']],
     [1,'dialog-header','dialog-body',['saveLayoutTitle','closeSaveLayout','saveLayoutForm','layoutName','cancelSaveLayout']],
     [2,'dialog-header','dialog-body',['saveCalibrationTitle','closeSaveCalibration','saveCalibrationForm','calibrationName','cancelSaveCalibration']],
-    [3,'dialog-header','dialog-body',['helpTitle','closeHelpButton']]
+    [3,'dialog-header','dialog-body image-source-actions',['imageSourceTitle','closeImageSource','imagePhotoButton','imageFileFallbackButton']],
+    [4,'dialog-header','dialog-body',['helpTitle','closeHelpButton']]
   ]) {
     assert.ok(dialogs[index].includes('class="'+header+'"'));
     assert.ok(dialogs[index].includes('class="'+body+'"'));
@@ -64,7 +65,7 @@ test('all four dialog shells retain their headers, scroll containers and actions
     if(index===1||index===2)assert.match(dialogs[index], /type="submit"/);
   }
   assert.match(css,/\.dialog-header\s*\{[^}]*position:sticky/);
-  assert.match(dialogs[3], /APP:HELP:BEGIN/);
+  assert.match(dialogs[4], /APP:HELP:BEGIN/);
 });
 
 test('project files are a closed native disclosure with existing actions and drop handlers', () => {

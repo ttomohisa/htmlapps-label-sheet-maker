@@ -94,9 +94,29 @@ async function main() {
                 assert.ok(Math.abs(geometry.scrollY)<=1,label+': scroll reset '+JSON.stringify(geometry));
                 assert.ok(Math.abs(geometry.gap-14)<=2,label+': workflow sits just below header '+JSON.stringify(geometry));
               }
+              if(step!=='labelPage') {
+                assert.equal(await page.locator('#mobileSelectionBar').isVisible(),false,label+': selection bar absent on '+step);
+                assert.equal(await page.locator('body').evaluate(el=>el.classList.contains('has-mobile-selection-bar')),false,label+': no stale reserved bottom space');
+              }
               if(step==='labelPage' && height>=500) {
                 assert.equal(await page.locator('#labelCanvasTitle').count(),0,label+': canvas title removed');
                 await page.locator('#addTextButton').click();
+                assert.equal(await page.locator('#mobileSelectionBar').isVisible(),width<=600,label+': selected element bar only on mobile Label');
+                if(width<=820) {
+                  const tool=await page.locator('.editor-toolbar').boundingBox(), first=await page.locator('#undoButton').boundingBox(), last=await page.locator('#deleteElementButton').boundingBox();
+                  if(width>380)assert.ok(first&&last&&Math.abs(first.y-last.y)<=2,label+': single action row '+JSON.stringify({first,last,tool}));
+                  else assert.equal(last,null,label+': narrow phone uses fixed selection actions');
+                }
+                const dropLines=await page.locator('#dataDropZone').evaluate(el=>[...el.children].map(child=>{const range=document.createRange();range.selectNodeContents(child);return new Set([...range.getClientRects()].map(r=>Math.round(r.top))).size;}));
+                assert.deepEqual(dropLines,[1,1],label+': compact drop zone');
+                if(width<=767) {
+                  assert.equal(await page.locator('#imageFileFallbackButton').isVisible(),false,label+': no stray file selection');
+                  await page.locator('#addImageButton').click();
+                  assert.equal(await page.locator('#imageSourceDialog').isVisible(),true,label+': mobile image source dialog');
+                  assert.equal(await page.locator('#imageFileFallbackButton').isVisible(),true,label+': file choice in dialog');
+                  await page.keyboard.press('Escape');
+                  assert.equal(await page.locator('#imageSourceDialog').isVisible(),false,label+': source dialog Escape');
+                }
                 const alignment=page.locator('[data-align-axis="hAlign"][data-align-value="center"]');
                 await alignment.evaluate(el=>el.scrollIntoView({block:'center',behavior:'instant'}));
                 await alignment.click();
