@@ -28,7 +28,7 @@ async function main() {
   try {
     for (const file of ['dist/index.html', 'dist/index.self-extract.html', 'label-sheet-maker.html']) {
       for (const language of ['ja', 'en']) {
-        for (const [width, height] of [[1360, 900], [821, 700], [820, 700], [601, 568], [600, 568], [360, 640], [320, 568], [393, 252]]) {
+        for (const [width, height] of [[1360, 900], [821, 700], [820, 700], [601, 568], [600, 568], [390, 844], [360, 640], [320, 568], [393, 252]]) {
           const context = await browser.newContext({ viewport: { width, height }, locale: language, reducedMotion: 'reduce' });
           const page = await context.newPage();
           const errors = [], requests = [];
@@ -107,8 +107,18 @@ async function main() {
                   if(width>380)assert.ok(first&&last&&Math.abs(first.y-last.y)<=2,label+': single action row '+JSON.stringify({first,last,tool}));
                   else assert.equal(last,null,label+': narrow phone uses fixed selection actions');
                 }
-                const dropLines=await page.locator('#dataDropZone').evaluate(el=>[...el.children].map(child=>{const range=document.createRange();range.selectNodeContents(child);return new Set([...range.getClientRects()].map(r=>Math.round(r.top))).size;}));
-                assert.deepEqual(dropLines,[1,1],label+': compact drop zone');
+                const mode=page.locator('#dataModeSelect'),originalMode=await mode.inputValue();
+                const drop=page.locator('#dataDropZone');
+                await mode.selectOption('merge');
+                await drop.waitFor({state:'visible'});
+                const dropGeometry=await drop.evaluate(el=>{
+                  const box=el.getBoundingClientRect();
+                  return {width:box.width,lines:[...el.children].map(child=>{const range=document.createRange();range.selectNodeContents(child);return new Set([...range.getClientRects()].map(r=>Math.round(r.top))).size;})};
+                });
+                console.log('DATA DROP '+label+' '+JSON.stringify(dropGeometry));
+                assert.deepEqual(dropGeometry.lines,[1,1],label+': compact drop zone '+JSON.stringify(dropGeometry));
+                await mode.selectOption(originalMode);
+                assert.equal(await drop.isVisible(),originalMode==='merge',label+': restored print mode');
                 if(width<=767) {
                   assert.equal(await page.locator('#imageFileFallbackButton').isVisible(),false,label+': no stray file selection');
                   await page.locator('#addImageButton').click();
