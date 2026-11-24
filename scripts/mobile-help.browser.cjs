@@ -74,6 +74,16 @@ async function main() {
             await summary.click();
             assert.equal(await project.getAttribute('open'), null, label + ': closes by pointer');
             const nav = page.locator(width <= 600 ? '.app-mobile-bottom-bar' : '#desktopStepNav');
+            // Visit Sheet before adding an element, so the empty-label warning is real.
+            if(width>600) {
+              await nav.locator('[data-page="sheetPage"]').click();
+              const warning=page.locator('#sheetStatusMessage');
+              await warning.waitFor({state:'visible'});
+              const expected=language==='ja'?'ラベルが空です。配置のみ確認できます。':'Empty label — layout preview only.';
+              await page.waitForFunction(expected=>document.querySelector('#sheetStatusMessage').textContent===expected,expected);
+              const geometry=await warning.evaluate(el=>{const range=document.createRange();range.selectNodeContents(el);return {width:el.clientWidth,lines:new Set([...range.getClientRects()].map(r=>Math.round(r.top))).size};});
+              assert.equal(geometry.lines,1,label+': empty-label warning fits on one line '+JSON.stringify(geometry));
+            }
             for (const step of ['paperPage','labelPage','sheetPage','outputPage','paperPage']) {
               await nav.locator('[data-page="'+step+'"]').click();
               assert.equal(await page.locator('#'+step).isVisible(), true, label + ': active '+step);
