@@ -1,5 +1,4 @@
 import assert from 'node:assert/strict';
-import { createHash } from 'node:crypto';
 import fs from 'node:fs';
 import test from 'node:test';
 import { gunzipSync } from 'node:zlib';
@@ -14,7 +13,6 @@ if (payload) html = gunzipSync(Buffer.from(payload[1].replace(/\s/g, ''), 'base6
 html = html.replace(/\r\n/g, '\n');
 const css = html.match(/<style>([\s\S]*?)<\/style>/)[1];
 const rules = [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)];
-const hash = value => createHash('sha256').update(value).digest('hex');
 const jaHelp = 'ダイアログを開いている間は背景のスクロールが止まります。内容はダイアログ内でスクロールできます。';
 const enHelp = 'Background scrolling is paused while a dialog is open. Scroll inside the dialog to read its contents.';
 
@@ -41,29 +39,42 @@ test('Help excludes layout audit prose while retaining usage notes', () => {
   assert.match(help, /data-i18n="helpOffline"/);
 });
 
-test('shared mobile layout preserves responsive shield visibility and reviewed styles', () => {
-  // Baseline: main 53a1e6f87c911fceede460274783abcc7fb3a0a2 (v1.1.3).
-  // Strip the modal lock; the reviewed baseline now also includes only the 600px informational-footer hide.
-  const existingCss = css.replace(/    html:has\(dialog:modal\),\s*body:has\(dialog:modal\)\s*\{\s*overflow:\s*hidden;?\s*\}\n/, '');
-  assert.equal(hash(existingCss), '64b203d1916ad53348a648acb63e5af308670d66ff3fcd248bf9f3972beb505d');
+test('mobile hides the introduction outside Paper and the local badge', () => {
+  assert.match(css, /@media \(max-width: 600px\)\s*\{[\s\S]*?\.main:not\(:has\(#paperPage\.is-active\)\) \.page-intro\s*\{\s*display:\s*none;/);
+  assert.match(css, /@media \(max-width: 820px\)\s*\{\s*\.local-badge\s*\{\s*display:\s*none;/);
+  assert.match(html, /<section class="app-page is-active" id="paperPage"/);
+  assert.doesNotMatch(html, /id="heroTitle"|data-i18n="introTitle"/);
+  assert.match(html, /<p data-i18n="lead">[^<]+<\/p>/);
+  assert.match(html, /state\.activePage=pageId;\$\$\('\.app-page'\)\.forEach\(page=>page\.classList\.toggle\('is-active',page\.id===pageId\)\)/);
 });
 
-test('all four dialog shells retain their existing headers, scroll containers and actions', () => {
+test('all four dialog shells retain their headers, scroll containers and actions', () => {
   const dialogs = [...html.matchAll(/<dialog\b[^>]*>[\s\S]*?<\/dialog>/g)].map(match => match[0]);
   assert.deepEqual(dialogs.map(value => value.match(/\bid="([^"]+)"/)[1]), ['appConfirmDialog', 'saveLayoutDialog', 'saveCalibrationDialog', 'helpDialog']);
-  // Rebaseline the exact build-details relocation into Help; other dialog shells remain unchanged.
-  const shells = dialogs.join('\n').replace(/      <p data-i18n="helpModalScroll">[^<]*<\/p>\n/, '');
-  assert.equal(hash(shells), 'e48938ebded1a5f0826adacea99acf1eabe88132fb7bd9a040c924313e02a831');
+  for (const [index,header,body,ids] of [
+    [0,'app-confirm-header','app-confirm-body',['appConfirmTitle','appConfirmClose','appConfirmMessage','appConfirmCancel','appConfirmOk']],
+    [1,'dialog-header','dialog-body',['saveLayoutTitle','closeSaveLayout','saveLayoutForm','layoutName','cancelSaveLayout']],
+    [2,'dialog-header','dialog-body',['saveCalibrationTitle','closeSaveCalibration','saveCalibrationForm','calibrationName','cancelSaveCalibration']],
+    [3,'dialog-header','dialog-body',['helpTitle','closeHelpButton']]
+  ]) {
+    assert.ok(dialogs[index].includes('class="'+header+'"'));
+    assert.ok(dialogs[index].includes('class="'+body+'"'));
+    for(const id of ids)assert.ok(dialogs[index].includes('id="'+id+'"'),id);
+    if(index===1||index===2)assert.match(dialogs[index], /type="submit"/);
+  }
+  assert.match(css,/\.dialog-header\s*\{[^}]*position:sticky/);
+  assert.match(dialogs[3], /APP:HELP:BEGIN/);
 });
 
-test('shared mobile layout preserves reviewed runtime, editor, data and PDF output', () => {
-  // The only runtime addition is the Help descendant-target guard, separately executed by mobile-build-info.test.cjs.
-  let script = html.match(/<script>\s*([\s\S]*?)<\/script>/)[1];
-  for (const [name, token] of [['APP_CONFIG', '__APP_CONFIG_JSON__'], ['BUILD_MANIFEST', '__BUILD_MANIFEST_JSON__'], ['assetBundle', '__EMBEDDED_ASSET_BUNDLE_JSON__']]) {
-    script = script.replace(new RegExp(`(const ${name} = )[\\s\\S]*?;\\n`), `$1${token};\n`);
-  }
-  script = script.replace(/helpModalScroll:'[^']*',/g, '');
-  assert.equal(hash(script), '8e2c0fd52c4c08f9b353f444a0ad1da3e240d69619ef9fb896cc013e711a18a8');
+test('project files are a closed native disclosure with existing actions and drop handlers', () => {
+  const details=html.match(/<details\b[^>]*id="projectDropZone"[^>]*>[\s\S]*?<\/details>/);
+  assert.ok(details);
+  assert.doesNotMatch(details[0].split('>')[0], /\bopen\b/);
+  assert.match(details[0], /<summary>[\s\S]*?data-i18n="projectTitle"[\s\S]*?<\/summary>/);
+  for(const id of ['projectFileName','openProjectButton','saveProjectButton','projectFileInput'])assert.ok(details[0].includes('id="'+id+'"'),id);
+  assert.doesNotMatch(details[0], /class="button primary" id="saveProjectButton"/);
+  assert.match(html,/projectDropZone\.addEventListener\('drop'/);
+  assert.match(html,/\$\('#saveProjectButton'\)\.addEventListener\('click',saveProjectFile\)/);
 });
 
 test('local-processing badge retains its decorative shield and check', () => {

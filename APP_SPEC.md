@@ -2,6 +2,10 @@
 
 ## v1.1.5 — Print and data integrity
 
+- Remove the separate hero heading; keep one concise introduction, visible on Paper only at the mobile breakpoint. Hide the local-processing badge on narrow screens.
+- Keep open/save/drop available on every step through a closed native Project file disclosure, with secondary buttons and restrained panel styling.
+- Publish a versioned GitHub Release with both validated HTML variants after a successful main deployment; never move an existing tag or overwrite an existing release.
+
 - Validate QR alignment centres for versions 1–40, capacity, merge column availability and all printable code values. Reject empty labels and invalid print jobs before rasterization; calibration PDF remains available.
 - Reject malformed quoted records and inconsistent column counts without replacing previous data; support explicit comma/tab selection and quote-aware auto detection. Preserve explicitly empty records.
 - Enforce 1–100 rows and columns. Restore the full layout/editor/used-position state on reset Undo; retire stale Undo actions. Reject duplicate/colliding element IDs.

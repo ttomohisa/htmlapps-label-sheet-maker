@@ -99,3 +99,69 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
+
+  release:
+    # Publish only after the exact main commit has passed validation and deployment.
+    if: github.ref == 'refs/heads/main'
+    needs: [build, deploy]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      actions: read
+    steps:
+      - name: Checkout validated revision
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.sha }}
+      - name: Resolve version and check existing release
+        id: version
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          version=$(node -p "require('./app.config.json').version")
+          if [[ ! "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::Expected a stable semantic version"
+            exit 1
+          fi
+          tag="v$version"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          if gh release view "$tag" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "Release $tag already exists; leaving it unchanged."
+            echo "publish=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          refs=$(git ls-remote --tags origin "refs/tags/$tag" "refs/tags/$tag^{}")
+          if [[ -n "$refs" ]]; then
+            target=$(printf '%s\n' "$refs" | tail -n 1 | cut -f 1)
+            if [[ "$target" != "$GITHUB_SHA" ]]; then
+              echo "::error::Tag $tag points to another revision; bump the version rather than moving a tag."
+              exit 1
+            fi
+          fi
+          echo "publish=true" >> "$GITHUB_OUTPUT"
+      - name: Download validated standalone artifacts
+        if: steps.version.outputs.publish == 'true'
+        uses: actions/download-artifact@v4
+        with:
+          name: standalone-html-${{ github.sha }}
+          path: release-files
+      - name: Publish tag and GitHub Release
+        if: steps.version.outputs.publish == 'true'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          set -euo pipefail
+          cp release-files/index.html release-files/label-sheet-maker.html
+          cp release-files/index.self-extract.html release-files/label-sheet-maker.self-extract.html
+          gh release create "$RELEASE_TAG" \
+            release-files/label-sheet-maker.html \
+            release-files/label-sheet-maker.self-extract.html \
+            release-files/dependency-manifest.json \
+            release-files/self-extract-manifest.json \
+            --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" \
+            --title "Label Sheet Maker $RELEASE_TAG" --generate-notes

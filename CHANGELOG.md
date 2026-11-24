@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## 1.1.5 - 2026-11-24
+
+- Simplify the introductory copy and mobile workflow, collapse project files by default, and reduce decorative cards and shadows.
+- Publish a versioned GitHub Release with both validated standalone HTML variants after successful main deployment.
+
 - Correct QR alignment positions, validate every printable merge/code value, reject malformed CSV/TSV, and allow explicit delimiter selection.
 - Enforce grid limits, restore full reset Undo state, reject duplicate element IDs, remove image hitbox color from print, omit fully used sheets, and bound accumulated JPEG memory.
 
