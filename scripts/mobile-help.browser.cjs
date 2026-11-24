@@ -28,7 +28,7 @@ async function main() {
   try {
     for (const file of ['dist/index.html', 'dist/index.self-extract.html', 'label-sheet-maker.html']) {
       for (const language of ['ja', 'en']) {
-        for (const [width, height] of [[1360, 900], [601, 568], [600, 568], [360, 640], [320, 568], [393, 252]]) {
+        for (const [width, height] of [[1360, 900], [821, 700], [820, 700], [601, 568], [600, 568], [360, 640], [320, 568], [393, 252]]) {
           const context = await browser.newContext({ viewport: { width, height }, locale: language, reducedMotion: 'reduce' });
           const page = await context.newPage();
           const errors = [], requests = [];
@@ -44,8 +44,8 @@ async function main() {
             assert.equal(await page.locator('html').getAttribute('lang'),language,label+': repeated language toggles');
             for(const id of ['buildVersion','builtAt','dependencyCount']){assert.equal(await page.locator('#'+id).count(),1,label+': unique metadata after toggles');assert.ok(!['','—','-'].includes((await page.locator('#'+id).textContent()).trim()),label+': populated metadata after toggles');}
             assert.equal(await page.locator('[data-i18n="localBadge"]').textContent(), language === 'en' ? 'Fully local processing' : '完全ローカル処理', label);
-            assert.equal(await page.locator('.local-badge').isVisible(),width>600,label+': existing mobile badge hiding');
-            if(width>600) assert.ok(await page.locator('.local-badge').evaluate(el => {
+            assert.equal(await page.locator('.local-badge').isVisible(),width>820,label+': local badge hidden at narrow-layout breakpoint');
+            if(width>820) assert.ok(await page.locator('.local-badge').evaluate(el => {
               const box = el.getBoundingClientRect();
               const range = document.createRange();
               range.selectNodeContents(el.querySelector('[data-i18n="localBadge"]'));
@@ -55,6 +55,31 @@ async function main() {
             assert.equal(await page.locator('main #buildVersion').count(), 0, label);
             assert.equal(await page.locator('footer').isVisible(), width > 600, label);
             await prepareApp(page, width, label);
+            const intro = page.locator('.page-intro');
+            assert.equal(await intro.isVisible(), true, label + ': introduction on Paper');
+            assert.equal(await intro.locator('h1').count(), 0, label + ': no redundant hero heading');
+            const project = page.locator('#projectDropZone');
+            const summary = project.locator('summary');
+            assert.equal(await project.getAttribute('open'), null, label + ': project collapsed by default');
+            assert.equal(await page.locator('#openProjectButton').isVisible(), false, label + ': open button initially hidden');
+            await summary.focus();
+            await page.keyboard.press('Enter');
+            assert.equal(await project.getAttribute('open'), '', label + ': keyboard disclosure');
+            for (const id of ['openProjectButton','saveProjectButton']) {
+              const button = page.locator('#'+id);
+              assert.equal(await button.isVisible(), true, label + ': '+id+' visible');
+              const box = await button.boundingBox();
+              assert.ok(box && box.x >= 0 && box.x + box.width <= width + 1, label + ': '+id+' fits');
+            }
+            await summary.click();
+            assert.equal(await project.getAttribute('open'), null, label + ': closes by pointer');
+            const nav = page.locator(width <= 600 ? '.app-mobile-bottom-bar' : '#desktopStepNav');
+            for (const step of ['labelPage','sheetPage','outputPage','paperPage']) {
+              await nav.locator('[data-page="'+step+'"]').click();
+              assert.equal(await page.locator('#'+step).isVisible(), true, label + ': active '+step);
+              assert.equal(await intro.isVisible(), width > 600 || step === 'paperPage', label + ': introduction visibility on '+step);
+              assert.equal(await summary.isVisible(), true, label + ': project remains reachable on '+step);
+            }
 
             assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), label + ': page width');
 
