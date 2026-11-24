@@ -118,3 +118,5 @@ The application embeds the paper, editor, data merge, media, project, sheet and 
 ## v1.3.0 batch data
 
 Generated serials are ordinary merge rows. An optional quantity array maps physical printed item indexes to original data rows by cumulative counts, with the same mapping in frozen PDF snapshots. Auto-fit derives a font size at render time and never changes geometry or the configured font size. Schema 2 protects projects that use these features from older readers; schema 1 remains supported.
+
+Shape and text paint are restricted to RGB hex values. New linear symbols share core validation, encoding and PDF rendering. Retail codes use the GTIN check digit, ITF uses paired digits. The PDF snapshot contains the same element style and source rows as the sheet preview.

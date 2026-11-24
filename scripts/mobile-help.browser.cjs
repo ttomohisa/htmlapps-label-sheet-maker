@@ -126,6 +126,42 @@ async function batchLabelSmoke(browser,results){
  }catch(e){await page.screenshot({path:path.join(results,'failure-batch-labels.png')}).catch(()=>{});throw e;}finally{await context.close();}
 }
 
+
+async function designLabelSmoke(browser,results){
+ for(const [width,height,locale] of [[1360,900,'ja'],[390,844,'en']]){
+ const context=await browser.newContext({viewport:{width,height},locale,reducedMotion:'reduce'});
+ const page=await context.newPage(),errors=[],requests=[];
+ page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>{if(/^https?:/.test(r.url()))requests.push(r.url());});
+ try{
+  await page.goto(pathToFileURL(path.resolve(__dirname,'..','dist/index.html')).href);
+  const nav=page.locator(width<=600?'.app-mobile-bottom-bar':'#desktopStepNav');
+  await nav.locator('[data-page="labelPage"]').click();
+  await page.locator('#shapeKindSelect').selectOption('rounded');await page.locator('#addShapeButton').click();
+  await page.locator('#shapeFilled').scrollIntoViewIfNeeded();await page.locator('#shapeFilled').check();
+  await page.locator('#shapeFillColor').fill('#ffee00');await page.locator('#shapeStrokeColor').fill('#16624f');
+  assert.ok(await page.locator('#labelEditorSvg rect[fill="#ffee00"]').count());
+  await page.locator('#shapeKindSelect').selectOption('line');await page.locator('#addShapeButton').click();
+  await page.locator('#shapeDirection').selectOption('down');
+  assert.ok(await page.locator('#labelEditorSvg g[data-element-id] line[stroke="#16624f"]').count());
+  await page.locator('#addTextButton').click();await page.locator('#textColor').fill('#aa2233');
+  assert.ok(await page.locator('#labelEditorSvg text[fill="#aa2233"]').count());
+  await page.locator('#extraCodeKind').selectOption('ean13');await page.locator('#addExtraCodeButton').click();
+  await page.locator('#codeValueInput').fill('4901234567890');
+  assert.ok(await page.locator('#codeValidation').evaluate(el=>el.classList.contains('is-error')));
+  await page.locator('#codeValueInput').fill('490123456789');
+  assert.ok(await page.locator('#labelEditorSvg text').filter({hasText:'4901234567894'}).count());
+  await nav.locator('[data-page="sheetPage"]').click();
+  assert.ok(await page.locator('#sheetPreviewSvg rect[fill="#ffee00"]').count());
+  assert.ok(await page.locator('#sheetPreviewSvg text[fill="#aa2233"]').count());
+  await nav.locator('[data-page="outputPage"]').click();
+  await page.locator('#createPrintPdf').scrollIntoViewIfNeeded();await page.locator('#createPrintPdf').click();
+  await page.locator('#outputResult').waitFor({state:'visible',timeout:40000});
+  assert.deepEqual(errors,[]);assert.deepEqual(requests,[]);
+  console.log('PASS design and barcode smoke '+locale+' '+width);
+ }catch(e){await page.screenshot({path:path.join(results,'failure-design-'+locale+'.png')}).catch(()=>{});throw e;}finally{await context.close();}
+ }
+}
+
 async function main() {
   const results = path.resolve(__dirname, '..', 'test-results', 'mobile-help');
   fs.mkdirSync(results, { recursive: true });
@@ -133,6 +169,7 @@ async function main() {
   try {
     await editorUsabilitySmoke(browser,results);
     await batchLabelSmoke(browser,results);
+    await designLabelSmoke(browser,results);
     for (const file of ['dist/index.html', 'dist/index.self-extract.html', 'label-sheet-maker.html']) {
       for (const language of ['ja', 'en']) {
         for (const [width, height] of [[1360, 900], [821, 700], [820, 700], [601, 568], [600, 568], [390, 844], [360, 640], [320, 568], [393, 252]]) {

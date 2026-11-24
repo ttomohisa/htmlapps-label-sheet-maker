@@ -226,3 +226,9 @@ Bug reports and feature proposals are welcome through GitHub Issues. See [CONTRI
 Copyright © 2026 ttomohisa
 
 Licensed under the [MIT License](LICENSE).
+
+### Shapes, colors and additional barcodes
+
+- Add rectangles, rounded rectangles, ellipses or lines. Set fill, outline color, stroke width, corner radius or line direction. Text color is editable separately. Shapes use the same position/size, stacking, duplicate, Undo and project save controls as other elements.
+- JAN/EAN-13 (12 or 13 digits), JAN/EAN-8 (7 or 8 digits) and UPC-A (11 or 12 digits) calculate a missing check digit and reject a wrong supplied check digit. ITF accepts 2–80 digits in pairs, without automatic check digits or ITF-14 bearer bars. Fixed values and merged columns both work. Preserve leading zeros in CSV. Code generation does not assign or register GTINs. Size warnings are estimates; verify the printed symbol with the intended scanner and applicable GS1 requirements before production use.
+- Shapes, non-default text colors and added barcode types require schema 2. The app still opens schema-1 projects.

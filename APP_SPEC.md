@@ -576,3 +576,9 @@ Dimensions in mm. All A4 portrait. Manufacturer names and product codes identify
 | HISAGO ELM012 | 3 × 8 | 66 × 33.9 | 6 / 12.9 | 0 / 0 | [Layout chart, p.2](https://www.hisago.co.jp/images/uploads/2024/03/APNF240HP.pdf) |
 | HISAGO ELM020 | 3 × 7 | 70 × 38.1 | 0 / 14.8 | 0 / 0 | [Layout chart, p.2](https://www.hisago.co.jp/images/uploads/2024/03/APNF240HP.pdf) |
 | HISAGO ELM021 | 3 × 8 | 70 × 33.9 | 0 / 12.7 | 0 / 0 | [Layout chart, p.2](https://www.hisago.co.jp/images/uploads/2024/03/APNF240HP.pdf) |
+
+### v1.3.0 design and barcode extension
+
+- Shape element kind rect/rounded/ellipse/line, hex RGB fill and stroke, optional fill/outline, stroke thickness 0.1–5 mm (clipped to frame), rounded corners, four line directions. No arbitrary SVG markup or paint URLs. Use shared geometry, stacking, Undo and rendering for editor, sheet and PDF. Text color is a six-digit hex RGB; default #20211f.
+- Retail code kinds ean13/ean8/upca, numeric full or check-digit-omitted input. Modulo-10 GTIN check digit, L/G/R patterns, start/middle/end guards, format-specific quiet zones; UPC-A encodes equivalent zero-prefixed EAN-13 modules. ITF is generic even-length 2–80 digits with interleaved narrow/wide patterns and no automatic check digit or ITF-14 bearer bars. No guarantee of GS1 print-grade conformance, registration, or physical scan success. Reference: https://ref.gs1.org/standards/genspecs/ .
+- New shape, non-default text color or new code kinds require schema 2. Existing schema 1 remains readable. Print preflight and mandatory barcode validation use the same input rules, skip excluded data rows, and warn about narrow modules or short bars.

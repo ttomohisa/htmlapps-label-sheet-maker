@@ -52,3 +52,8 @@ All user data and PDF generation remain local to the browser. The readable stand
 - Apply quantities [2,0,3] manually and from a column; check five labels in order across used positions, page boundaries and print PDF. Reject blanks/fractions/negative counts without altering previous values; all-zero disables print PDF.
 - Enable auto-fit on long text; check original size remains unchanged, effective size is smaller in all previews and PDF, and minimum-size overflow is reported. Verify Undo, project save/restore and language switching.
 - Confirm all 33 presets produce valid layouts and match measured paper. Verify legacy schema-1 projects and new schema-2 roundtrip; run the same checks offline for both release variants.
+
+### Design and new codes
+
+- Add all shape kinds, set colors, geometry, layering and line direction; Undo, duplicate, save/reopen schema 2; confirm the same paint and shape in sheet preview and PDF.
+- Check EAN-13, EAN-8, UPC-A and ITF with fixed data and CSV fields, valid/missing/incorrect check digits, leading zeros, skipped invalid rows, and invalid ITF length. Verify the generated printed symbols using independent scanners at realistic dimensions; this is a separate physical test.
