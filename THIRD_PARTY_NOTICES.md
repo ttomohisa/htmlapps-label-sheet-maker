@@ -1,6 +1,6 @@
 # Third-Party Notices
 
-Label Sheet Maker v0.5.0 does not load third-party runtime code from a CDN or external server.
+Label Sheet Maker does not load third-party runtime code from a CDN or external server.
 
 ## QR encoding implementation
 

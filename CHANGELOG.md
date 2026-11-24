@@ -2,6 +2,21 @@
 
 ## Unreleased
 
+## 1.2.0 - 2026-11-25
+
+- Element list, collapsible import settings, fit-to-view, rounded coordinate display, print preflight report, drag selection with Undo, opt-in local recovery and image replacement.
+- Cancel interrupted sheet-selection gestures; ignore stale recovery confirmations; flag empty text and estimate image resolution using the actual fit mode.
+
+- Fix stale mobile selection actions on navigation; compact the canvas toolbar and file-drop copy; move mobile image source selection into a dialog.
+
+- Keep workflow tabs directly below the header after the first navigation, move project actions to the header and keyboard shortcuts to Help, streamline text and geometry controls and used-position actions.
+
+- Simplify the introductory copy and mobile workflow, collapse project files by default, and reduce decorative cards and shadows.
+- Publish a versioned GitHub Release with both validated standalone HTML variants after successful main deployment.
+
+- Correct QR alignment positions, validate every printable merge/code value, reject malformed CSV/TSV, and allow explicit delimiter selection.
+- Enforce grid limits, restore full reset Undo state, reject duplicate element IDs, remove image hitbox color from print, omit fully used sheets, and bound accumulated JPEG memory.
+
 - Hide the informational page footer at the existing smartphone breakpoint and move the unchanged build information to the end of Help. Preserve native disclosure and dialog dismissal.
 
 ## 1.1.4 - 2026-10-11

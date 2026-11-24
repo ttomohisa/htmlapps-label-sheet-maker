@@ -113,3 +113,9 @@ v1.0 explicitly excludes manufacturer product-code databases, manufacturer logos
 - 0.2 mm arrow nudge / 1 mm Shift+Arrow nudge.
 - Touch long-press element action menu.
 - Final desktop/mobile, Japanese/English, standalone, CSP, project, sheet, and PDF regression.
+
+## v1.2.0 — Editing and print reliability
+
+- Includes the unreleased v1.1.5 fixes and all eight editor usability improvements.
+- Regression focus: project recovery ownership, rounded display, overlapping elements, image replacement, drag cancellation, print preflight and release parity.
+- Release gate: main validation and Pages deployment must succeed before creating the version tag and GitHub Release. Physical print/scan checks remain separate from software regression.

@@ -1,5 +1,24 @@
 # Label Sheet Maker / ラベルシート作成 — Product Specification
 
+## v1.2.0 — Editor usability
+
+- Collapsible element list, import settings, fit-to-view zoom, rounded display values without changing underlying geometry.
+- Explicit preflight report (all merge rows, empty text, text overflow estimate, code checks, fit-aware image resolution estimate, paper offsets); navigate to affected elements and rows. Existing hard PDF checks remain.
+- Opt-in drag selection with Undo and touch scrolling preserved outside the mode. Retire incomplete gestures on navigation or redraw; disable drag mode on later pages.
+- Opt-in local recovery, including imported data and images; one snapshot per browser storage origin, quota failures reported. Restore or discard before overwriting. Turning off removes the snapshot. Stale confirmations cannot restore or discard a newer snapshot.
+- Replace image contents without changing element identity, position, frame size, fit, or ordering.
+
+## v1.2.0 — Print and data integrity (originally planned for v1.1.5)
+
+- Remove the separate hero heading; keep one concise introduction on initial load. Any workflow navigation hides it and the local-processing badge for the rest of the session, including returning to Paper. Hide the local-processing badge on narrow screens even before navigation.
+- Keep open/save/drop available on every step through a closed native Project file disclosure in the header, with secondary buttons and restrained panel styling. Keep the workflow at the top after navigation; put keyboard shortcuts in Help, use compact segmented text alignment and grouped centre/used-position actions.
+- Publish a versioned GitHub Release with both validated HTML variants after a successful main deployment; never move an existing tag or overwrite an existing release.
+
+- Validate QR alignment centres for versions 1–40, capacity, merge column availability and all printable code values. Reject empty labels and invalid print jobs before rasterization; calibration PDF remains available.
+- Reject malformed quoted records and inconsistent column counts without replacing previous data; support explicit comma/tab selection and quote-aware auto detection. Preserve explicitly empty records.
+- Enforce 1–100 rows and columns. Restore the full layout/editor/used-position state on reset Undo; retire stale Undo actions. Reject duplicate/colliding element IDs.
+- Use transparent image hitboxes; omit fully used sheets from print output and preview while keeping first-sheet editing in Sheet. Limit accumulated JPEG output to 128 MiB with a localized error.
+
 ## v1.1.4 — Modal background scrolling
 
 - While Help, Save paper layout, Save calibration preset, or the confirmation dialog is open modally, lock both document scroll containers with `html:has(dialog:modal), body:has(dialog:modal) { overflow: hidden; }`. Closing the last modal restores ordinary page scrolling without JavaScript scroll state.
@@ -20,7 +39,7 @@ Japanese name: **ラベルシート作成**
 
 Repository: `ttomohisa/htmlapps-label-sheet-maker`
 
-Current development milestone: **v1.1.4 — Modal background scrolling**
+Current development milestone: **v1.2.0 — Editor usability**
 
 ## 2. Product principles
 
@@ -218,7 +237,7 @@ File decoding supports UTF-8, UTF-8 BOM, and Shift_JIS. Auto detection prefers a
 
 ### 7.3 Parsing and headers
 
-CSV parsing supports quoted fields, embedded delimiters, escaped double quotes, and embedded line breaks. TSV is selected automatically when tabs dominate the first row.
+CSV parsing supports quoted fields, embedded delimiters, escaped double quotes, and embedded line breaks. TSV is selected automatically when tabs outside quotes dominate the first logical record; users can also explicitly choose comma or tab.
 
 The first row is used as column names. Empty or duplicate names are normalized without discarding source columns, for example `column_3` and `name_2`.
 
@@ -527,3 +546,5 @@ Physical printer alignment, paper feed tolerances, and scan reliability still re
 
 - Hide only the informational page footer at the existing smartphone breakpoint (600px); preserve functional bottom navigation/actions and Help controls.
 - The existing build-information disclosure is the final item inside the scrollable Help body, retaining its metadata IDs, population, and desktop/mobile availability.
+
+- Mobile selection actions update on every step change, preserving the selected element. Compact action row; on the narrowest phones use the fixed selection bar without duplicate canvas controls. Mobile image selection offers photo or file only after Add image; desktop opens its file picker directly. Shorten data-drop and output copy.

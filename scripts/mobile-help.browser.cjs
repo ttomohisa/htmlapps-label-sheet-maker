@@ -21,14 +21,68 @@ async function smoke(page,results,file){
  console.log('PASS synthetic label to edited-name PDF '+file);
 }
 
+
+async function editorUsabilitySmoke(browser,results) {
+ const context=await browser.newContext({viewport:{width:1360,height:900},locale:'ja',reducedMotion:'reduce'});
+ const page=await context.newPage(),errors=[],requests=[];
+ page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>{if(/^https?:/.test(r.url()))requests.push(r.url());});
+ try {
+  await page.goto(pathToFileURL(path.resolve(__dirname,'..','dist/index.html')).href);
+  const nav=page.locator('#desktopStepNav');
+  await nav.locator('[data-page="labelPage"]').click();
+  await page.locator('#addTextButton').click();
+  await page.locator('#textContent').fill('Long text that does not fit in this tiny label frame');
+  await page.locator('#elementWidth').fill('2');await page.locator('#elementWidth').press('Tab');
+  await page.locator('#elementListDetails summary').click();
+  assert.equal(await page.locator('#elementList button').count(),1);
+  const png={name:'before.png',mimeType:'image/png',buffer:Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aUPsAAAAASUVORK5CYII=','base64')};
+  const pick=page.waitForEvent('filechooser');await page.locator('#addImageButton').click();await (await pick).setFiles(png);
+  await page.waitForFunction(()=>document.querySelector('#elementListCount').textContent==='2');
+  const geom=async()=>Promise.all(['elementX','elementY','elementWidth','elementHeight'].map(id=>page.locator('#'+id).inputValue()));
+  const before=await geom();
+  const replacement=page.waitForEvent('filechooser');await page.locator('#replaceImageButton').click();await (await replacement).setFiles({...png,name:'after.png'});
+  await page.waitForFunction(()=>document.querySelector('#imageFileName').textContent==='after.png');
+  assert.deepEqual(await geom(),before);assert.equal(await page.locator('#elementList button').count(),2);
+  await page.locator('#elementList button').last().click();
+  assert.equal(await page.locator('#textContent').inputValue(),'Long text that does not fit in this tiny label frame');
+  await nav.locator('[data-page="sheetPage"]').click();
+  await page.locator('#sheetDragMode').click();
+  const slot1=page.locator('#sheetPreviewSvg [data-sheet-slot="1"]'),slot2=page.locator('#sheetPreviewSvg [data-sheet-slot="2"]');
+  await slot1.scrollIntoViewIfNeeded();
+  const a=await slot1.boundingBox(),b=await slot2.boundingBox();assert.ok(a&&b);
+  await page.mouse.move(a.x+a.width/2,a.y+a.height/2);await page.mouse.down();await page.mouse.move(b.x+b.width/2,b.y+b.height/2,{steps:12});await page.mouse.up();
+  assert.equal(await page.locator('#sheetSummaryUsed').textContent(),'2','drag marks both positions');
+  const fresh=await slot1.boundingBox();await page.mouse.move(fresh.x+fresh.width/2,fresh.y+fresh.height/2);await page.mouse.down();await page.locator('#languageButton').evaluate(el=>el.click());await page.mouse.up();assert.equal(await page.locator('#sheetSummaryUsed').textContent(),'2','redraw cancels pending drag');await page.locator('#languageButton').click();
+  await page.locator('#markAllAvailableButton').click();
+  await nav.locator('[data-page="outputPage"]').click();
+  await page.locator('#printCheckButton').click();
+  await page.waitForFunction(()=>!document.querySelector('#printCheckButton').disabled);
+  const issue=page.locator('#printCheckIssues button').filter({hasText:'文字が枠からはみ出す可能性'});
+  assert.ok(await issue.count(),'text overflow detected');
+  await issue.first().click();
+  assert.equal(await page.locator('#labelPage').isVisible(),true);assert.equal(await page.locator('#textContent').inputValue(),'Long text that does not fit in this tiny label frame');
+  await page.locator('#projectDropZone summary').click();await page.locator('#autoRecoveryToggle').check();
+  await page.waitForFunction(()=>localStorage.getItem('labelSheetMaker.recovery.v1')!==null);
+  await page.reload();await page.locator('#helpButton').waitFor();
+  await page.locator('#projectDropZone summary').click();await page.locator('#restoreWorkButton').click();
+  await nav.locator('[data-page="labelPage"]').click();
+  assert.equal(await page.locator('#elementListCount').textContent(),'2','recovered both elements');
+  await page.locator('#projectDropZone summary').click();await page.locator('#autoRecoveryToggle').uncheck();
+  assert.equal(await page.evaluate(()=>localStorage.getItem('labelSheetMaker.recovery.v1')),null);
+  assert.deepEqual(errors,[]);assert.deepEqual(requests,[]);
+  console.log('PASS editor usability smoke');
+ } catch(error){await page.screenshot({path:path.join(results,'failure-editor-usability.png')}).catch(()=>{});throw error;} finally {await context.close();}
+}
+
 async function main() {
   const results = path.resolve(__dirname, '..', 'test-results', 'mobile-help');
   fs.mkdirSync(results, { recursive: true });
   const browser = await chromium.launch();
   try {
+    await editorUsabilitySmoke(browser,results);
     for (const file of ['dist/index.html', 'dist/index.self-extract.html', 'label-sheet-maker.html']) {
       for (const language of ['ja', 'en']) {
-        for (const [width, height] of [[1360, 900], [601, 568], [600, 568], [360, 640], [320, 568], [393, 252]]) {
+        for (const [width, height] of [[1360, 900], [821, 700], [820, 700], [601, 568], [600, 568], [390, 844], [360, 640], [320, 568], [393, 252]]) {
           const context = await browser.newContext({ viewport: { width, height }, locale: language, reducedMotion: 'reduce' });
           const page = await context.newPage();
           const errors = [], requests = [];
@@ -44,8 +98,8 @@ async function main() {
             assert.equal(await page.locator('html').getAttribute('lang'),language,label+': repeated language toggles');
             for(const id of ['buildVersion','builtAt','dependencyCount']){assert.equal(await page.locator('#'+id).count(),1,label+': unique metadata after toggles');assert.ok(!['','—','-'].includes((await page.locator('#'+id).textContent()).trim()),label+': populated metadata after toggles');}
             assert.equal(await page.locator('[data-i18n="localBadge"]').textContent(), language === 'en' ? 'Fully local processing' : '完全ローカル処理', label);
-            assert.equal(await page.locator('.local-badge').isVisible(),width>600,label+': existing mobile badge hiding');
-            if(width>600) assert.ok(await page.locator('.local-badge').evaluate(el => {
+            assert.equal(await page.locator('.local-badge').isVisible(),width>820,label+': local badge hidden at narrow-layout breakpoint');
+            if(width>820) assert.ok(await page.locator('.local-badge').evaluate(el => {
               const box = el.getBoundingClientRect();
               const range = document.createRange();
               range.selectNodeContents(el.querySelector('[data-i18n="localBadge"]'));
@@ -55,6 +109,114 @@ async function main() {
             assert.equal(await page.locator('main #buildVersion').count(), 0, label);
             assert.equal(await page.locator('footer').isVisible(), width > 600, label);
             await prepareApp(page, width, label);
+            const intro = page.locator('.page-intro');
+            assert.equal(await intro.isVisible(), true, label + ': introduction on Paper');
+            assert.equal(await intro.locator('h1').count(), 0, label + ': no redundant hero heading');
+            const project = page.locator('#projectDropZone');
+            const summary = project.locator('summary');
+            assert.equal(await project.getAttribute('open'), null, label + ': project collapsed by default');
+            assert.equal(await page.locator('#openProjectButton').isVisible(), false, label + ': open button initially hidden');
+            await summary.focus();
+            await page.keyboard.press('Enter');
+            assert.equal(await project.getAttribute('open'), '', label + ': keyboard disclosure');
+            for (const id of ['openProjectButton','saveProjectButton']) {
+              const button = page.locator('#'+id);
+              assert.equal(await button.isVisible(), true, label + ': '+id+' visible');
+              const box = await button.boundingBox();
+              assert.ok(box && box.x >= 0 && box.x + box.width <= width + 1, label + ': '+id+' fits');
+            }
+            await summary.click();
+            assert.equal(await project.getAttribute('open'), null, label + ': closes by pointer');
+            const nav = page.locator(width <= 600 ? '.app-mobile-bottom-bar' : '#desktopStepNav');
+            // Visit Sheet before adding an element, so the empty-label warning is real.
+            if(width>600) {
+              await nav.locator('[data-page="sheetPage"]').click();
+              const warning=page.locator('#sheetStatusMessage');
+              await warning.waitFor({state:'visible'});
+              const expected=language==='ja'?'ラベルが空です。配置のみ確認できます。':'Empty label — layout preview only.';
+              await page.waitForFunction(expected=>document.querySelector('#sheetStatusMessage').textContent===expected,expected);
+              const geometry=await warning.evaluate(el=>{const range=document.createRange();range.selectNodeContents(el);return {width:el.clientWidth,lines:new Set([...range.getClientRects()].map(r=>Math.round(r.top))).size};});
+              assert.equal(geometry.lines,1,label+': empty-label warning fits on one line '+JSON.stringify(geometry));
+            }
+            for (const step of ['paperPage','labelPage','sheetPage','outputPage','paperPage']) {
+              await nav.locator('[data-page="'+step+'"]').click();
+              assert.equal(await page.locator('#'+step).isVisible(), true, label + ': active '+step);
+              assert.equal(await intro.isVisible(), false, label + ': introduction stays hidden on '+step);
+              assert.equal(await summary.isVisible(), true, label + ': project remains reachable on '+step);
+              assert.equal(await page.locator('.local-badge').isVisible(), false, label + ': local badge stays hidden');
+              if(width>600) {
+                // Wait for the navigation render and explicit scroll reset, then
+                // sample both rectangles in one browser frame (not two protocol calls).
+                const geometry = await page.evaluate(async () => {
+                  await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+                  const header = document.querySelector('.app-header').getBoundingClientRect();
+                  const tabs = document.querySelector('#desktopStepNav').getBoundingClientRect();
+                  const padding = parseFloat(getComputedStyle(document.querySelector('main')).paddingTop);
+                  return {headerBottom:header.bottom, tabsTop:tabs.top, gap:tabs.top-header.bottom, scrollY, padding};
+                });
+                console.log('WORKFLOW '+label+' '+step+' '+JSON.stringify(geometry));
+                assert.ok(Math.abs(geometry.scrollY)<=1,label+': scroll reset '+JSON.stringify(geometry));
+                assert.ok(Math.abs(geometry.gap-14)<=2,label+': workflow sits just below header '+JSON.stringify(geometry));
+              }
+              if(step!=='labelPage') {
+                assert.equal(await page.locator('#mobileSelectionBar').isVisible(),false,label+': selection bar absent on '+step);
+                assert.equal(await page.locator('body').evaluate(el=>el.classList.contains('has-mobile-selection-bar')),false,label+': no stale reserved bottom space');
+              }
+              if(step==='labelPage' && height>=500) {
+                assert.equal(await page.locator('#labelCanvasTitle').count(),0,label+': canvas title removed');
+                await page.locator('#addTextButton').click();
+                assert.equal(await page.locator('#elementListCount').textContent(),'1',label+': element list count');
+                assert.equal(await page.locator('#dataOptions').getAttribute('open'),null,label+': import options collapsed');
+                await page.locator('#fitCanvasButton').evaluate(el=>el.click());
+                assert.equal(await page.locator('#zoomRange').inputValue(),'100',label+': fit resets zoom');
+                assert.equal(await page.locator('#mobileSelectionBar').isVisible(),width<=600,label+': selected element bar only on mobile Label');
+                if(width<=820) {
+                  const tool=await page.locator('.editor-toolbar').boundingBox(), first=await page.locator('#undoButton').boundingBox(), last=await page.locator('#deleteElementButton').boundingBox();
+                  if(width>380)assert.ok(first&&last&&Math.abs(first.y-last.y)<=2,label+': single action row '+JSON.stringify({first,last,tool}));
+                  else assert.equal(last,null,label+': narrow phone uses fixed selection actions');
+                }
+                const mode=page.locator('#dataModeSelect'),originalMode=await mode.inputValue();
+                const drop=page.locator('#dataDropZone');
+                await mode.selectOption('merge');
+                await drop.waitFor({state:'visible'});
+                const dropGeometry=await drop.evaluate(el=>{
+                  const box=el.getBoundingClientRect();
+                  return {width:box.width,lines:[...el.children].map(child=>{const range=document.createRange();range.selectNodeContents(child);return new Set([...range.getClientRects()].map(r=>Math.round(r.top))).size;})};
+                });
+                console.log('DATA DROP '+label+' '+JSON.stringify(dropGeometry));
+                assert.deepEqual(dropGeometry.lines,[1,1],label+': compact drop zone '+JSON.stringify(dropGeometry));
+                await mode.selectOption(originalMode);
+                assert.equal(await drop.isVisible(),originalMode==='merge',label+': restored print mode');
+                if(width<=767) {
+                  assert.equal(await page.locator('#imageFileFallbackButton').isVisible(),false,label+': no stray file selection');
+                  await page.locator('#addImageButton').click();
+                  assert.equal(await page.locator('#imageSourceDialog').isVisible(),true,label+': mobile image source dialog');
+                  assert.equal(await page.locator('#imageFileFallbackButton').isVisible(),true,label+': file choice in dialog');
+                  await page.keyboard.press('Escape');
+                  assert.equal(await page.locator('#imageSourceDialog').isVisible(),false,label+': source dialog Escape');
+                }
+                const alignment=page.locator('[data-align-axis="hAlign"][data-align-value="center"]');
+                await alignment.evaluate(el=>el.scrollIntoView({block:'center',behavior:'instant'}));
+                await alignment.click();
+                assert.equal(await alignment.getAttribute('aria-pressed'),'true',label+': alignment selection');
+                assert.equal(await page.locator('#hAlign').inputValue(),'center',label+': actual text alignment updated');
+                for(const id of ['centerHorizontalButton','centerVerticalButton']) {
+                  const control=page.locator('#'+id);
+                  await control.evaluate(el=>el.scrollIntoView({block:'center',behavior:'instant'}));
+                  await control.click();
+                }
+              }
+              if(step==='outputPage' && height>=500) {
+                await page.locator('#printCheckButton').click();
+                await page.locator('#printCheckResult').waitFor({state:'visible'});
+                await page.waitForFunction(()=>!document.querySelector('#printCheckButton').disabled);
+                assert.ok((await page.locator('#printCheckSummary').textContent()).trim(),label+': print check result');
+              }
+              if(step==='sheetPage' && height>=500) {
+                await page.locator('#invertUsedButton').click();
+                await page.locator('#markAllAvailableButton').click();
+              }
+            }
 
             assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), label + ': page width');
 

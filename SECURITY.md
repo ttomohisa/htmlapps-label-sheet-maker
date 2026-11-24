@@ -18,9 +18,9 @@ Include:
 
 ## Trust model
 
-The default template is a static browser application with no backend. Its primary protections are:
+Label Sheet Maker is a static browser application with no backend. Its primary protections are:
 
-- No ordinary runtime CDN/API connection (`connect-src 'none'`). Optional peer-to-peer WebRTC must be explicit in the product specification and must not introduce hidden signaling/STUN/TURN services.
+- No ordinary runtime CDN/API connection (`connect-src 'none'`). This app does not use WebRTC or server uploads.
 - Explicitly pinned and embedded third-party files.
 - Committed `dependencies.lock.json` tarball SHA-256 values verified before embedding.
 - SHA-256 records in the generated dependency manifest.
@@ -29,11 +29,11 @@ The default template is a static browser application with no backend. Its primar
 
 A generated HTML file is executable code. Distribute it through a trusted channel and verify hashes for high-trust workflows.
 
-If an app uses `components/webrtc-qr-pairing.html`, treat the paired browser as an explicit data recipient. “No server upload” does not mean “data never leaves this device.” Keep the manual signaling and `iceServers: []` boundary visible in the UI/help text, and do not silently add STUN/TURN later.
+Opt-in recovery stores the full project, including images and merge data, in local browser storage. This is not encrypted by the app. Turning autosave off removes the recovery entry; exported project files and backups must be managed separately. Avoid enabling recovery on shared browser profiles.
 
 ## Input files
 
-Applications created from this template may parse untrusted local files. Implementations should:
+This app parses untrusted local CSV/TSV, images and project files. Maintenance should:
 
 - Validate type, size, and structure before expensive processing.
 - Avoid unbounded allocation or recursion.

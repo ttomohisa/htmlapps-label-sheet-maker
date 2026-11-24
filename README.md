@@ -16,6 +16,8 @@ GitHub Pages delivers the initial HTML. After it loads, sheet geometry, label ed
 
 [![Label Sheet Maker screenshot](assets/screenshot-en.png)](https://ttomohisa.github.io/htmlapps-label-sheet-maker/)
 
+*Screenshot from an earlier version.*
+
 ## Features
 
 - **Define sheets by real dimensions** — Use A4, Letter, custom paper, or manufacturer-neutral presets and adjust label size, rows, columns, margins, and gaps in mm or inches.
@@ -47,11 +49,11 @@ Just [open the demo](https://ttomohisa.github.io/htmlapps-label-sheet-maker/). N
 
 ### Use the downloaded HTML
 
-1. Download `dist/index.html` from this repository or from a build artifact.
+1. Download `label-sheet-maker.html` from [GitHub Releases](https://github.com/ttomohisa/htmlapps-label-sheet-maker/releases). The readable file is also available at the repository root.
 2. Open it in a current Chromium-based browser, Firefox, or Safari.
 3. The app can run directly from the local HTML file without a local web server.
 
-`dist/index.self-extract.html` is also provided. It contains the same app as a gzip-compressed self-extracting single HTML file and expands locally in the browser.
+The release also includes `label-sheet-maker.self-extract.html` (built as `dist/index.self-extract.html`). It contains the same app as a gzip-compressed self-extracting single HTML file and expands locally in the browser.
 
 ### Build it fully offline-ready (advanced)
 
@@ -74,9 +76,18 @@ Python, Node.js, and a local web server are not required for the standard Window
 7. Review additional pages. Page 2 and later are composed as fresh sheets.
 8. In **Output**, create a calibration PDF when needed, adjust X/Y print offsets, and optionally save the calibration as a local preset.
 9. Create the print-ready PDF and print it at **Actual size / 100%**.
-10. Use **Save project file** to save the current job as `.labelsheet.json`, then reopen it later with **Open project file** or drag and drop it onto the project bar.
+10. Expand **Project file** in the header to save or open `.labelsheet.json`. You can also drop a project file onto that control.
 
 Built-in presets describe physical dimensions and grid counts only. They are not manufacturer-official templates.
+
+### Editing features
+
+- Expand **Elements** to select overlapping objects. Use Fit to view to reset the canvas zoom.
+- Select an image and choose **Replace image** to keep its position, frame size, fit and stacking order.
+- Delimiter and encoding options are under **Import settings**. Malformed quotes or inconsistent column counts reject the import without replacing previous data.
+- In Sheet, use **Drag to select** to mark or clear multiple positions according to the first slot touched. Undo is available immediately afterward. A fully used first sheet is omitted from the print PDF.
+- **Check before printing** reports empty or overflowing text, missing merge columns, code errors, estimated image resolution and label frames extending beyond the paper. Results are estimates, not a guarantee of print or scan quality.
+- The initial introduction disappears after choosing a workflow step.
 
 ### Label editor controls
 
@@ -113,7 +124,7 @@ The repository includes a workflow that builds the standalone HTML, verifies it,
 3. Push to `main`, or manually run **Deploy standalone app to GitHub Pages** from the Actions tab.
 4. After a successful deployment, the demo is available at `https://ttomohisa.github.io/htmlapps-label-sheet-maker/`.
 
-Each push to `main` runs the repository checks before Pages deployment. Pull requests that touch the build inputs run **Validate standalone HTML**.
+Each push to `main` runs the repository checks before Pages deployment. Pull requests that touch the build inputs run **Validate standalone HTML**. After successful main validation and Pages deployment, the workflow publishes the tag and GitHub Release for the version in `app.config.json`, without overwriting an existing tag or release.
 
 ## Development and build layout
 
@@ -168,6 +179,7 @@ The generated app is designed for **fully local processing** of the user's label
 - There is no runtime CDN, API call, analytics, telemetry, or remote font.
 - CSV / TSV files, pasted tables, local images, QR / barcode values, project files, and PDF generation stay in the browser.
 - Custom sheet layouts and print-calibration presets are stored in browser site storage.
+- Autosave is off by default. Enabling it in Project file stores a recovery snapshot, including images and table data, in this browser's local storage. Restore or discard it on reopening. Turning autosave off removes the recovery snapshot. Storage quotas, private browsing or clearing site data may prevent recovery; save important work as a portable project.
 - `.labelsheet.json` project files are created locally and can contain the embedded images and merge data needed to resume the job.
 
 The GitHub Pages version requires the initial HTML request, but data selected or entered after the app loads is not uploaded by the app. For use with the network completely disconnected, open the generated `dist/index.html` locally.
@@ -179,10 +191,10 @@ The GitHub Pages version requires the initial HTML request, but data selected or
 - Code 128 currently uses Set B and accepts printable ASCII characters. Code 39 accepts uppercase letters, digits, spaces, and its supported symbol set.
 - QR codes are generated from UTF-8 text, but very small printed QR codes can become difficult to scan.
 - Image input is limited to local PNG, JPEG, and WebP files. SVG image import and remote image URLs are not supported.
-- CSV / TSV and pasted table data are supported; XLSX and Google Sheets are not supported in v1.0.0.
+- CSV / TSV and pasted table data are supported; XLSX and Google Sheets are not supported.
 - Used-label positions are selected manually. Camera-based automatic detection is not included.
 - The app generates PDF files but does not control printer drivers or printer hardware. Final alignment can still depend on printer feed accuracy and print-dialog scaling.
-- Very large custom paper sizes, many high-resolution images, or large merge datasets can require substantial browser memory.
+- Very large custom paper sizes, many high-resolution images, or large merge datasets can require substantial browser memory. PDF generation limits accumulated JPEG data to 128 MiB; split large jobs.
 - Project files can include embedded image and merge data, so they may contain sensitive information. Store and share them accordingly.
 
 ## Third-party code

@@ -110,3 +110,7 @@ Keep source in one HTML while it remains understandable. When an app grows subst
 - No runtime external resource.
 - Clear state ownership.
 - A build that fails on missing input.
+
+## Label Sheet Maker state and output
+
+The application embeds the paper, editor, data merge, media, project, sheet and PDF cores. The schema-1 project carries geometry, elements, data, used slots and output settings. Optional recovery saves one normalized snapshot in localStorage; no recovery data is sent over the network. It is disabled by default, and quota failures are reported. Print output is generated from an immutable snapshot at 300 dpi, with a 128 MiB cumulative JPEG limit. The optional preflight report estimates text clipping and image resolution and does not replace the mandatory code/data checks at PDF generation.
