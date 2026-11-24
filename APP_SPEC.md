@@ -2,8 +2,8 @@
 
 ## v1.1.5 — Print and data integrity
 
-- Remove the separate hero heading; keep one concise introduction, visible on Paper only at the mobile breakpoint. Hide the local-processing badge on narrow screens.
-- Keep open/save/drop available on every step through a closed native Project file disclosure, with secondary buttons and restrained panel styling.
+- Remove the separate hero heading; keep one concise introduction on initial load. Any workflow navigation hides it and the local-processing badge for the rest of the session, including returning to Paper. Hide the local-processing badge on narrow screens even before navigation.
+- Keep open/save/drop available on every step through a closed native Project file disclosure in the header, with secondary buttons and restrained panel styling. Keep the workflow at the top after navigation; put keyboard shortcuts in Help, use compact segmented text alignment and grouped centre/used-position actions.
 - Publish a versioned GitHub Release with both validated HTML variants after a successful main deployment; never move an existing tag or overwrite an existing release.
 
 - Validate QR alignment centres for versions 1–40, capacity, merge column availability and all printable code values. Reject empty labels and invalid print jobs before rasterization; calibration PDF remains available.

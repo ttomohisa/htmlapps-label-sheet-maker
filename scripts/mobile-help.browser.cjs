@@ -74,11 +74,30 @@ async function main() {
             await summary.click();
             assert.equal(await project.getAttribute('open'), null, label + ': closes by pointer');
             const nav = page.locator(width <= 600 ? '.app-mobile-bottom-bar' : '#desktopStepNav');
-            for (const step of ['labelPage','sheetPage','outputPage','paperPage']) {
+            for (const step of ['paperPage','labelPage','sheetPage','outputPage','paperPage']) {
               await nav.locator('[data-page="'+step+'"]').click();
               assert.equal(await page.locator('#'+step).isVisible(), true, label + ': active '+step);
-              assert.equal(await intro.isVisible(), width > 600 || step === 'paperPage', label + ': introduction visibility on '+step);
+              assert.equal(await intro.isVisible(), false, label + ': introduction stays hidden on '+step);
               assert.equal(await summary.isVisible(), true, label + ': project remains reachable on '+step);
+              assert.equal(await page.locator('.local-badge').isVisible(), false, label + ': local badge stays hidden');
+              if(width>600) {
+                const navBox=await nav.boundingBox(),headerBox=await page.locator('.app-header').boundingBox();
+                assert.ok(navBox&&headerBox&&navBox.y-headerBox.y-headerBox.height<=16,label+': workflow sits just below header');
+              }
+              if(step==='labelPage') {
+                assert.equal(await page.locator('#labelCanvasTitle').count(),0,label+': canvas title removed');
+                await page.locator('#addTextButton').click();
+                const alignment=page.locator('[data-align-axis="hAlign"][data-align-value="center"]');
+                await alignment.click();
+                assert.equal(await alignment.getAttribute('aria-pressed'),'true',label+': alignment selection');
+                assert.equal(await page.locator('#hAlign').inputValue(),'center',label+': actual text alignment updated');
+                await page.locator('#centerHorizontalButton').click();
+                await page.locator('#centerVerticalButton').click();
+              }
+              if(step==='sheetPage') {
+                await page.locator('#invertUsedButton').click();
+                await page.locator('#markAllAvailableButton').click();
+              }
             }
 
             assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), label + ': page width');

@@ -39,8 +39,9 @@ test('Help excludes layout audit prose while retaining usage notes', () => {
   assert.match(help, /data-i18n="helpOffline"/);
 });
 
-test('mobile hides the introduction outside Paper and the local badge', () => {
-  assert.match(css, /@media \(max-width: 600px\)\s*\{[\s\S]*?\.main:not\(:has\(#paperPage\.is-active\)\) \.page-intro\s*\{\s*display:\s*none;/);
+test('workflow navigation hides the introduction permanently and narrow layouts hide the local badge', () => {
+  assert.match(css, /body\.workflow-started \.page-intro\s*\{\s*display:\s*none;/);
+  assert.match(html, /document\.body\.classList\.add\('workflow-started'\)/);
   assert.match(css, /@media \(max-width: 820px\)\s*\{\s*\.local-badge\s*\{\s*display:\s*none;/);
   assert.match(html, /<section class="app-page is-active" id="paperPage"/);
   assert.doesNotMatch(html, /id="heroTitle"|data-i18n="introTitle"/);
@@ -73,10 +74,20 @@ test('project files are a closed native disclosure with existing actions and dro
   assert.match(details[0], /<summary>[\s\S]*?data-i18n="projectTitle"[\s\S]*?<\/summary>/);
   for(const id of ['projectFileName','openProjectButton','saveProjectButton','projectFileInput'])assert.ok(details[0].includes('id="'+id+'"'),id);
   assert.doesNotMatch(details[0], /class="button primary" id="saveProjectButton"/);
+  assert.match(html, /<header[\s\S]*?<details class="project-bar" id="projectDropZone"[\s\S]*?<\/header>/);
   assert.match(html,/projectDropZone\.addEventListener\('drop'/);
   assert.match(html,/\$\('#saveProjectButton'\)\.addEventListener\('click',saveProjectFile\)/);
 });
 
+test('keyboard help and editing controls have the expected structure',()=>{
+  const help=html.match(/<!-- APP:HELP:BEGIN -->([\s\S]*?)<!-- APP:HELP:END -->/)[1];
+  const main=html.match(/<main\b[^>]*>[\s\S]*?<\/main>/)[0];
+  assert.match(help,/class="keyboard-hint"/);
+  assert.doesNotMatch(main,/class="keyboard-hint"|data-i18n="labelEditorBody"|data-i18n="editorToolNote"|id="labelCanvasTitle"/);
+  for(const axis of ['hAlign','vAlign'])assert.equal([...main.matchAll(new RegExp('data-align-axis="'+axis+'"','g'))].length,3);
+  assert.match(main,/class="geometry-center-actions"/);
+  assert.match(main,/class="sheet-used-actions"/);
+});
 test('local-processing badge retains its decorative shield and check', () => {
   const badge = html.match(/<div class="local-badge">([\s\S]*?)<\/div>/)[1];
   assert.match(badge, /<svg[^>]*aria-hidden="true"/);

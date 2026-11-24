@@ -4,6 +4,8 @@
 
 ## 1.1.5 - 2026-11-24
 
+- Keep workflow tabs directly below the header after the first navigation, move project actions to the header and keyboard shortcuts to Help, streamline text and geometry controls and used-position actions.
+
 - Simplify the introductory copy and mobile workflow, collapse project files by default, and reduce decorative cards and shadows.
 - Publish a versioned GitHub Release with both validated standalone HTML variants after successful main deployment.
 

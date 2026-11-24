@@ -48,7 +48,7 @@
     }
     .sr-only { position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0; }
     .app-header { position: sticky; z-index: 40; top: 0; min-height: var(--header-height); border-bottom: 1px solid color-mix(in srgb,var(--line) 82%,transparent); background: color-mix(in srgb,var(--bg) 92%,transparent); backdrop-filter: blur(16px) saturate(1.2); }
-    .header-inner { width:min(1220px,100%); min-height:var(--header-height); margin:0 auto; padding:10px clamp(14px,2.8vw,30px); display:flex; align-items:center; gap:14px; }
+    .header-inner { position:relative; width:min(1220px,100%); min-height:var(--header-height); margin:0 auto; padding:10px clamp(14px,2.8vw,30px); display:flex; align-items:center; gap:14px; }
     .brand { display:flex; align-items:center; gap:10px; min-width:0; }
     .brand-mark { width:38px; height:38px; flex:0 0 auto; border-radius:11px; overflow:hidden; box-shadow:var(--shadow-sm); }
     .brand-mark img { display:block; width:100%; height:100%; }
@@ -56,7 +56,7 @@
     .brand-name { margin:0; font-size:17px; line-height:1.2; letter-spacing:.01em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
     .version-badge { display:inline-flex; align-items:center; margin-left:7px; padding:1px 6px; border:1px solid var(--line); border-radius:999px; color:var(--muted); background:var(--surface-muted); font-size:11px; font-weight:650; vertical-align:2px; }
     .brand-meta { margin:2px 0 0; color:var(--muted); font-size:12px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .header-actions { margin-left:auto; display:flex; align-items:center; gap:12px; }
+    .header-actions { margin-left:auto; display:flex; align-items:center; flex:0 0 auto; gap:12px; }
     .language-button,.header-icon-button { border:0; background:transparent; color:var(--muted); cursor:pointer; font-weight:750; }
     .language-button { padding:6px 2px; font-size:12px; }
     .header-icon-button { width:34px; height:34px; padding:7px; border-radius:9px; display:grid; place-items:center; }
@@ -64,21 +64,25 @@
     .header-icon-button svg { width:20px; height:20px; }
     .main { width:min(1220px,100%); margin:0 auto; padding:22px clamp(14px,2.8vw,30px) 54px; }
     .page-intro { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:0 2px 10px; }
+    body.workflow-started .page-intro { display:none; }
+    body.workflow-started .main { padding-top:14px; }
     .page-intro p { margin:0; max-width:780px; color:var(--muted); font-size:14px; line-height:1.65; }
     .local-badge { display:inline-flex; align-items:center; gap:7px; flex:0 0 auto; margin-top:3px; padding:7px 0; border:0; border-radius:0; color:var(--accent); background:transparent; font-size:12px; font-weight:500; white-space:nowrap; }
     .local-badge svg { width:15px; height:15px; }
-    .project-bar { margin:0 0 10px; min-width:0; }
-    .project-bar summary { display:flex; align-items:center; justify-content:flex-end; gap:7px; width:max-content; max-width:100%; margin-left:auto; min-height:36px; padding:4px 6px; list-style:none; cursor:pointer; color:var(--muted); font-size:12px; font-weight:650; }
+    .project-bar { min-width:0; }
+    .project-bar summary { display:flex; align-items:center; gap:5px; min-height:34px; padding:4px 5px; list-style:none; cursor:pointer; color:var(--muted); font-size:12px; font-weight:650; border-radius:6px; }
     .project-bar summary::-webkit-details-marker { display:none; }
-    .project-bar summary:hover { color:var(--accent); }
-    .project-bar summary svg { width:16px; height:16px; flex:none; }
+    .project-bar summary:hover,.project-bar[open] summary { color:var(--accent); background:var(--surface-muted); }
+    .project-bar summary svg { width:17px; height:17px; flex:none; }
+    .project-bar summary .project-chevron { width:12px; height:12px; }
     .project-bar[open] .project-chevron { transform:rotate(90deg); }
-    .project-content { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:8px 2px 12px; border-bottom:1px solid var(--line); }
-    .project-bar.is-dragover { outline:1px dashed var(--accent); outline-offset:2px; background:var(--accent-soft); }
-    .project-copy { min-width:0; }
+    .project-content { position:absolute; top:100%; right:clamp(12px,2.8vw,30px); width:min(340px,calc(100vw - 24px)); padding:12px; border:1px solid var(--line); border-radius:8px; background:var(--surface); box-shadow:var(--shadow-md); }
+    .project-bar:not([open]) .project-content { display:none; }
+    .project-bar.is-dragover summary { outline:1px dashed var(--accent); background:var(--accent-soft); }
+    .project-copy { min-width:0; margin-bottom:10px; }
     .project-copy span { display:block; color:var(--muted); font-size:11px; overflow-wrap:anywhere; }
-    .project-actions { display:flex; flex:0 0 auto; gap:8px; }
-    .project-actions .button { min-height:38px; padding:7px 11px; font-size:12px; }
+    .project-actions { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
+    .project-actions .button { min-height:40px; padding:7px 8px; font-size:12px; overflow-wrap:anywhere; }
     .step-nav { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px; margin-bottom:16px; }
     .step-button { min-width:0; min-height:62px; display:flex; align-items:center; gap:10px; padding:9px 12px; border:1px solid var(--line); border-radius:8px; background:transparent; cursor:pointer; text-align:left; box-shadow:none; }
     .step-button:hover { border-color:var(--line-strong); background:var(--surface-hover); }
@@ -150,7 +154,6 @@
     .editor-tool-button { width:100%; min-height:44px; display:flex; align-items:center; gap:10px; padding:9px 11px; border:1px solid var(--line); border-radius:11px; background:var(--surface); cursor:pointer; text-align:left; font-weight:750; }
     .editor-tool-button:hover { border-color:var(--line-strong); background:var(--surface-hover); }
     .editor-tool-button svg { width:20px; height:20px; flex:0 0 auto; color:var(--accent); }
-    .editor-note { margin:11px 0 0; padding:10px 11px; border-radius:10px; color:var(--muted); background:var(--surface-muted); font-size:11px; }
     .editor-toolbar { min-height:52px; display:flex; flex-wrap:wrap; align-items:center; gap:8px 10px; padding:8px 10px; border-bottom:1px solid var(--line); }
     .editor-toolbar-group { display:flex; align-items:center; gap:6px; min-width:0; }
     .editor-toolbar-group.zoom-group { margin-left:auto; }
@@ -186,6 +189,7 @@
     .zoom-value { min-width:42px; color:var(--muted); font-size:11px; font-variant-numeric:tabular-nums; text-align:right; }
     .safe-area-control { display:flex; align-items:center; gap:6px; padding:0 4px; color:var(--muted); font-size:11px; white-space:nowrap; }
     .safe-area-control input { accent-color:var(--accent); }
+    .canvas-metric { padding:8px 12px; color:var(--muted); font-size:11px; font-variant-numeric:tabular-nums; border-bottom:1px solid var(--line); }
     .label-stage { position:relative; min-height:560px; display:block; padding:34px; overflow:auto; overscroll-behavior:contain; border-radius:0 0 16px 16px; background:linear-gradient(45deg,#ecece8 25%,transparent 25%),linear-gradient(-45deg,#ecece8 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#ecece8 75%),linear-gradient(-45deg,transparent 75%,#ecece8 75%); background-size:24px 24px; background-position:0 0,0 12px,12px -12px,-12px 0; touch-action:none; cursor:default; }
     .label-stage.is-pan-mode { cursor:grab; }
     .label-stage.is-panning { cursor:grabbing; }
@@ -202,7 +206,25 @@
     .toggle-row { display:flex; flex-wrap:wrap; gap:12px; margin-top:9px; }
     .check-control { display:flex; align-items:center; gap:6px; color:var(--muted); font-size:11px; }
     .check-control input { accent-color:var(--accent); }
-    .geometry-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
+    .geometry-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:7px; }
+    .inspector-font-grid { display:grid; grid-template-columns:minmax(0,1fr) 78px; gap:7px; align-items:end; }
+    .inspector .field input,.inspector .field select { min-height:38px; border-radius:6px; padding-block:6px; }
+    .inspector .input-with-unit input { padding-right:30px; }
+    .inspector .unit-suffix { right:7px; }
+    .inspector-section-title { font-weight:750; }
+    .alignment-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:7px; margin-top:10px; }
+    .alignment-options { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); border:1px solid var(--line); border-radius:6px; overflow:hidden; }
+    .alignment-options button { display:grid; place-items:center; min-width:0; min-height:36px; padding:4px 0; border:0; background:transparent; cursor:pointer; color:var(--muted); }
+    .alignment-options button+button { border-left:1px solid var(--line); }
+    .alignment-options button[aria-pressed=true] { background:var(--accent-soft); color:var(--accent); }
+    .alignment-options button:hover { background:var(--surface-muted); }
+    .alignment-options button:focus-visible { outline-offset:-3px; }
+    .alignment-options svg,.geometry-center-actions svg { width:19px; height:19px; flex:none; }
+    .geometry-center-actions { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:7px; margin-top:10px; }
+    .geometry-center-actions .button { display:flex; align-items:center; justify-content:center; gap:5px; min-width:0; min-height:38px; padding:5px 4px; font-size:11px; line-height:1.3; border-radius:6px; }
+    .geometry-center-actions .button span { overflow-wrap:anywhere; }
+    .inspector .toggle-row { gap:12px; }
+    .inspector .check-control { min-height:30px; }
     .geometry-grid input { min-width:0; }
     .editor-action-grid { display:grid; grid-template-columns:1fr 1fr; gap:7px; }
     .editor-action-grid .button { min-width:0; padding-inline:8px; font-size:11px; }
@@ -212,7 +234,7 @@
     .code-validation.is-warning { color:#875f00; background:#fff5d6; }
     .code-validation.is-error { color:var(--danger); background:var(--danger-soft); }
     .inspector-textarea.compact { min-height:68px; }
-    .keyboard-hint { margin-top:12px; color:var(--muted); font-size:10px; }
+    .keyboard-hint { margin:8px 0 0; color:var(--muted); font-size:12px; line-height:2.2; }
     .keyboard-hint kbd { padding:1px 5px; border:1px solid var(--line); border-bottom-width:2px; border-radius:5px; background:var(--surface-muted); font:inherit; font-weight:700; }
     .data-section { margin-top:16px; padding-top:16px; border-top:1px solid var(--line); }
     .data-section-title { margin:0 0 9px; font-size:12px; font-weight:800; }
@@ -244,8 +266,12 @@
     .sheet-control-section + .sheet-control-section { margin-top:16px; padding-top:16px; border-top:1px solid var(--line); }
     .sheet-control-section h3 { margin:0 0 5px; font-size:13px; }
     .sheet-control-section p { margin:0; color:var(--muted); font-size:11px; }
-    .sheet-used-actions { display:grid; grid-template-columns:1fr 1fr; gap:7px; margin-top:10px; }
-    .sheet-used-actions .button:last-child { grid-column:1 / -1; }
+    .sheet-used-actions { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); margin-top:12px; border:1px solid var(--line); border-radius:7px; overflow:hidden; }
+    .sheet-used-actions .button { display:grid; justify-items:center; align-content:center; gap:5px; min-width:0; min-height:64px; padding:7px 3px; border:0; border-radius:0; font-size:11px; font-weight:650; line-height:1.3; text-align:center; overflow-wrap:anywhere; }
+    .sheet-used-actions .button+.button { border-left:1px solid var(--line); }
+    .sheet-used-actions .button:focus-visible { outline-offset:-3px; }
+    .sheet-used-actions svg { width:21px; height:21px; color:var(--accent); }
+    .sheet-used-actions .danger svg { color:var(--danger); }
     .sheet-status { margin-top:10px; padding:9px 10px; border-radius:9px; color:var(--muted); background:var(--surface-muted); font-size:10px; line-height:1.45; }
     .sheet-status.is-warning { color:var(--warning); background:var(--warning-soft); }
     .sheet-page-nav { display:grid; grid-template-columns:42px minmax(0,1fr) 42px; gap:7px; align-items:center; margin-top:10px; }
@@ -388,13 +414,11 @@
       .main { padding:16px 12px 28px; }
       .page-intro { padding-bottom:6px; }
       .page-intro p { font-size:13px; }
-      .main:not(:has(#paperPage.is-active)) .page-intro { display:none; }
       .local-badge { display:none; }
-      .project-bar { margin-bottom:8px; }
-      .project-bar summary { min-height:44px; }
-      .project-content { align-items:stretch; flex-direction:column; gap:8px; padding:4px 0 10px; }
-      .project-actions { display:grid; grid-template-columns:1fr 1fr; width:100%; }
-      .project-actions .button { width:100%; }
+      .project-bar summary { min-height:40px; min-width:36px; justify-content:center; }
+      .project-bar .project-label,.project-bar .project-chevron { display:none; }
+      .project-bar summary .project-icon { width:20px; height:20px; }
+      .project-actions .button { min-height:44px; }
       .step-nav { display:none; }
       .panel-head,.panel-body { padding-left:14px; padding-right:14px; }
       .field-grid { grid-template-columns:1fr 1fr; gap:10px; }
@@ -407,8 +431,6 @@
       .sheet-summary-card { padding:8px; }
       .sheet-summary-card strong { font-size:15px; }
       .sheet-preview-stage { min-height:430px; padding:12px; }
-      .sheet-used-actions { grid-template-columns:1fr; }
-      .sheet-used-actions .button:last-child { grid-column:auto; }
       .output-preview-stage { min-height:430px; padding:12px; }
       .offset-grid { grid-template-columns:1fr 1fr; }
       .calibration-row { grid-template-columns:1fr; }
@@ -450,6 +472,17 @@
         </div>
       </div>
       <div class="header-actions">
+        <details class="project-bar" id="projectDropZone">
+          <summary data-i18n-title="projectTitle" data-i18n-aria-label="projectTitle" aria-label="作業ファイル" title="作業ファイル"><svg class="project-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg><span class="project-label" data-i18n="projectTitle">作業ファイル</span><svg class="project-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></summary>
+          <div class="project-content" data-i18n-aria-label="projectDropAria" aria-label="作業ファイルを開くまたは保存">
+          <div class="project-copy"><span id="projectFileName" data-i18n="projectDropHint">.labelsheet.json をドロップして作業を再開できます</span></div>
+          <div class="project-actions">
+            <button class="button" id="openProjectButton" type="button" data-i18n="openProject">作業ファイルを開く</button>
+            <button class="button" id="saveProjectButton" type="button" data-i18n="saveProject">作業ファイルを保存</button>
+          </div>
+          <input id="projectFileInput" type="file" accept=".labelsheet.json,application/json" hidden>
+          </div>
+        </details>
         <button class="language-button" id="languageButton" type="button" aria-label="英語に切り替え" title="英語に切り替え">EN</button>
         <button class="header-icon-button" id="helpButton" type="button" data-i18n-title="helpTitle" data-i18n-aria-label="helpTitle" title="Help" aria-label="Help">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.8 9a2.35 2.35 0 1 1 3.72 1.9c-.92.67-1.52 1.12-1.52 2.1"/><path d="M12 17h.01"/></svg>
@@ -468,17 +501,6 @@
     </div>
 
     <!-- APP:BEGIN -->
-    <details class="project-bar" id="projectDropZone">
-      <summary><svg class="project-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg><span data-i18n="projectTitle">作業ファイル</span><svg class="project-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></summary>
-      <div class="project-content" data-i18n-aria-label="projectDropAria" aria-label="作業ファイルを開くまたは保存">
-      <div class="project-copy"><span id="projectFileName" data-i18n="projectDropHint">.labelsheet.json をドロップして作業を再開できます</span></div>
-      <div class="project-actions">
-        <button class="button" id="openProjectButton" type="button" data-i18n="openProject">作業ファイルを開く</button>
-        <button class="button" id="saveProjectButton" type="button" data-i18n="saveProject">作業ファイルを保存</button>
-      </div>
-      <input id="projectFileInput" type="file" accept=".labelsheet.json,application/json" hidden>
-      </div>
-    </details>
     <nav class="step-nav" id="desktopStepNav" aria-label="Workflow">
       <button class="step-button is-active" type="button" data-page="paperPage" aria-current="step"><span class="step-number">1</span><span class="step-copy"><span class="step-name" data-i18n="stepPaper">用紙</span><span class="step-desc" data-i18n="stepPaperDesc">寸法と配置</span></span></button>
       <button class="step-button" type="button" data-page="labelPage"><span class="step-number">2</span><span class="step-copy"><span class="step-name" data-i18n="stepLabel">ラベル</span><span class="step-desc" data-i18n="stepLabelDesc">1枚を編集</span></span></button>
@@ -589,7 +611,7 @@
     <section class="app-page" id="labelPage" aria-labelledby="labelPageTitle">
       <div class="label-editor-grid">
         <section class="panel editor-side-panel tools">
-          <div class="panel-head"><h2 id="labelPageTitle" data-i18n="labelEditorTitle">ラベル編集</h2><p data-i18n="labelEditorBody">1枚のラベルに文字を配置し、印刷時の実寸座標で編集します。</p></div>
+          <div class="panel-head"><h2 id="labelPageTitle" data-i18n="labelEditorTitle">ラベル編集</h2></div>
           <div class="panel-body">
             <div class="data-guide-card">
               <div class="data-guide-head"><span class="data-guide-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4" width="17" height="16" rx="2"/><path d="M3.5 9h17M9 4v16M15 4v16"/></svg></span><div class="data-guide-copy"><strong data-i18n="dataGuideTitle">CSVや表データを差し込む</strong><span data-i18n="dataGuideBody">列を読み込むと、名前・価格・住所などをデータ項目としてラベルへ追加できます。</span></div></div>
@@ -604,7 +626,6 @@
             </div>
             <input class="sr-only" id="imageFileInput" type="file" accept="image/png,image/jpeg,image/webp,.png,.jpg,.jpeg,.webp">
             <input class="sr-only" id="imageFileFallbackInput" type="file">
-            <p class="editor-note" data-i18n="editorToolNote">固定文字、CSV項目、画像、QRコード、Code 128 / Code 39を1枚のラベルへ配置できます。</p>
 
             <div class="data-section">
               <p class="data-section-title" data-i18n="dataModeTitle">印刷内容</p>
@@ -626,12 +647,11 @@
               <div id="dataFieldArea" hidden><p class="data-section-title" style="margin-top:12px" data-i18n="addDataField">データ項目を追加</p><div class="data-field-list" id="dataFieldList"></div></div>
             </div>
 
-            <p class="keyboard-hint"><kbd>Ctrl/Cmd + Z</kbd> <span data-i18n="shortcutUndo">元に戻す</span> · <kbd>Delete / Backspace</kbd> <span data-i18n="shortcutDelete">削除</span> · <kbd>↑↓←→</kbd> <span data-i18n="shortcutMove">微移動</span> · <kbd>Shift + ↑↓←→</kbd> <span data-i18n="shortcutMoveLarge">1 mm移動</span> · <kbd>Alt + drag</kbd> <span data-i18n="shortcutSnapBypass">スナップ無効</span> · <kbd>Esc</kbd> <span data-i18n="shortcutDeselect">選択解除</span></p>
           </div>
         </section>
 
-        <section class="panel label-canvas-panel" aria-labelledby="labelCanvasTitle">
-          <div class="panel-head"><div class="panel-head-row"><div><h2 id="labelCanvasTitle" data-i18n="labelCanvasTitle">ラベルキャンバス</h2><p id="labelCanvasMetric">—</p></div></div></div>
+        <section class="panel label-canvas-panel" data-i18n-aria-label="labelCanvasAria" aria-label="ラベル編集キャンバス">
+          <div class="canvas-metric" id="labelCanvasMetric">—</div>
           <div class="editor-toolbar">
             <div class="editor-toolbar-group">
               <button class="editor-icon-button" id="undoButton" type="button" data-i18n-title="undo" data-i18n-aria-label="undo" title="元に戻す" aria-label="元に戻す" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 8 5 12l4 4"/><path d="M5 12h8a6 6 0 0 1 6 6"/></svg></button>
@@ -687,11 +707,15 @@
             </div>
             <div class="inspector-section" id="textStyleSection">
               <p class="inspector-section-title" data-i18n="textStyle">文字スタイル</p>
-              <div class="field-grid">
+              <div class="inspector-font-grid">
                 <div class="field"><label for="fontFamily" data-i18n="fontFamily">書体</label><select id="fontFamily"><option value="sans" data-i18n="fontSans">ゴシック</option><option value="meiryo" data-i18n="fontMeiryo">メイリオ</option><option value="yu-gothic" data-i18n="fontYuGothic">游ゴシック</option><option value="hiragino-kaku" data-i18n="fontHiraginoKaku">ヒラギノ角ゴ</option><option value="maru" data-i18n="fontMaru">丸ゴシック</option><option value="serif" data-i18n="fontSerif">明朝</option><option value="yu-mincho" data-i18n="fontYuMincho">游明朝</option><option value="hiragino-mincho" data-i18n="fontHiraginoMincho">ヒラギノ明朝</option><option value="mono" data-i18n="fontMono">等幅</option><option value="system" data-i18n="fontSystem">システム</option></select></div>
                 <div class="field"><label for="fontSize" data-i18n="fontSize">文字サイズ</label><div class="input-with-unit"><input id="fontSize" type="number" min="4" max="96" step="1" inputmode="decimal"><span class="unit-suffix font-size-suffix">pt</span></div></div>
-                <div class="field"><label for="hAlign" data-i18n="hAlign">横位置</label><select id="hAlign"><option value="left" data-i18n="alignLeft">左</option><option value="center" data-i18n="alignCenter">中央</option><option value="right" data-i18n="alignRight">右</option></select></div>
-                <div class="field"><label for="vAlign" data-i18n="vAlign">縦位置</label><select id="vAlign"><option value="top" data-i18n="alignTop">上</option><option value="middle" data-i18n="alignMiddle">中央</option><option value="bottom" data-i18n="alignBottom">下</option></select></div>
+              </div>
+              <div class="alignment-grid">
+                <div class="field"><span class="field-label" id="hAlignLabel" data-i18n="hAlign">横位置</span><div class="alignment-options" role="group" aria-labelledby="hAlignLabel"><button type="button" data-align-axis="hAlign" data-align-value="left" data-i18n-title="alignLeft" data-i18n-aria-label="alignLeft" title="左" aria-label="左" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16M4 10h10M4 15h16M4 20h10"/></svg></button><button type="button" data-align-axis="hAlign" data-align-value="center" data-i18n-title="alignCenter" data-i18n-aria-label="alignCenter" title="中央" aria-label="中央" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16M7 10h10M4 15h16M7 20h10"/></svg></button><button type="button" data-align-axis="hAlign" data-align-value="right" data-i18n-title="alignRight" data-i18n-aria-label="alignRight" title="右" aria-label="右" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16M10 10h10M4 15h16M10 20h10"/></svg></button></div></div>
+                <div class="field"><span class="field-label" id="vAlignLabel" data-i18n="vAlign">縦位置</span><div class="alignment-options" role="group" aria-labelledby="vAlignLabel"><button type="button" data-align-axis="vAlign" data-align-value="top" data-i18n-title="alignTop" data-i18n-aria-label="alignTop" title="上" aria-label="上" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16M7 8h10M7 12h10M7 16h10"/></svg></button><button type="button" data-align-axis="vAlign" data-align-value="middle" data-i18n-title="alignMiddle" data-i18n-aria-label="alignMiddle" title="中央" aria-label="中央" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h16M7 7h10M7 17h10"/></svg></button><button type="button" data-align-axis="vAlign" data-align-value="bottom" data-i18n-title="alignBottom" data-i18n-aria-label="alignBottom" title="下" aria-label="下" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h16M7 16h10M7 12h10M7 8h10"/></svg></button></div></div>
+                <select hidden tabindex="-1" aria-hidden="true" id="hAlign"><option value="left" data-i18n="alignLeft">左</option><option value="center" data-i18n="alignCenter">中央</option><option value="right" data-i18n="alignRight">右</option></select>
+                <select hidden tabindex="-1" aria-hidden="true" id="vAlign"><option value="top" data-i18n="alignTop">上</option><option value="middle" data-i18n="alignMiddle">中央</option><option value="bottom" data-i18n="alignBottom">下</option></select>
               </div>
               <div class="toggle-row"><label class="check-control"><input id="boldToggle" type="checkbox"><span data-i18n="bold">太字</span></label><label class="check-control"><input id="wrapToggle" type="checkbox" checked><span data-i18n="wrap">折り返す</span></label></div>
             </div>
@@ -703,9 +727,9 @@
                 <div class="field"><label for="elementWidth" data-i18n="width">幅</label><div class="input-with-unit"><input id="elementWidth" data-editor-geometry="width" type="number" min="0.1" step="0.1" inputmode="decimal"><span class="unit-suffix editor-unit-suffix">mm</span></div></div>
                 <div class="field"><label for="elementHeight" data-i18n="height">高さ</label><div class="input-with-unit"><input id="elementHeight" data-editor-geometry="height" type="number" min="0.1" step="0.1" inputmode="decimal"><span class="unit-suffix editor-unit-suffix">mm</span></div></div>
               </div>
-              <div class="button-row">
-                <button class="button" id="centerHorizontalButton" type="button" data-i18n="centerHorizontal" disabled>左右中央に配置</button>
-                <button class="button" id="centerVerticalButton" type="button" data-i18n="centerVertical" disabled>上下中央に配置</button>
+              <div class="geometry-center-actions" role="group" data-i18n-aria-label="positionSize" aria-label="位置とサイズ">
+                <button class="button" id="centerHorizontalButton" type="button" data-i18n-title="centerHorizontal" data-i18n-aria-label="centerHorizontal" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v4m0 10v4"/><rect x="5" y="8" width="14" height="8" rx="1"/></svg><span data-i18n="centerHorizontalShort">左右中央</span></button>
+                <button class="button" id="centerVerticalButton" type="button" data-i18n-title="centerVertical" data-i18n-aria-label="centerVertical" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h4m10 0h4"/><rect x="8" y="5" width="8" height="14" rx="1"/></svg><span data-i18n="centerVerticalShort">上下中央</span></button>
               </div>
             </div>
           </div>
@@ -726,9 +750,9 @@
               <h3 data-i18n="usedSheetTitle">使いかけ用紙</h3>
               <p data-i18n="usedSheetBody">1ページ目で、すでに剥がした位置をタップして使用済みにします。空いている位置だけへ順番に配置します。</p>
               <div class="sheet-used-actions">
-                <button class="button" id="markAllAvailableButton" type="button" data-i18n="markAllAvailable">すべて使用可能</button>
-                <button class="button danger" id="markAllUsedButton" type="button" data-i18n="markAllUsed">すべて使用済み</button>
-                <button class="button" id="invertUsedButton" type="button" data-i18n="invertUsed">選択を反転</button>
+                <button class="button" id="markAllAvailableButton" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="m8 12 3 3 5-6"/></svg><span data-i18n="markAllAvailable">すべて使用可能</span></button>
+                <button class="button danger" id="markAllUsedButton" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="m9 9 6 6m0-6-6 6"/></svg><span data-i18n="markAllUsed">すべて使用済み</span></button>
+                <button class="button" id="invertUsedButton" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16m-4-4 4 4-4 4M20 17H4m4-4-4 4 4 4"/></svg><span data-i18n="invertUsed">選択を反転</span></button>
               </div>
               <div class="sheet-status" id="sheetStatusMessage" role="status"></div>
             </div>
@@ -854,6 +878,9 @@
       <p data-i18n="helpReliability">用紙寸法は有効な値で入力を終えた時に反映します。空欄や数値として扱えない寸法は、プレビューの寸法表示で「—」になります。内容や印刷設定を変更した後はPDFを作り直してください。</p>
       <section><h3 data-i18n="positionSize">位置とサイズ</h3><p data-i18n="helpGeometry"></p></section>
 
+      <section><h3 data-i18n="keyboardShortcuts">キーボード操作</h3>
+        <p class="keyboard-hint"><kbd>Ctrl/Cmd + Z</kbd> <span data-i18n="shortcutUndo">元に戻す</span> · <kbd>Delete / Backspace</kbd> <span data-i18n="shortcutDelete">削除</span> · <kbd>↑↓←→</kbd> <span data-i18n="shortcutMove">微移動</span> · <kbd>Shift + ↑↓←→</kbd> <span data-i18n="shortcutMoveLarge">1 mm移動</span> · <kbd>Alt + drag</kbd> <span data-i18n="shortcutSnapBypass">スナップ無効</span> · <kbd>Esc</kbd> <span data-i18n="shortcutDeselect">選択解除</span></p>
+      </section>
       <!-- APP:HELP:END -->
     <details class="build-details">
       <summary data-i18n="buildInfo">ビルド情報</summary>
@@ -1297,8 +1324,8 @@
       Object.assign(translations.ja,{
         brandMeta:'用紙寸法を合わせ、CSVデータをラベルへ差し込み',lead:'用紙の寸法に合わせて文字や画像、CSVデータなどを配置し、ラベルの印刷用PDFを作成します。',
         nextStepTitle:'次はラベル内容を編集',nextStepBody:'用紙寸法が決まったら「ラベル」へ進み、固定文字や差し込みデータを配置します。',
-        labelEditorTitle:'ラベル編集',labelEditorBody:'固定文字とCSV・表データの項目を、1枚のラベル上へ配置します。',addText:'テキストを追加',editorToolNote:'CSVや表を読み込むと、列をデータ項目としてラベルへ追加できます。画像・QR・バーコードはv0.4.0で追加します。',shortcutUndo:'元に戻す',shortcutDelete:'削除',shortcutMove:'微移動',
-        labelCanvasTitle:'ラベルキャンバス',labelCanvasAria:'ラベル編集キャンバス',zoomLabel:'ズーム',panMode:'キャンバスを移動',safeArea:'安全余白',editorEmptyTitle:'まだ内容がありません',editorEmptyBody:'「テキストを追加」から1枚目の要素を置けます。',
+        labelEditorTitle:'ラベル編集',addText:'テキストを追加',shortcutUndo:'元に戻す',shortcutDelete:'削除',shortcutMove:'微移動',
+        labelCanvasAria:'ラベル編集キャンバス',zoomLabel:'ズーム',panMode:'キャンバスを移動',safeArea:'安全余白',editorEmptyTitle:'まだ内容がありません',editorEmptyBody:'「テキストを追加」から1枚目の要素を置けます。',
         inspectorTitle:'要素設定',inspectorBody:'選択した要素の内容と位置を調整します。',inspectorEmpty:'キャンバス上の要素を選択してください。',textContent:'文字',textStyle:'文字スタイル',fontFamily:'書体',fontSize:'文字サイズ',fontSans:'ゴシック',fontSerif:'明朝',fontMono:'等幅',fontSystem:'システム',hAlign:'横位置',vAlign:'縦位置',alignLeft:'左',alignCenter:'中央',alignRight:'右',alignTop:'上',alignMiddle:'中央',alignBottom:'下',bold:'太字',wrap:'折り返す',positionSize:'位置とサイズ',width:'幅',height:'高さ',elementActions:'要素操作',duplicate:'複製',bringFront:'前面へ',sendBack:'背面へ',deleteElement:'削除',redo:'やり直す',defaultText:'テキスト',
         dataModeTitle:'印刷内容',dataModeLabel:'モード',modeRepeat:'同じラベルを繰り返す',modeMerge:'データを差し込む',repeatCount:'印刷枚数',dataSourceTitle:'差し込みデータ',dataDropTitle:'CSV / TSVをここにドロップ',dataDropBody:'またはクリックしてファイルを選択',encoding:'文字コード',encodingAuto:'自動判定',pasteDataLabel:'表を貼り付け',pasteDataPlaceholder:'name\tprice\nMug\t1980',usePastedData:'貼り付けた表を使う',dataEmpty:'まだデータを読み込んでいません。',dataLoaded:'{name} · {rows} 行 / {cols} 列',pastedData:'貼り付けデータ',previousRow:'前の行',nextRow:'次の行',rowNumber:'行番号',addDataField:'データ項目を追加',contentSource:'内容',sourceFixed:'固定文字',sourceField:'データ項目',dataField:'データ項目',noDataFields:'データ項目なし',dataLoadedToast:'{rows} 行のデータを読み込みました',dataParseEmpty:'列またはデータ行を確認してください',dataParseFailed:'データを解析できませんでした',dataReadFailed:'ファイルを読み込めませんでした',pasteDataEmpty:'貼り付ける表データを入力してください',loadDataFirst:'先にCSVまたは表データを読み込んでください',
         helpStep2:'「ラベル」で固定文字を配置するか、CSV / TSV / 表データを読み込んで列をデータ項目として追加します。',helpStep3:'行を切り替えて差し込み結果を確認し、ドラッグ・四隅リサイズ・数値入力で位置とサイズを調整します。',helpPrivacyBody:'入力した寸法、CSV、貼り付けた表データはブラウザー内で処理され、このアプリから外部サーバーへ送信されません。',footer:'ラベルの作成はブラウザー内で完結'
@@ -1306,17 +1333,17 @@
       Object.assign(translations.en,{
         brandMeta:'Match sheet dimensions and merge CSV data into labels',lead:'Match your label sheet dimensions, add text, images or CSV data, and create a PDF for printing.',
         nextStepTitle:'Next: edit label content',nextStepBody:'Once the sheet dimensions are set, open Label and place fixed text or merged data fields.',
-        labelEditorTitle:'Label editor',labelEditorBody:'Place fixed text and fields from CSV or pasted table data on one label.',addText:'Add text',editorToolNote:'Load CSV or pasted table data to add columns as data fields. Images, QR codes, and barcodes arrive in v0.4.0.',shortcutUndo:'Undo',shortcutDelete:'Delete',shortcutMove:'Nudge',
-        labelCanvasTitle:'Label canvas',labelCanvasAria:'Label editing canvas',zoomLabel:'Zoom',panMode:'Pan canvas',safeArea:'Safe area',editorEmptyTitle:'No content yet',editorEmptyBody:'Use “Add text” to place the first element.',
+        labelEditorTitle:'Label editor',addText:'Add text',shortcutUndo:'Undo',shortcutDelete:'Delete',shortcutMove:'Nudge',
+        labelCanvasAria:'Label editing canvas',zoomLabel:'Zoom',panMode:'Pan canvas',safeArea:'Safe area',editorEmptyTitle:'No content yet',editorEmptyBody:'Use “Add text” to place the first element.',
         inspectorTitle:'Element settings',inspectorBody:'Adjust the selected element’s content and geometry.',inspectorEmpty:'Select an element on the canvas.',textContent:'Text',textStyle:'Text style',fontFamily:'Font',fontSize:'Font size',fontSans:'Sans serif',fontSerif:'Serif',fontMono:'Monospace',fontSystem:'System',hAlign:'Horizontal',vAlign:'Vertical',alignLeft:'Left',alignCenter:'Center',alignRight:'Right',alignTop:'Top',alignMiddle:'Middle',alignBottom:'Bottom',bold:'Bold',wrap:'Wrap',positionSize:'Position & size',width:'Width',height:'Height',elementActions:'Element actions',duplicate:'Duplicate',bringFront:'Bring front',sendBack:'Send back',deleteElement:'Delete',redo:'Redo',defaultText:'Text',
         dataModeTitle:'Print content',dataModeLabel:'Mode',modeRepeat:'Repeat the same label',modeMerge:'Merge data rows',repeatCount:'Number of labels',dataSourceTitle:'Merge data',dataDropTitle:'Drop CSV / TSV here',dataDropBody:'or click to choose a file',encoding:'Encoding',encodingAuto:'Auto detect',pasteDataLabel:'Paste table data',pasteDataPlaceholder:'name\tprice\nMug\t1980',usePastedData:'Use pasted table',dataEmpty:'No data loaded yet.',dataLoaded:'{name} · {rows} rows / {cols} columns',pastedData:'Pasted data',previousRow:'Previous row',nextRow:'Next row',rowNumber:'Row number',addDataField:'Add data field',contentSource:'Content',sourceFixed:'Fixed text',sourceField:'Data field',dataField:'Data field',noDataFields:'No data fields',dataLoadedToast:'Loaded {rows} data rows',dataParseEmpty:'Check the columns or data rows',dataParseFailed:'Could not parse the data',dataReadFailed:'Could not read the file',pasteDataEmpty:'Paste table data first',loadDataFirst:'Load a CSV or pasted table first',
         helpStep2:'In Label, place fixed text or load CSV / TSV / pasted table data and add columns as data fields.',helpStep3:'Switch preview rows to check merged values, then adjust elements by drag, corner resize, or geometry values.',helpPrivacyBody:'Entered dimensions, CSV files, and pasted table data are processed in this browser and are not sent to an external server by this app.',footer:'Label making stays in the browser'
       });
       Object.assign(translations.ja,{
-        brandMeta:'用紙寸法を合わせ、文字・画像・コードをラベルへ配置',lead:'用紙の寸法に合わせて文字や画像、CSVデータなどを配置し、ラベルの印刷用PDFを作成します。',labelEditorBody:'固定文字、差し込み項目、画像、QRコード、バーコードを1枚のラベル上へ配置します。',addImage:'画像を追加',fileFallback:'ファイルから選択',addQr:'QRコードを追加',addCode128:'Code 128を追加',addCode39:'Code 39を追加',editorToolNote:'固定文字、CSV項目、画像、QRコード、Code 128 / Code 39を1枚のラベルへ配置できます。',editorEmptyBody:'テキスト・画像・QRコード・バーコードから最初の要素を追加できます。',imageSettings:'画像',imageFile:'ファイル',imageFit:'表示方法',fitContain:'全体を表示',fitCover:'枠いっぱい',imageUnnamed:'画像',sourceFixedValue:'固定値',codeValue:'値',showHumanText:'文字も表示',codeEmpty:'値を入力してください。',invalidCode39:'Code 39で使えない文字が含まれています。英大文字・数字と一部記号を使用してください。',invalidCode128:'Code 128ではv0.4.0時点でASCII印字可能文字のみ使用できます。',qrTooSmall:'QRコードが小さいため、印刷後に読み取りにくい可能性があります。',codeReady:'この内容をコードとして描画できます。',codeGenerationFailed:'コードを生成できません',unsupportedImage:'PNG / JPEG / WebP画像を選択してください',imageReadFailed:'画像を読み込めませんでした',imageAdded:'画像を追加しました',helpStep2:'「ラベル」で固定文字・差し込み項目・画像・QRコード・Code 128 / Code 39を配置します。',helpStep3:'行を切り替えて差し込み結果を確認し、ドラッグ・四隅リサイズ・数値入力で位置とサイズを調整します。',helpPrivacyBody:'入力した寸法、CSV、貼り付けた表データ、画像、コード内容はブラウザー内で処理され、このアプリから外部サーバーへ送信されません。',qrTrademark:'QRコードは株式会社デンソーウェーブの登録商標です。',footer:'ラベルの作成はブラウザー内で完結'
+        brandMeta:'用紙寸法を合わせ、文字・画像・コードをラベルへ配置',lead:'用紙の寸法に合わせて文字や画像、CSVデータなどを配置し、ラベルの印刷用PDFを作成します。',addImage:'画像を追加',fileFallback:'ファイルから選択',addQr:'QRコードを追加',addCode128:'Code 128を追加',addCode39:'Code 39を追加',editorEmptyBody:'テキスト・画像・QRコード・バーコードから最初の要素を追加できます。',imageSettings:'画像',imageFile:'ファイル',imageFit:'表示方法',fitContain:'全体を表示',fitCover:'枠いっぱい',imageUnnamed:'画像',sourceFixedValue:'固定値',codeValue:'値',showHumanText:'文字も表示',codeEmpty:'値を入力してください。',invalidCode39:'Code 39で使えない文字が含まれています。英大文字・数字と一部記号を使用してください。',invalidCode128:'Code 128ではv0.4.0時点でASCII印字可能文字のみ使用できます。',qrTooSmall:'QRコードが小さいため、印刷後に読み取りにくい可能性があります。',codeReady:'この内容をコードとして描画できます。',codeGenerationFailed:'コードを生成できません',unsupportedImage:'PNG / JPEG / WebP画像を選択してください',imageReadFailed:'画像を読み込めませんでした',imageAdded:'画像を追加しました',helpStep2:'「ラベル」で固定文字・差し込み項目・画像・QRコード・Code 128 / Code 39を配置します。',helpStep3:'行を切り替えて差し込み結果を確認し、ドラッグ・四隅リサイズ・数値入力で位置とサイズを調整します。',helpPrivacyBody:'入力した寸法、CSV、貼り付けた表データ、画像、コード内容はブラウザー内で処理され、このアプリから外部サーバーへ送信されません。',qrTrademark:'QRコードは株式会社デンソーウェーブの登録商標です。',footer:'ラベルの作成はブラウザー内で完結'
       });
       Object.assign(translations.en,{
-        brandMeta:'Match sheet dimensions and place text, images, and codes',lead:'Match your label sheet dimensions, add text, images or CSV data, and create a PDF for printing.',labelEditorBody:'Place fixed text, merged fields, images, QR codes, and barcodes on one label.',addImage:'Add image',fileFallback:'Choose from files',addQr:'Add QR code',addCode128:'Add Code 128',addCode39:'Add Code 39',editorToolNote:'Place fixed text, CSV fields, images, QR codes, Code 128, and Code 39 on one label.',editorEmptyBody:'Add the first element from text, image, QR code, or barcode.',imageSettings:'Image',imageFile:'File',imageFit:'Fit',fitContain:'Show entire image',fitCover:'Fill frame',imageUnnamed:'Image',sourceFixedValue:'Fixed value',codeValue:'Value',showHumanText:'Show text',codeEmpty:'Enter a value.',invalidCode39:'Code 39 contains unsupported characters. Use uppercase letters, numbers, and supported symbols.',invalidCode128:'In v0.4.0, Code 128 accepts printable ASCII characters only.',qrTooSmall:'This QR code is small and may be difficult to scan after printing.',codeReady:'This value can be rendered as a code.',codeGenerationFailed:'Could not generate the code',unsupportedImage:'Choose a PNG, JPEG, or WebP image',imageReadFailed:'Could not read the image',imageAdded:'Image added',helpStep2:'In Label, place fixed text, merged fields, images, QR codes, Code 128, or Code 39.',helpStep3:'Switch preview rows to check merged values, then adjust elements by drag, corner resize, or geometry values.',helpPrivacyBody:'Entered dimensions, CSV files, pasted table data, images, and code values are processed in this browser and are not sent to an external server by this app.',qrTrademark:'QR Code is a registered trademark of DENSO WAVE INCORPORATED.',footer:'Label making stays in the browser'
+        brandMeta:'Match sheet dimensions and place text, images, and codes',lead:'Match your label sheet dimensions, add text, images or CSV data, and create a PDF for printing.',addImage:'Add image',fileFallback:'Choose from files',addQr:'Add QR code',addCode128:'Add Code 128',addCode39:'Add Code 39',editorEmptyBody:'Add the first element from text, image, QR code, or barcode.',imageSettings:'Image',imageFile:'File',imageFit:'Fit',fitContain:'Show entire image',fitCover:'Fill frame',imageUnnamed:'Image',sourceFixedValue:'Fixed value',codeValue:'Value',showHumanText:'Show text',codeEmpty:'Enter a value.',invalidCode39:'Code 39 contains unsupported characters. Use uppercase letters, numbers, and supported symbols.',invalidCode128:'In v0.4.0, Code 128 accepts printable ASCII characters only.',qrTooSmall:'This QR code is small and may be difficult to scan after printing.',codeReady:'This value can be rendered as a code.',codeGenerationFailed:'Could not generate the code',unsupportedImage:'Choose a PNG, JPEG, or WebP image',imageReadFailed:'Could not read the image',imageAdded:'Image added',helpStep2:'In Label, place fixed text, merged fields, images, QR codes, Code 128, or Code 39.',helpStep3:'Switch preview rows to check merged values, then adjust elements by drag, corner resize, or geometry values.',helpPrivacyBody:'Entered dimensions, CSV files, pasted table data, images, and code values are processed in this browser and are not sent to an external server by this app.',qrTrademark:'QR Code is a registered trademark of DENSO WAVE INCORPORATED.',footer:'Label making stays in the browser'
       });
       Object.assign(translations.ja,{
         brandMeta:'ラベル内容をシートへ並べ、使いかけ用紙にも配置',lead:'用紙の寸法に合わせて文字や画像、CSVデータなどを配置し、ラベルの印刷用PDFを作成します。',
@@ -1339,15 +1366,17 @@
         projectTitle:'Project file',projectDropHint:'Drop a .labelsheet.json file here to resume work',projectDropAria:'Open or save a project file',openProject:'Open project file',saveProject:'Save project file',projectSaved:'Project file saved',projectLoaded:'Project file loaded',projectReplaceTitle:'Open project file',projectReplaceMessage:'Replace the current work with the selected project file? Unsaved changes will be lost.',projectReplaceConfirm:'Replace and open',projectInvalidJson:'Could not open the project file. Its JSON may be damaged.',projectUnsupportedSchema:'This project file cannot be opened by this version.',projectInvalidStructure:'The project file is incomplete or damaged.',projectReadFailed:'Could not read the project file',helpStep6:'Expand “Project file” above to save or reopen your paper, labels, data, used positions, and output settings.',helpPrivacyBody:'Dimensions, CSV data, images, code values, project files, and PDF generation are all processed in this browser and are not sent to an external server by this app.',footer:'Label making stays in the browser'
       });
       Object.assign(translations.ja,{
-        brandMeta:'ラベルを直感的に編集し、差し込みデータから印刷PDFまで作成',labelEditorBody:'文字・画像・コードを追加し、選択した要素をキャンバス上で直感的に編集します。',dataGuideTitle:'CSVや表データを差し込む',dataGuideBody:'列を読み込むと、名前・価格・住所などをデータ項目としてラベルへ追加できます。',dataGuideAction:'差し込みデータを設定',dataGuideEmpty:'データ未設定',dataGuideLoaded:'{rows} 行 / {cols} 列 読み込み済み',mergeDataShort:'差し込み',shortcutDeselect:'選択解除',fontMeiryo:'メイリオ',fontYuGothic:'游ゴシック',fontYuMincho:'游明朝',fontHiraginoKaku:'ヒラギノ角ゴ',fontHiraginoMincho:'ヒラギノ明朝',fontMaru:'丸ゴシック',editText:'編集',undoDelete:'元に戻す',elementDeleted:'要素を削除しました',helpStep2:'「ラベル」で文字・画像・コードを追加します。CSVや表データを使う場合は「差し込み」からデータを読み込み、列をデータ項目として追加します。',helpStep3:'要素は枠をドラッグして移動、四隅でサイズ変更できます。テキストはダブルクリックすると文字欄へ移動して全文を選択します。選択中はキャンバス上部の複製・前面・背面・削除を使え、Delete / Backspaceでも削除できます。スマホでは選択時に表示される編集ボタンから文字欄へ移動できます。移動時は中央・端へスナップし、削除後はトーストから元に戻せます。',});
+        brandMeta:'ラベルを直感的に編集し、差し込みデータから印刷PDFまで作成',dataGuideTitle:'CSVや表データを差し込む',dataGuideBody:'列を読み込むと、名前・価格・住所などをデータ項目としてラベルへ追加できます。',dataGuideAction:'差し込みデータを設定',dataGuideEmpty:'データ未設定',dataGuideLoaded:'{rows} 行 / {cols} 列 読み込み済み',mergeDataShort:'差し込み',shortcutDeselect:'選択解除',fontMeiryo:'メイリオ',fontYuGothic:'游ゴシック',fontYuMincho:'游明朝',fontHiraginoKaku:'ヒラギノ角ゴ',fontHiraginoMincho:'ヒラギノ明朝',fontMaru:'丸ゴシック',editText:'編集',undoDelete:'元に戻す',elementDeleted:'要素を削除しました',helpStep2:'「ラベル」で文字・画像・コードを追加します。CSVや表データを使う場合は「差し込み」からデータを読み込み、列をデータ項目として追加します。',helpStep3:'要素は枠をドラッグして移動、四隅でサイズ変更できます。テキストはダブルクリックすると文字欄へ移動して全文を選択します。選択中はキャンバス上部の複製・前面・背面・削除を使え、Delete / Backspaceでも削除できます。スマホでは選択時に表示される編集ボタンから文字欄へ移動できます。移動時は中央・端へスナップし、削除後はトーストから元に戻せます。',});
       Object.assign(translations.en,{
-        brandMeta:'Edit labels directly and continue from merge data to print-ready PDF',labelEditorBody:'Add text, images, and codes, then edit the selected element directly on the canvas.',dataGuideTitle:'Merge CSV or table data',dataGuideBody:'Load columns such as name, price, or address and add them to the label as data fields.',dataGuideAction:'Set up merge data',dataGuideEmpty:'No merge data',dataGuideLoaded:'{rows} rows / {cols} columns loaded',mergeDataShort:'Merge data',shortcutDeselect:'Deselect',fontMeiryo:'Meiryo',fontYuGothic:'Yu Gothic',fontYuMincho:'Yu Mincho',fontHiraginoKaku:'Hiragino Kaku Gothic',fontHiraginoMincho:'Hiragino Mincho',fontMaru:'Rounded Gothic',editText:'Edit',undoDelete:'Undo',elementDeleted:'Element deleted',helpStep2:'In Label, add text, images, or codes. For CSV or pasted table data, use “Merge data”, load the data, then add columns as data fields.',helpStep3:'Drag an element frame to move it and use the corner handles to resize. Double-click text to jump to its text field and select the full value. While selected, use the duplicate, layer, and delete actions above the canvas; Delete / Backspace also removes the selection. On mobile, use the Edit button that appears for selected text. While moving, elements snap to the label center and edges, and deletions can be undone from the toast.',});
+        brandMeta:'Edit labels directly and continue from merge data to print-ready PDF',dataGuideTitle:'Merge CSV or table data',dataGuideBody:'Load columns such as name, price, or address and add them to the label as data fields.',dataGuideAction:'Set up merge data',dataGuideEmpty:'No merge data',dataGuideLoaded:'{rows} rows / {cols} columns loaded',mergeDataShort:'Merge data',shortcutDeselect:'Deselect',fontMeiryo:'Meiryo',fontYuGothic:'Yu Gothic',fontYuMincho:'Yu Mincho',fontHiraginoKaku:'Hiragino Kaku Gothic',fontHiraginoMincho:'Hiragino Mincho',fontMaru:'Rounded Gothic',editText:'Edit',undoDelete:'Undo',elementDeleted:'Element deleted',helpStep2:'In Label, add text, images, or codes. For CSV or pasted table data, use “Merge data”, load the data, then add columns as data fields.',helpStep3:'Drag an element frame to move it and use the corner handles to resize. Double-click text to jump to its text field and select the full value. While selected, use the duplicate, layer, and delete actions above the canvas; Delete / Backspace also removes the selection. On mobile, use the Edit button that appears for selected text. While moving, elements snap to the label center and edges, and deletions can be undone from the toast.',});
       Object.assign(translations.ja,{snapToggleLabel:'スナップ',touchMenuLabel:'要素メニュー',shortcutMoveLarge:'1 mm移動',shortcutSnapBypass:'スナップ無効',});
       Object.assign(translations.en,{snapToggleLabel:'Snap',touchMenuLabel:'Element menu',shortcutMoveLarge:'Move 1 mm',shortcutSnapBypass:'Disable snap',});
       Object.assign(translations.ja,{pdfPendingLayout:'「用紙」の入力を有効な値に修正してからPDFを作成してください。プレビューは最後に確定した用紙設定です。',helpReliability:'用紙寸法は入力途中には確定せず、有効な値で入力を終えた時に反映します。空欄や数値として扱えない寸法は、プレビューの寸法表示で「—」になります。内容・枚数・使用済み位置・印刷補正を変更した後はPDFを作り直してください。保存時のファイル名は直前まで編集できます。'});
       Object.assign(translations.en,{pdfPendingLayout:'Finish valid values in Paper before creating a PDF. The preview uses the last committed paper settings.',helpReliability:'Paper dimensions are committed only after you finish entering valid values. Empty or non-finite dimensions appear as “—” in preview measurements. After changing content, counts, used positions, or calibration, create a new PDF. You can edit the filename immediately before saving.'});
       Object.assign(translations.ja,{fieldUnassigned:'未割り当て — 列を選択',delimiterLabel:'区切り文字',delimiterCsv:'カンマ (CSV)',delimiterTsv:'タブ (TSV)',dataInvalidQuote:'{line} 行目付近の引用符を確認してください。以前のデータは保持されています。',dataColumnCount:'{line} 行目の列数が見出しと一致しません。以前のデータは保持されています。',printEmptyLabel:'ラベルに文字や画像などを追加してください。',printMissingField:'差し込み列「{field}」が見つかりません。',printPreflightFailed:'印刷できません（データ行 {row}）：{message}',qrTooLong:'QRコードの内容が長すぎます。',pdfMemoryLimit:'PDFが大きすぎます。印刷するデータを分けてください。',helpPrintChecks:'CSVの引用符や列数に誤りがある場合は読み込みを中止します。未割り当ての差し込み列や無効なコードがある場合は印刷用PDFを作成できません。全面使用済みの用紙は印刷用PDFから除きます。大きなPDFはデータを分けて作成してください。'});
       Object.assign(translations.en,{fieldUnassigned:'Unassigned — choose a column',delimiterLabel:'Delimiter',delimiterCsv:'Comma (CSV)',delimiterTsv:'Tab (TSV)',dataInvalidQuote:'Check the quotes near line {line}. Your previous data is unchanged.',dataColumnCount:'Line {line} has a different number of columns from the header. Your previous data is unchanged.',printEmptyLabel:'Add text, an image or another element to the label.',printMissingField:'Merge column “{field}” was not found.',printPreflightFailed:'Cannot print (data row {row}): {message}',qrTooLong:'The QR code content is too long.',pdfMemoryLimit:'The PDF is too large. Split the print job into smaller batches.',helpPrintChecks:'Files with malformed quotes or inconsistent column counts are rejected. Assign missing merge columns and correct invalid codes before creating a print PDF. A fully used sheet is omitted from print PDFs. Split large print jobs into smaller batches.'});
+      Object.assign(translations.ja,{keyboardShortcuts:'キーボード操作',centerHorizontalShort:'左右中央',centerVerticalShort:'上下中央',brandMeta:'用紙に合わせたラベル作成・印刷PDF'});
+      Object.assign(translations.en,{keyboardShortcuts:'Keyboard shortcuts',centerHorizontalShort:'Center X',centerVerticalShort:'Center Y',brandMeta:'Label sheets and print PDFs'});
       function readStorage(key){try{return localStorage.getItem(key);}catch{return null;}}
       function writeStorage(key,value){try{localStorage.setItem(key,value);return true;}catch{return false;}}
       function removeStorage(key){try{localStorage.removeItem(key);return true;}catch{return false;}}
@@ -1410,7 +1439,7 @@
           if(request!==importState.projectRequest)return;applyProject(project,{fileName:file.name});AppToast.show({message:t('projectLoaded')});
         }catch(error){if(request!==importState.projectRequest)return;console.warn(error);const key=error?.message==='PROJECT_INVALID_JSON'?'projectInvalidJson':error?.message==='PROJECT_UNSUPPORTED_SCHEMA'?'projectUnsupportedSchema':error?.message==='PROJECT_INVALID_STRUCTURE'?'projectInvalidStructure':'projectReadFailed';AppToast.show({message:t(key),duration:5200});}
       }
-      function setPage(pageId){if(!document.getElementById(pageId))return;cancelEditorInteraction();state.activePage=pageId;$$('.app-page').forEach(page=>page.classList.toggle('is-active',page.id===pageId));$$('[data-page]').forEach(button=>{const active=button.dataset.page===pageId;button.classList.toggle('is-active',active);if(button.closest('.step-nav')){if(active)button.setAttribute('aria-current','step');else button.removeAttribute('aria-current');}else{if(active)button.setAttribute('aria-current','page');else button.removeAttribute('aria-current');}});window.scrollTo({top:0,behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});if(pageId==='labelPage')requestAnimationFrame(renderLabelEditor);if(pageId==='sheetPage')requestAnimationFrame(renderSheetPage);if(pageId==='outputPage')requestAnimationFrame(renderOutputPage);}
+      function setPage(pageId){if(!document.getElementById(pageId))return;cancelEditorInteraction();state.activePage=pageId;$$('.app-page').forEach(page=>page.classList.toggle('is-active',page.id===pageId));$$('[data-page]').forEach(button=>{const active=button.dataset.page===pageId;button.classList.toggle('is-active',active);if(button.closest('.step-nav')){if(active)button.setAttribute('aria-current','step');else button.removeAttribute('aria-current');}else{if(active)button.setAttribute('aria-current','page');else button.removeAttribute('aria-current');}});window.scrollTo({top:0,behavior:'auto'});if(pageId==='labelPage')requestAnimationFrame(renderLabelEditor);if(pageId==='sheetPage')requestAnimationFrame(renderSheetPage);if(pageId==='outputPage')requestAnimationFrame(renderOutputPage);}
       function applyLanguage(){document.documentElement.lang=language;$$('[data-i18n]').forEach(el=>el.textContent=t(el.dataset.i18n));$$('[data-i18n-title]').forEach(el=>el.title=t(el.dataset.i18nTitle));$$('[data-i18n-aria-label]').forEach(el=>el.setAttribute('aria-label',t(el.dataset.i18nAriaLabel)));$$('[data-i18n-placeholder]').forEach(el=>el.setAttribute('placeholder',t(el.dataset.i18nPlaceholder)));$('#languageButton').textContent=language==='ja'?'EN':'JA';$('#languageButton').setAttribute('aria-label',language==='ja'?'英語に切り替え':'Switch to Japanese');$('#languageButton').title=language==='ja'?'英語に切り替え':'Switch to Japanese';document.title=language==='ja'?APP_CONFIG.nameJa:APP_CONFIG.name;$('#brandName').textContent=language==='ja'?APP_CONFIG.nameJa:APP_CONFIG.name;$('#footerName').textContent=language==='ja'?APP_CONFIG.nameJa:APP_CONFIG.name;renderPresetOptions();render();}
       function currentSettingsSnapshot(){return JSON.parse(JSON.stringify(state.settings));}
       function setSettings(next,{presetId='custom',persist=true}={}){const settings={...defaultSettings,...next};if(!LabelSheetCore.computeLayout(settings).valid)return false;cancelEditorInteraction();resetLayoutDrafts();state.settings=settings;state.activePresetId=presetId;clampEditorElements();sheetState.usedFirstPage=SheetCompositionCore.normalizeUsed(sheetState.usedFirstPage,LabelSheetCore.computeLayout(settings).labels.length);pushEditorHistory();if(persist)persistSettings();renderPresetOptions();render();return true;}
@@ -1501,7 +1530,7 @@
         if(axis!=='x'&&axis!=='y')return;const cancelled=cancelEditorInteraction(),element=selectedElement();if(!element)return;const bounds=editorBounds(),size=axis==='x'?'width':'height',value=Math.max(0,(bounds[size]-element[size])/2);if(element[axis]===value){if(cancelled)renderLabelEditor();return;}updateSelectedProperty(axis,value,{commit:true});
       }
       function renderInspector(){const element=selectedElement(),empty=$('#inspectorEmpty'),fields=$('#inspectorFields');empty.hidden=!!element;fields.hidden=!element;renderEditorGeometry(element);if(!element)return;const isText=element.type==='text',isImage=element.type==='image',isCode=element.type==='code';$('#textElementSettings').hidden=!isText;$('#textStyleSection').hidden=!isText;$('#imageElementSettings').hidden=!isImage;$('#codeElementSettings').hidden=!isCode;
-        if(isText){const sourceType=element.sourceType==='field'?'field':'fixed';$('#elementSourceType').value=sourceType;renderDataFieldSelect(element.fieldName);$('#dataFieldSelectField').hidden=sourceType!=='field';$('#textContentField').hidden=sourceType==='field';$('#textContent').value=element.text??'';$('#fieldPreviewBadge').hidden=sourceType!=='field';$('#fieldPreviewBadge').textContent=sourceType==='field'?`${element.fieldName || t('dataField')}: ${DataMergeCore.resolveElementText(element,currentDataRow()) || '—'}`:'';$('#fontFamily').value=element.fontFamily||'sans';$('#fontSize').value=String(element.fontSize||12);$('#boldToggle').checked=!!element.bold;$('#hAlign').value=element.hAlign||'left';$('#vAlign').value=element.vAlign||'top';$('#wrapToggle').checked=element.wrap!==false;}
+        if(isText){const sourceType=element.sourceType==='field'?'field':'fixed';$('#elementSourceType').value=sourceType;renderDataFieldSelect(element.fieldName);$('#dataFieldSelectField').hidden=sourceType!=='field';$('#textContentField').hidden=sourceType==='field';$('#textContent').value=element.text??'';$('#fieldPreviewBadge').hidden=sourceType!=='field';$('#fieldPreviewBadge').textContent=sourceType==='field'?`${element.fieldName || t('dataField')}: ${DataMergeCore.resolveElementText(element,currentDataRow()) || '—'}`:'';$('#fontFamily').value=element.fontFamily||'sans';$('#fontSize').value=String(element.fontSize||12);$('#boldToggle').checked=!!element.bold;$('#hAlign').value=element.hAlign||'left';$('#vAlign').value=element.vAlign||'top';$$('[data-align-axis]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.alignValue===($('#'+button.dataset.alignAxis).value))));$('#wrapToggle').checked=element.wrap!==false;}
         if(isImage){$('#imageFileName').textContent=element.fileName||t('imageUnnamed');$('#imageFileName').title=element.fileName||'';$('#imageFitSelect').value=element.fit==='cover'?'cover':'contain';}
         if(isCode){const sourceType=element.sourceType==='field'?'field':'fixed';$('#codeKindBadge').textContent=element.kind==='qr'?'QR':element.kind==='code39'?'Code 39':'Code 128';$('#codeSourceType').value=sourceType;renderDataFieldSelect(element.fieldName,'#codeDataFieldSelect');$('#codeDataFieldSelectField').hidden=sourceType!=='field';$('#codeValueField').hidden=sourceType==='field';$('#codeValueInput').value=element.value??'';$('#showHumanTextField').hidden=element.kind==='qr';$('#showHumanTextToggle').checked=element.showText!==false;const validation=codeValidation(element),status=$('#codeValidation');status.textContent=validation.message;status.classList.toggle('is-warning',validation.level==='warning');status.classList.toggle('is-error',validation.level==='error');}
         $$('.editor-unit-suffix').forEach(el=>el.textContent=unitLabel());}
@@ -1692,6 +1721,7 @@
       $('#textContent').addEventListener('input',event=>updateSelectedProperty('text',event.target.value));$('#textContent').addEventListener('change',pushEditorHistory);
       $('#fontFamily').addEventListener('change',event=>updateSelectedProperty('fontFamily',event.target.value,{commit:true}));$('#fontSize').addEventListener('change',event=>updateSelectedProperty('fontSize',Math.max(4,Math.min(96,Number(event.target.value)||12)),{commit:true}));
       $('#boldToggle').addEventListener('change',event=>updateSelectedProperty('bold',event.target.checked,{commit:true}));$('#wrapToggle').addEventListener('change',event=>updateSelectedProperty('wrap',event.target.checked,{commit:true}));$('#hAlign').addEventListener('change',event=>updateSelectedProperty('hAlign',event.target.value,{commit:true}));$('#vAlign').addEventListener('change',event=>updateSelectedProperty('vAlign',event.target.value,{commit:true}));
+      $$('[data-align-axis]').forEach(button=>button.addEventListener('click',()=>{if(selectedElement()?.type!=='text')return;const axis=button.dataset.alignAxis,value=button.dataset.alignValue;if($('#'+axis).value!==value)updateSelectedProperty(axis,value,{commit:true});}));
       $$('[data-editor-geometry]').forEach(input=>{input.addEventListener('input',()=>{input.dataset.geometryEditing='true';setGeometryInputError(input,'');});input.addEventListener('change',()=>commitEditorGeometryInput(input));input.addEventListener('blur',()=>{if(input.dataset.geometryEditing==='true')commitEditorGeometryInput(input);});});
       $('#centerHorizontalButton').addEventListener('click',()=>centerSelectedElement('x'));$('#centerVerticalButton').addEventListener('click',()=>centerSelectedElement('y'));
       $('#zoomRange').addEventListener('input',event=>{editorState.zoom=Math.max(50,Math.min(300,Number(event.target.value)||100));renderLabelEditor();});
@@ -1721,11 +1751,13 @@
       $('#saveProjectButton').addEventListener('click',saveProjectFile);
       $('#projectFileInput').addEventListener('change',event=>{loadProjectFile(event.target.files?.[0]);event.target.value='';});
       const projectDropZone=$('#projectDropZone');
+      document.addEventListener('click',event=>{if(projectDropZone.open&&!projectDropZone.contains(event.target))projectDropZone.open=false;});
+      document.addEventListener('keydown',event=>{if(event.key==='Escape'&&projectDropZone.open){projectDropZone.open=false;projectDropZone.querySelector('summary')?.focus();}});
       projectDropZone.addEventListener('dragover',event=>{event.preventDefault();projectDropZone.classList.add('is-dragover');});
       projectDropZone.addEventListener('dragleave',()=>projectDropZone.classList.remove('is-dragover'));
       projectDropZone.addEventListener('drop',event=>{event.preventDefault();projectDropZone.classList.remove('is-dragover');loadProjectFile(event.dataTransfer?.files?.[0]);});
 
-      $$('[data-page]').forEach(button=>button.addEventListener('click',()=>setPage(button.dataset.page)));
+      $$('[data-page]').forEach(button=>button.addEventListener('click',()=>{document.body.classList.add('workflow-started');$('#projectDropZone').open=false;setPage(button.dataset.page);}));
       $('#languageButton').addEventListener('click',()=>{language=language==='ja'?'en':'ja';writeStorage(storageKeys.language,language);applyLanguage();});
       $('#unitMm').addEventListener('click',()=>setDisplayUnit('mm'));
       $('#unitIn').addEventListener('click',()=>setDisplayUnit('in'));

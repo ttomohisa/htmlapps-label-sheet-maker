@@ -209,7 +209,7 @@ Licensed under the [MIT License](LICENSE).
 
 ### Project files and releases
 
-Expand **Project file** above the workflow to open, drop or save a project. On phones the introductory description appears only on the Paper step. A new stable version is released automatically after the main branch build and Pages deployment succeed.
+Expand **Project file** in the header to open, drop or save a project. The introductory description disappears once you choose a workflow step. Keyboard shortcuts are in Help. A new stable version is released automatically after the main branch build and Pages deployment succeed.
 
 ### Print and data checks (v1.1.5)
 
