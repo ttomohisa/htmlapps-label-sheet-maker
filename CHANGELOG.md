@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 1.2.0 - 2026-11-25
+
+- Element list, collapsible import settings, fit-to-view, rounded coordinate display, print preflight report, drag selection with Undo, opt-in local recovery and image replacement.
+
 ## 1.1.5 - 2026-11-24
 
 - Fix stale mobile selection actions on navigation; compact the canvas toolbar and file-drop copy; move mobile image source selection into a dialog.

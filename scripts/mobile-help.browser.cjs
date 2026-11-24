@@ -111,6 +111,10 @@ async function main() {
               if(step==='labelPage' && height>=500) {
                 assert.equal(await page.locator('#labelCanvasTitle').count(),0,label+': canvas title removed');
                 await page.locator('#addTextButton').click();
+                assert.equal(await page.locator('#elementListCount').textContent(),'1',label+': element list count');
+                assert.equal(await page.locator('#dataOptions').getAttribute('open'),null,label+': import options collapsed');
+                await page.locator('#fitCanvasButton').evaluate(el=>el.click());
+                assert.equal(await page.locator('#zoomRange').inputValue(),'100',label+': fit resets zoom');
                 assert.equal(await page.locator('#mobileSelectionBar').isVisible(),width<=600,label+': selected element bar only on mobile Label');
                 if(width<=820) {
                   const tool=await page.locator('.editor-toolbar').boundingBox(), first=await page.locator('#undoButton').boundingBox(), last=await page.locator('#deleteElementButton').boundingBox();
@@ -147,6 +151,12 @@ async function main() {
                   await control.evaluate(el=>el.scrollIntoView({block:'center',behavior:'instant'}));
                   await control.click();
                 }
+              }
+              if(step==='outputPage' && height>=500) {
+                await page.locator('#printCheckButton').click();
+                await page.locator('#printCheckResult').waitFor({state:'visible'});
+                await page.waitForFunction(()=>!document.querySelector('#printCheckButton').disabled);
+                assert.ok((await page.locator('#printCheckSummary').textContent()).trim(),label+': print check result');
               }
               if(step==='sheetPage' && height>=500) {
                 await page.locator('#invertUsedButton').click();

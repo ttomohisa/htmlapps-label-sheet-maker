@@ -1,5 +1,13 @@
 # Label Sheet Maker / ラベルシート作成 — Product Specification
 
+## v1.2.0 — Editor usability
+
+- Collapsible element list, import settings, fit-to-view zoom, rounded display values without changing underlying geometry.
+- Explicit preflight report (all merge rows, text overflow estimate, code checks, image resolution estimate, paper offsets); navigate to affected elements and rows. Existing hard PDF checks remain.
+- Opt-in drag selection with Undo and touch scrolling preserved outside the mode.
+- Opt-in local recovery, including imported data and images; one snapshot per browser storage origin, quota failures reported. Restore or discard before overwriting.
+- Replace image contents without changing element identity, position, frame size, fit, or ordering.
+
 ## v1.1.5 — Print and data integrity
 
 - Remove the separate hero heading; keep one concise introduction on initial load. Any workflow navigation hides it and the local-processing badge for the rest of the session, including returning to Paper. Hide the local-processing badge on narrow screens even before navigation.
@@ -31,7 +39,7 @@ Japanese name: **ラベルシート作成**
 
 Repository: `ttomohisa/htmlapps-label-sheet-maker`
 
-Current development milestone: **v1.1.5 — Print and data integrity**
+Current development milestone: **v1.2.0 — Editor usability**
 
 ## 2. Product principles
 

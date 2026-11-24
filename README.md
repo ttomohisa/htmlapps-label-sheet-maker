@@ -214,3 +214,7 @@ Expand **Project file** in the header to open, drop or save a project. The intro
 ### Print and data checks (v1.1.5)
 
 Malformed quoted data or inconsistent column counts are rejected without replacing the previous data. Choose comma or tab explicitly if auto detection is wrong. Assign missing columns and correct invalid codes before generating a print PDF. A fully used first sheet is omitted from the print PDF; the Sheet step still shows it. Large print jobs may need to be split (128 MiB accumulated JPEG limit).
+
+### Editor improvements (v1.2.0)
+
+Expand Elements to select overlapping elements, Import settings to change CSV parsing, and use Fit to view to reset zoom. Replace an image without changing its frame. On Sheet, enable Drag to select to mark/clear multiple positions. Check before printing estimates clipping, image resolution and paper offsets and reports code/data issues. Autosave work is opt-in in Project file: images and data are stored in browser storage, subject to quota; save a portable project for large work.
