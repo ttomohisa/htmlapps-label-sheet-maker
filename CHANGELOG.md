@@ -10,7 +10,8 @@
 - Add editable rectangles, rounded rectangles, ellipses and lines, with fill/outline controls and text color.
 - Add JAN/EAN-13, EAN-8, UPC-A and generic ITF; validate or complete retail check digits.
 - Expand generic A4/Letter presets from 4 to 20 and add 13 manufacturer/product-code layouts from published A-one and HISAGO dimensions.
-- Save quantity/auto-fit projects with schema 2 while retaining schema 1 compatibility for older files.
+- Save projects using custom quantities, auto-fit, shapes, non-default text colors or new barcode types with schema 2; read schema 1 as well.
+- Refine EAN/UPC guard bars, human-readable digit placement and dimension warnings; preserve shape geometry on save/restore and reset page indexes when importing new data.
 
 ## 1.2.0 - 2026-11-25
 

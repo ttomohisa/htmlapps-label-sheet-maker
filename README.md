@@ -86,7 +86,13 @@ Built-in presets include generic dimensions and independent layouts based on pub
 - Expand **Copies per row** in merge mode. Set the current row's copies, or apply an integer quantity column to all rows. Zero excludes a row; the initial quantity is one. Invalid values leave previous quantities unchanged. Explicit quantities allow up to 10,000 copies per row and a total of 10,000 (or the original row count if larger). New data imports reset quantities.
 - In Text style, enable **Shrink text to fit** and choose a minimum font size (4 pt or more). The same per-row layout is used in the editor, sheet and print PDF. Text that still does not fit at the minimum is flagged by the print check; review the final preview.
 - Choose from 20 generic A4/Letter layouts and 13 named A-one/HISAGO A4 layouts; check actual stock dimensions and margins before printing.
-- Projects that use custom quantities or auto-fit are saved with schema version 2 to prevent older app versions silently dropping these settings. v1.3.0 reads schema 1 and 2; other projects remain schema 1.
+- Projects using custom quantities, auto-fit, shapes, non-default text colors or new barcode formats use schema 2 so older versions cannot silently ignore the settings. v1.3.0 reads both schemas; projects without these features remain schema 1.
+
+### Shapes, colors and additional barcodes
+
+- Add rectangles, rounded rectangles, ellipses or lines. Set fill, outline color, stroke width, corner radius or line direction. Text color is editable separately. Shapes use the same position/size, stacking, duplicate, Undo and project save controls as other elements.
+- JAN/EAN-13 (12 or 13 digits), JAN/EAN-8 (7 or 8 digits) and UPC-A (11 or 12 digits) calculate a missing check digit and reject a wrong supplied check digit. ITF accepts 2–80 digits in pairs, without automatic check digits or ITF-14 bearer bars. Fixed values and merged columns both work. Preserve leading zeros in CSV. Code generation does not assign or register GTINs. EAN/UPC use format-specific guard bars and digit placement. Dimension warnings are estimates for general retail POS, not print-quality or conformance certification; verify the printed symbol with the intended scanner and applicable GS1 requirements before production use.
+
 
 ### Editing features
 
@@ -211,7 +217,7 @@ The GitHub Pages version requires the initial HTML request, but data selected or
 | --- | --- | --- |
 | Project Nayuki QR Code generator algorithms (adapted) | MIT | QR encoding and error-correction structure |
 
-Code 39 and Code 128 are implemented locally from their published symbol structures; no external barcode runtime package is bundled. `dependencies.json` currently contains no runtime package dependency.
+Code 39, Code 128, EAN-13, EAN-8, UPC-A and ITF are implemented locally from their published symbol structures; no external barcode runtime package is bundled. `dependencies.json` currently contains no runtime package dependency.
 
 See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for the full notice.
 
@@ -226,9 +232,3 @@ Bug reports and feature proposals are welcome through GitHub Issues. See [CONTRI
 Copyright © 2026 ttomohisa
 
 Licensed under the [MIT License](LICENSE).
-
-### Shapes, colors and additional barcodes
-
-- Add rectangles, rounded rectangles, ellipses or lines. Set fill, outline color, stroke width, corner radius or line direction. Text color is editable separately. Shapes use the same position/size, stacking, duplicate, Undo and project save controls as other elements.
-- JAN/EAN-13 (12 or 13 digits), JAN/EAN-8 (7 or 8 digits) and UPC-A (11 or 12 digits) calculate a missing check digit and reject a wrong supplied check digit. ITF accepts 2–80 digits in pairs, without automatic check digits or ITF-14 bearer bars. Fixed values and merged columns both work. Preserve leading zeros in CSV. Code generation does not assign or register GTINs. Size warnings are estimates; verify the printed symbol with the intended scanner and applicable GS1 requirements before production use.
-- Shapes, non-default text colors and added barcode types require schema 2. The app still opens schema-1 projects.

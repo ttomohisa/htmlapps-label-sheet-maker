@@ -367,7 +367,7 @@ First-page sheet positions are keyboard focusable buttons in the SVG preview and
 
 ## 10. v0.7.0 — Project Save / Restore
 
-The app can export the current job as one `.labelsheet.json` file and reopen it later without a server. The project file uses `schemaVersion: 1` and records the producing `appVersion` plus a save timestamp.
+The app can export the current job as one `.labelsheet.json` file and reopen it later without a server. The original v0.7 project file used `schemaVersion: 1`; see the v1.3.0 section for current schema selection. It records the producing `appVersion` plus a save timestamp.
 
 Saved content includes paper geometry, every label element, embedded local image Data URLs, parsed merge headers and rows, repeat/merge mode, current merge row, first-sheet used positions, X/Y print calibration, and the print-PDF filename. Browser-only named paper-layout and calibration preset collections remain device-local and are not copied into the project.
 
@@ -555,7 +555,7 @@ Physical printer alignment, paper feed tolerances, and scan reliability still re
 - Quantity array indexed by original row; absent/empty means one copy per row. Integer 0–10000; 0 excludes. Explicit total <= max(10000, source row count). Column apply is atomic, manual edit uses original row navigation, reset or new import restores one. Map physical item indexes to original rows without expanding table records. Keep first-sheet used slots independent. Print check and required code validation skip excluded rows. Fingerprint includes quantities.
 - Opt-in per-element text auto-fit, maximum existing font size, minimum >=4pt (default 6, no larger than maximum); choose largest fitting half-point size, otherwise use minimum and report remaining overflow. Shared layout for canvas, sheet, output and preflight. Preserve geometry and original configured font size.
 - Preserve 20 generic presets and add 13 named A4 layouts. All must pass geometry validation; no official compatibility claims.
-- Schema 2 is written when non-default quantities or enabled auto-fit are present; reader supports 1/2, default projects keep schema 1. Autosave uses same project normalization. Do not silently downgrade custom print quantities in old readers.
+- Schema 2 is written for non-default quantities, enabled auto-fit, shapes, non-default text colors, or added barcode types; reader supports 1/2, projects without these features keep schema 1. Autosave uses same project normalization. Do not silently downgrade custom print quantities in old readers.
 
 ### Manufacturer preset references (checked 2026-11-25)
 
@@ -579,6 +579,10 @@ Dimensions in mm. All A4 portrait. Manufacturer names and product codes identify
 
 ### v1.3.0 design and barcode extension
 
-- Shape element kind rect/rounded/ellipse/line, hex RGB fill and stroke, optional fill/outline, stroke thickness 0.1–5 mm (clipped to frame), rounded corners, four line directions. No arbitrary SVG markup or paint URLs. Use shared geometry, stacking, Undo and rendering for editor, sheet and PDF. Text color is a six-digit hex RGB; default #20211f.
+Label design templates are out of scope; users construct their own designs from editable elements. Paper presets are separate from design templates.
+
+- Shape element kind rect/rounded/ellipse/line, hex RGB fill and stroke, optional fill/outline, stroke thickness 0.1–5 mm (clipped to frame; at least fill or outline remains visible), rounded corners, four line directions. No arbitrary SVG markup or paint URLs. Use shared geometry, stacking, Undo and rendering for editor, sheet and PDF. Text color is a six-digit hex RGB; default #20211f.
 - Retail code kinds ean13/ean8/upca, numeric full or check-digit-omitted input. Modulo-10 GTIN check digit, L/G/R patterns, start/middle/end guards, format-specific quiet zones; UPC-A encodes equivalent zero-prefixed EAN-13 modules. ITF is generic even-length 2–80 digits with interleaved narrow/wide patterns and no automatic check digit or ITF-14 bearer bars. No guarantee of GS1 print-grade conformance, registration, or physical scan success. Reference: https://ref.gs1.org/standards/genspecs/ .
-- New shape, non-default text color or new code kinds require schema 2. Existing schema 1 remains readable. Print preflight and mandatory barcode validation use the same input rules, skip excluded data rows, and warn about narrow modules or short bars.
+- New shape, non-default text color or new code kinds require schema 2. Existing schema 1 remains readable. Print preflight and mandatory barcode validation use the same input rules, skip excluded data rows, and warn about dimensions. EAN/UPC warnings use the general retail POS module-width range and scaled minimum bar heights, based on the actual bar area excluding HRI. Guard bars extend into the HRI area and digits are placed by format. ITF warning remains heuristic.
+
+Reference for retail symbol sizing: [GS1 Sweden size guide](https://gs1.se/en/guides/how-to-guides/size-guide/), [GS1 General Specifications](https://ref.gs1.org/standards/genspecs/), sections 5.2 and 5.12.3.1. Physical verification is required separately. Named paper layouts were rechecked against the linked A-one PDFs and HISAGO chart (page 2).

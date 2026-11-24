@@ -82,6 +82,7 @@ async function batchLabelSmoke(browser,results){
  try{
   await page.goto(pathToFileURL(path.resolve(__dirname,'..','dist/index.html')).href);
   assert.ok(await page.locator('#presetSelect option').count()>=21);
+  await page.locator('#presetSelect').selectOption('aone-31504');assert.equal(await page.locator('#labelWidth').inputValue(),'86.4');assert.equal(await page.locator('#topMargin').inputValue(),'21.2');
   await page.locator('#presetSelect').selectOption('a4-4-99x139');
   assert.equal(await page.locator('#columns').inputValue(),'2');
   await page.locator('#presetSelect').selectOption('a4-24-66x33.9');

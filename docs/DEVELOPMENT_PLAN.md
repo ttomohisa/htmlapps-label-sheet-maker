@@ -122,4 +122,4 @@ v1.0 explicitly excludes manufacturer product-code databases, manufacturer logos
 
 ## v1.3.0 — Batch labels
 
-- Serial generation, per-row quantities, text auto-fit and expanded generic presets. Regression gates include print mapping, schema compatibility, both languages, offline builds and mobile layout.
+- Serial generation, per-row quantities, text auto-fit, 20 generic and 13 named paper presets, shapes/lines/text colors, and EAN-13/EAN-8/UPC-A/ITF. Label design templates are explicitly excluded. Regression gates include print mapping, schema compatibility, both languages, offline builds and mobile layout.

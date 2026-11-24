@@ -57,3 +57,5 @@ All user data and PDF generation remain local to the browser. The readable stand
 
 - Add all shape kinds, set colors, geometry, layering and line direction; Undo, duplicate, save/reopen schema 2; confirm the same paint and shape in sheet preview and PDF.
 - Check EAN-13, EAN-8, UPC-A and ITF with fixed data and CSV fields, valid/missing/incorrect check digits, leading zeros, skipped invalid rows, and invalid ITF length. Verify the generated printed symbols using independent scanners at realistic dimensions; this is a separate physical test.
+
+Release-specific checks: verify UPC-A outer digits, EAN-13 leading digit, EAN-8 paired digit groups and extended guards at realistic module widths. Check narrow/short symbol warnings, no shape-size change after save/reopen, new import resets page indexes and stale serial confirmation cannot replace changed quantities. Do not infer physical scan success from SVG/PDF generation tests.

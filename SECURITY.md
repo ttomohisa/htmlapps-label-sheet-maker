@@ -54,3 +54,5 @@ Before adding or upgrading a package:
 - Refresh the selected lock entry with the dependency scripts; never hand-edit a lock hash to bypass a mismatch.
 - Rebuild with a clean cache.
 - Test with the network disabled.
+
+Project schema 2 includes optional quantity arrays, auto-fit, shape geometry and RGB color values, and additional barcode formats. Shape and text paint accept only six-digit hexadecimal RGB, never arbitrary SVG/CSS or remote URLs. Invalid quantity arrays are rejected. Barcode inputs are validated locally; neither the app nor the project format registers product identifiers.
