@@ -81,18 +81,32 @@ async function main() {
               assert.equal(await summary.isVisible(), true, label + ': project remains reachable on '+step);
               assert.equal(await page.locator('.local-badge').isVisible(), false, label + ': local badge stays hidden');
               if(width>600) {
-                const navBox=await nav.boundingBox(),headerBox=await page.locator('.app-header').boundingBox();
-                assert.ok(navBox&&headerBox&&navBox.y-headerBox.y-headerBox.height<=16,label+': workflow sits just below header');
+                // Wait for the navigation render and explicit scroll reset, then
+                // sample both rectangles in one browser frame (not two protocol calls).
+                const geometry = await page.evaluate(async () => {
+                  await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+                  const header = document.querySelector('.app-header').getBoundingClientRect();
+                  const tabs = document.querySelector('#desktopStepNav').getBoundingClientRect();
+                  const padding = parseFloat(getComputedStyle(document.querySelector('main')).paddingTop);
+                  return {headerBottom:header.bottom, tabsTop:tabs.top, gap:tabs.top-header.bottom, scrollY, padding};
+                });
+                console.log('WORKFLOW '+label+' '+step+' '+JSON.stringify(geometry));
+                assert.ok(Math.abs(geometry.scrollY)<=1,label+': scroll reset '+JSON.stringify(geometry));
+                assert.ok(Math.abs(geometry.gap-14)<=2,label+': workflow sits just below header '+JSON.stringify(geometry));
               }
               if(step==='labelPage' && height>=500) {
                 assert.equal(await page.locator('#labelCanvasTitle').count(),0,label+': canvas title removed');
                 await page.locator('#addTextButton').click();
                 const alignment=page.locator('[data-align-axis="hAlign"][data-align-value="center"]');
+                await alignment.evaluate(el=>el.scrollIntoView({block:'center',behavior:'instant'}));
                 await alignment.click();
                 assert.equal(await alignment.getAttribute('aria-pressed'),'true',label+': alignment selection');
                 assert.equal(await page.locator('#hAlign').inputValue(),'center',label+': actual text alignment updated');
-                await page.locator('#centerHorizontalButton').click();
-                await page.locator('#centerVerticalButton').click();
+                for(const id of ['centerHorizontalButton','centerVerticalButton']) {
+                  const control=page.locator('#'+id);
+                  await control.evaluate(el=>el.scrollIntoView({block:'center',behavior:'instant'}));
+                  await control.click();
+                }
               }
               if(step==='sheetPage' && height>=500) {
                 await page.locator('#invertUsedButton').click();
