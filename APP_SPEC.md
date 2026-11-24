@@ -112,7 +112,7 @@ Reject or visibly flag:
 
 ### 5.3 Built-in presets
 
-Built-in presets are generic dimension-based presets. They must not use manufacturer trademarks, manufacturer logos, claims of official compatibility, or copied manufacturer artwork.
+Built-in presets include generic dimension-based layouts and manufacturer/product-code references to independently implemented layouts from verified public dimensions. Names and codes identify stock only; no logos, official compatibility claims or copied artwork.
 
 Preset labels describe dimensions and grid only, such as:
 
@@ -450,7 +450,7 @@ Not in v1.0:
 
 ## 11. Intellectual-property guardrails
 
-- Keep the app and built-in presets manufacturer-neutral.
+- Keep the app independent of manufacturers; named presets identify stock using verified dimensions.
 - Do not display manufacturer logos.
 - Do not call any built-in layout an “official” template.
 - Do not ship a copied manufacturer template database in v1.0.
@@ -554,5 +554,25 @@ Physical printer alignment, paper feed tolerances, and scan reliability still re
 - Generate an ordinary merge table with a stable `serial` column; ascending/descending non-negative integer range 0–999999999999, nonzero integer step, 1–10000 rows, 1–12 minimum digits, prefix/suffix each <=128 characters. Preview endpoints, confirm replacement of existing data, retire stale imports. Use the existing text/code field binding. Generated rows persist in project files; generator form itself does not.
 - Quantity array indexed by original row; absent/empty means one copy per row. Integer 0–10000; 0 excludes. Explicit total <= max(10000, source row count). Column apply is atomic, manual edit uses original row navigation, reset or new import restores one. Map physical item indexes to original rows without expanding table records. Keep first-sheet used slots independent. Print check and required code validation skip excluded rows. Fingerprint includes quantities.
 - Opt-in per-element text auto-fit, maximum existing font size, minimum >=4pt (default 6, no larger than maximum); choose largest fitting half-point size, otherwise use minimum and report remaining overflow. Shared layout for canvas, sheet, output and preflight. Preserve geometry and original configured font size.
-- Preserve 4 existing neutral presets and add 16 centered generic A4/Letter grids. All must pass geometry validation; no manufacturer compatibility claims.
+- Preserve 20 generic presets and add 13 named A4 layouts. All must pass geometry validation; no official compatibility claims.
 - Schema 2 is written when non-default quantities or enabled auto-fit are present; reader supports 1/2, default projects keep schema 1. Autosave uses same project normalization. Do not silently downgrade custom print quantities in old readers.
+
+### Manufacturer preset references (checked 2026-11-25)
+
+Dimensions in mm. All A4 portrait. Manufacturer names and product codes identify stock; no endorsement or official template is implied. Right/bottom margins derived from the published grid. Test against actual paper.
+
+| Manufacturer / code | Columns × rows | Width × height | Left / top | Horizontal / vertical gap | Source |
+|---|---|---|---|---|---|
+| A-one 31512 | 3 × 8 | 66 × 33.9 | 6 / 12.9 | 0 / 0 | [Test print PDF](https://www.a-one.co.jp/img_pdf/ZT31512_A.pdf) |
+| A-one 31504 | 2 × 6 | 86.4 × 42.3 | 18.6 / 21.2 | 0 / 0 | [Test print PDF](https://www.a-one.co.jp/img_pdf/ZT31504_A.pdf) |
+| HISAGO ELM002 | 1 × 2 | 210 × 148.5 | 0 / 0 | 0 / 0 | [Layout chart, p.2](https://www.hisago.co.jp/images/uploads/2024/03/APNF240HP.pdf) |
+| HISAGO ELM003 | 2 × 2 | 105 × 148.5 | 0 / 0 | 0 / 0 | [Layout chart, p.2](https://www.hisago.co.jp/images/uploads/2024/03/APNF240HP.pdf) |
+| HISAGO ELM004 | 2 × 3 | 105 × 99 | 0 / 0 | 0 / 0 | [Layout chart, p.2](https://www.hisago.co.jp/images/uploads/2024/03/APNF240HP.pdf) |
+| HISAGO ELM014 | 2 × 4 | 105 × 74.25 | 0 / 0 | 0 / 0 | [Layout chart, p.2](https://www.hisago.co.jp/images/uploads/2024/03/APNF240HP.pdf) |
+| HISAGO ELM006 | 2 × 5 | 86.4 × 50.8 | 18.6 / 21.2 | 0 / 0 | [Layout chart, p.2](https://www.hisago.co.jp/images/uploads/2024/03/APNF240HP.pdf) |
+| HISAGO ELM008 | 2 × 6 | 86.4 × 42.3 | 18.6 / 21.2 | 0 / 0 | [Layout chart, p.2](https://www.hisago.co.jp/images/uploads/2024/03/APNF240HP.pdf) |
+| HISAGO ELM017 | 2 × 6 | 83.8 × 42.3 | 19.3 / 21.5 | 3.8 / 0 | [Layout chart, p.2](https://www.hisago.co.jp/images/uploads/2024/03/APNF240HP.pdf) |
+| HISAGO ELM018 | 2 × 6 | 84 × 42 | 19 / 22.5 | 4 / 0 | [Layout chart, p.2](https://www.hisago.co.jp/images/uploads/2024/03/APNF240HP.pdf) |
+| HISAGO ELM012 | 3 × 8 | 66 × 33.9 | 6 / 12.9 | 0 / 0 | [Layout chart, p.2](https://www.hisago.co.jp/images/uploads/2024/03/APNF240HP.pdf) |
+| HISAGO ELM020 | 3 × 7 | 70 × 38.1 | 0 / 14.8 | 0 / 0 | [Layout chart, p.2](https://www.hisago.co.jp/images/uploads/2024/03/APNF240HP.pdf) |
+| HISAGO ELM021 | 3 × 8 | 70 × 33.9 | 0 / 12.7 | 0 / 0 | [Layout chart, p.2](https://www.hisago.co.jp/images/uploads/2024/03/APNF240HP.pdf) |
