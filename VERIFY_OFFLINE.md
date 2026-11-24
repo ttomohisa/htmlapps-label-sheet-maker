@@ -1,6 +1,6 @@
 # Offline Verification — Label Sheet Maker
 
-## v0.8.0 readable build
+## v1.2.0 readable build
 
 1. Run `build-standalone.bat` on Windows.
 2. Open `dist/index.html` directly from the filesystem.
@@ -31,7 +31,17 @@ All user data and PDF generation remain local to the browser. The readable stand
 1. Open `dist/index.self-extract.html` directly.
 2. Confirm the loader uses the same favicon as the readable build.
 3. Confirm the loader disappears and the restored app matches `dist/index.html`.
-4. Repeat the v0.8.0 core flow offline, including project save/restore, PDF calibration, and print-ready PDF generation.
+4. Repeat the readable-build core flow offline, including project save/restore, PDF calibration, and print-ready PDF generation.
 5. Confirm the browser console contains no decompression or CSP error.
 
 `scripts/verify-self-extract.ps1` verifies an ASCII-only loader and byte-for-byte restoration when the standard Windows build is run.
+
+## v1.2.0 editor and recovery
+
+- Select overlapping elements from Elements; replace a PNG/JPEG/WebP image and check frame geometry, ordering, and Undo.
+- Fit the canvas at narrow and wide viewport sizes; check rounded dimension display does not change an untouched saved value.
+- Load malformed CSV/TSV and confirm the previous data survives. Expand Import settings and try a manual delimiter.
+- Drag across first-sheet positions, Undo, then navigate away or change language during a gesture. No incomplete selection may be committed. Check later-page scrolling.
+- Run Check before printing against empty text, overflowing text, an invalid barcode, a missing field and an offset beyond the paper; select an issue to navigate to the relevant row/element.
+- Verify autosave is off by default. Enable, reload, restore, then turn off and confirm the recovery entry is removed. Test quota/blocked storage, and a second tab changing the saved work during confirmation. Recovery is not a replacement for a portable project file.
+- Repeat offline checks using normal and self-extracting release files. Record browser/device and results; a checklist is not evidence of a completed test.

@@ -52,6 +52,7 @@ async function editorUsabilitySmoke(browser,results) {
   const a=await slot1.boundingBox(),b=await slot2.boundingBox();assert.ok(a&&b);
   await page.mouse.move(a.x+a.width/2,a.y+a.height/2);await page.mouse.down();await page.mouse.move(b.x+b.width/2,b.y+b.height/2,{steps:12});await page.mouse.up();
   assert.equal(await page.locator('#sheetSummaryUsed').textContent(),'2','drag marks both positions');
+  const fresh=await slot1.boundingBox();await page.mouse.move(fresh.x+fresh.width/2,fresh.y+fresh.height/2);await page.mouse.down();await page.locator('#languageButton').evaluate(el=>el.click());await page.mouse.up();assert.equal(await page.locator('#sheetSummaryUsed').textContent(),'2','redraw cancels pending drag');await page.locator('#languageButton').click();
   await page.locator('#markAllAvailableButton').click();
   await nav.locator('[data-page="outputPage"]').click();
   await page.locator('#printCheckButton').click();

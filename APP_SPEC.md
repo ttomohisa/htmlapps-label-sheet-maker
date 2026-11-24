@@ -3,12 +3,12 @@
 ## v1.2.0 — Editor usability
 
 - Collapsible element list, import settings, fit-to-view zoom, rounded display values without changing underlying geometry.
-- Explicit preflight report (all merge rows, text overflow estimate, code checks, image resolution estimate, paper offsets); navigate to affected elements and rows. Existing hard PDF checks remain.
-- Opt-in drag selection with Undo and touch scrolling preserved outside the mode.
-- Opt-in local recovery, including imported data and images; one snapshot per browser storage origin, quota failures reported. Restore or discard before overwriting.
+- Explicit preflight report (all merge rows, empty text, text overflow estimate, code checks, fit-aware image resolution estimate, paper offsets); navigate to affected elements and rows. Existing hard PDF checks remain.
+- Opt-in drag selection with Undo and touch scrolling preserved outside the mode. Retire incomplete gestures on navigation or redraw; disable drag mode on later pages.
+- Opt-in local recovery, including imported data and images; one snapshot per browser storage origin, quota failures reported. Restore or discard before overwriting. Turning off removes the snapshot. Stale confirmations cannot restore or discard a newer snapshot.
 - Replace image contents without changing element identity, position, frame size, fit, or ordering.
 
-## v1.1.5 — Print and data integrity
+## v1.2.0 — Print and data integrity (originally planned for v1.1.5)
 
 - Remove the separate hero heading; keep one concise introduction on initial load. Any workflow navigation hides it and the local-processing badge for the rest of the session, including returning to Paper. Hide the local-processing badge on narrow screens even before navigation.
 - Keep open/save/drop available on every step through a closed native Project file disclosure in the header, with secondary buttons and restrained panel styling. Keep the workflow at the top after navigation; put keyboard shortcuts in Help, use compact segmented text alignment and grouped centre/used-position actions.
