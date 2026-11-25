@@ -108,6 +108,8 @@ async function batchLabelSmoke(browser,results){
   await page.locator('#dataRowNext').click();await page.locator('#rowQuantity').fill('0');await page.locator('#rowQuantity').press('Tab');
   await page.locator('#dataRowNext').click();await page.locator('#rowQuantity').fill('3');await page.locator('#rowQuantity').press('Tab');
   await nav.locator('[data-page="sheetPage"]').click();
+  // setPage renders the sheet in requestAnimationFrame; count() and textContent() do not wait for a redraw.
+  await page.waitForFunction(()=>document.querySelector('#sheetSummaryCount').textContent==='5' && document.querySelectorAll('#sheetPreviewSvg [data-element-id] text').length===5);
   assert.equal(await page.locator('#sheetSummaryCount').textContent(),'5');
   const sheet=page.locator('#sheetPreviewSvg');
   const texts=await sheet.locator('[data-element-id] text').allTextContents();
@@ -151,9 +153,18 @@ async function designLabelSmoke(browser,results){
   assert.ok(await page.locator('#codeValidation').evaluate(el=>el.classList.contains('is-error')));
   await page.locator('#codeValueInput').fill('490123456789');
   assert.ok(await page.locator('#labelEditorSvg text').filter({hasText:'4901234567894'}).count());
+  // Verify the earlier edits survived the later element additions before switching views.
+  assert.ok(await page.locator('#labelEditorSvg rect[fill="#ffee00"]').count());
+  assert.ok(await page.locator('#labelEditorSvg text[fill="#aa2233"]').count());
   await nav.locator('[data-page="sheetPage"]').click();
-  assert.ok(await page.locator('#sheetPreviewSvg rect[fill="#ffee00"]').count());
-  assert.ok(await page.locator('#sheetPreviewSvg text[fill="#aa2233"]').count());
+  // The sheet is redrawn on the next animation frame, not synchronously on click.
+  // Wait for the actual expected SVG nodes; missing or incorrect colors still fail.
+  const sheetShape=page.locator('#sheetPreviewSvg rect[fill="#ffee00"]');
+  const sheetText=page.locator('#sheetPreviewSvg text[fill="#aa2233"]');
+  await sheetShape.first().waitFor({state:'attached',timeout:10000});
+  await sheetText.first().waitFor({state:'attached',timeout:10000});
+  assert.ok(await sheetShape.count());
+  assert.ok(await sheetText.count());
   await nav.locator('[data-page="outputPage"]').click();
   await page.locator('#createPrintPdf').scrollIntoViewIfNeeded();await page.locator('#createPrintPdf').click();
   await page.locator('#outputResult').waitFor({state:'visible',timeout:40000});
