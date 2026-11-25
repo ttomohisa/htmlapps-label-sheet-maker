@@ -16,8 +16,6 @@ GitHub Pagesから最初のHTMLを読み込んだ後、用紙寸法の計算、�
 
 [![Label Sheet Maker / ラベルシート作成の画面](assets/screenshot.png)](https://ttomohisa.github.io/htmlapps-label-sheet-maker/)
 
-※ スクリーンショットは以前のバージョンです。
-
 ## 主な機能
 
 - **実際の寸法でラベル用紙を定義** — A4 / Letter / カスタム用紙、汎用プリセットやメーカー・品番別プリセットを使い、ラベル寸法、行列、余白、間隔をmmまたはinchで調整できます。

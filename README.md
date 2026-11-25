@@ -16,8 +16,6 @@ GitHub Pages delivers the initial HTML. After it loads, sheet geometry, label ed
 
 [![Label Sheet Maker screenshot](assets/screenshot-en.png)](https://ttomohisa.github.io/htmlapps-label-sheet-maker/)
 
-*Screenshot from an earlier version.*
-
 ## Features
 
 - **Define sheets by real dimensions** — Use A4, Letter, custom paper, or generic or manufacturer/product-code presets and adjust label size, rows, columns, margins, and gaps in mm or inches.
