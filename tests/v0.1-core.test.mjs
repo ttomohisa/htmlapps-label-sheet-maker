@@ -65,6 +65,6 @@ assert.equal(core.fromDisplayUnit(10, 'mm'), 10);
 
 const presets = core.builtInPresets();
 assert.ok(presets.length >= 3);
-assert.ok(presets.every(item => !/(A-one|Avery|KOKUYO|コクヨ|エーワン|ラベル屋さん)/i.test(item.nameEn + item.nameJa)));
+assert.ok(presets.filter(item=>!item.manufacturer).every(item => !/(A-one|Avery|KOKUYO|コクヨ|エーワン|ラベル屋さん)/i.test(item.nameEn + item.nameJa)));
 
 console.log('v0.1 core tests passed');

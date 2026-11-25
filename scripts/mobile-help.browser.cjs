@@ -74,12 +74,114 @@ async function editorUsabilitySmoke(browser,results) {
  } catch(error){await page.screenshot({path:path.join(results,'failure-editor-usability.png')}).catch(()=>{});throw error;} finally {await context.close();}
 }
 
+
+async function batchLabelSmoke(browser,results){
+ const context=await browser.newContext({viewport:{width:1360,height:900},locale:'ja',reducedMotion:'reduce'});
+ const page=await context.newPage(),errors=[],requests=[];
+ page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>{if(/^https?:/.test(r.url()))requests.push(r.url());});
+ try{
+  await page.goto(pathToFileURL(path.resolve(__dirname,'..','dist/index.html')).href);
+  assert.ok(await page.locator('#presetSelect option').count()>=21);
+  await page.locator('#presetSelect').selectOption('aone-31504');assert.equal(await page.locator('#labelWidth').inputValue(),'86.4');assert.equal(await page.locator('#topMargin').inputValue(),'21.2');
+  await page.locator('#presetSelect').selectOption('a4-4-99x139');
+  assert.equal(await page.locator('#columns').inputValue(),'2');
+  await page.locator('#presetSelect').selectOption('a4-24-66x33.9');
+  const nav=page.locator('#desktopStepNav');
+  await nav.locator('[data-page="labelPage"]').click();
+  await page.locator('#serialDetails summary').click();
+  await page.locator('#serialCount').fill('3');await page.locator('#serialPrefix').fill('A-');
+  await page.locator('#serialStart').fill('7');await page.locator('#serialStep').fill('2');
+  assert.equal(await page.locator('#serialPreview').textContent(),'A-007 … A-011');
+  await page.locator('#generateSerialButton').click();
+  await page.locator('#dataFieldList button').filter({hasText:'serial'}).click();
+  const canvas=page.locator('#labelEditorSvg [data-element-id] text');
+  assert.equal(await canvas.first().textContent(),'A-007');
+  await page.locator('#fontSize').fill('36');await page.locator('#fontSize').press('Tab');
+  await page.locator('#wrapToggle').uncheck();
+  await page.locator('#elementWidth').fill('20');await page.locator('#elementWidth').press('Tab');
+  const original=Number(await canvas.first().getAttribute('font-size'));
+  await page.locator('#autoFitToggle').check();
+  assert.ok(Number(await canvas.first().getAttribute('font-size'))<original);
+  assert.equal(await page.locator('#fontSize').inputValue(),'36');
+  await page.locator('#quantityDetails summary').click();
+  await page.locator('#rowQuantity').fill('2');await page.locator('#rowQuantity').press('Tab');
+  await page.locator('#dataRowNext').click();await page.locator('#rowQuantity').fill('0');await page.locator('#rowQuantity').press('Tab');
+  await page.locator('#dataRowNext').click();await page.locator('#rowQuantity').fill('3');await page.locator('#rowQuantity').press('Tab');
+  await nav.locator('[data-page="sheetPage"]').click();
+  // setPage renders the sheet in requestAnimationFrame; count() and textContent() do not wait for a redraw.
+  await page.waitForFunction(()=>document.querySelector('#sheetSummaryCount').textContent==='5' && document.querySelectorAll('#sheetPreviewSvg [data-element-id] text').length===5);
+  assert.equal(await page.locator('#sheetSummaryCount').textContent(),'5');
+  const sheet=page.locator('#sheetPreviewSvg');
+  const texts=await sheet.locator('[data-element-id] text').allTextContents();
+  assert.deepEqual(texts,['A-007','A-007','A-011','A-011','A-011']);
+  await sheet.locator('[data-sheet-slot="1"]').click();
+  assert.deepEqual(await sheet.locator('[data-element-id] text').allTextContents(),texts);
+  await nav.locator('[data-page="outputPage"]').click();
+  await page.locator('#createPrintPdf').click();await page.locator('#outputResult').waitFor({state:'visible',timeout:40000});
+  assert.match(await page.locator('#outputResultMeta').textContent(),/5 ラベル/);
+  const download=page.waitForEvent('download');await page.locator('#saveGeneratedPdf').click();assert.ok((await download).suggestedFilename().endsWith('.pdf'));
+  await nav.locator('[data-page="labelPage"]').click();
+  await page.locator('#pasteDataInput').fill('name,qty\nAlpha,2\nBeta,0\nGamma,3');await page.locator('#pasteDataButton').click();
+  await page.locator('#quantityColumn').selectOption('qty');await page.locator('#applyQuantityColumn').click();
+  assert.match(await page.locator('#quantityTotal').textContent(),/5/);
+  assert.deepEqual(errors,[]);assert.deepEqual(requests,[]);
+  console.log('PASS v1.3.0 batch-label smoke');
+ }catch(e){await page.screenshot({path:path.join(results,'failure-batch-labels.png')}).catch(()=>{});throw e;}finally{await context.close();}
+}
+
+
+async function designLabelSmoke(browser,results){
+ for(const [width,height,locale] of [[1360,900,'ja'],[390,844,'en']]){
+ const context=await browser.newContext({viewport:{width,height},locale,reducedMotion:'reduce'});
+ const page=await context.newPage(),errors=[],requests=[];
+ page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>{if(/^https?:/.test(r.url()))requests.push(r.url());});
+ try{
+  await page.goto(pathToFileURL(path.resolve(__dirname,'..','dist/index.html')).href);
+  const nav=page.locator(width<=600?'.app-mobile-bottom-bar':'#desktopStepNav');
+  await nav.locator('[data-page="labelPage"]').click();
+  await page.locator('#shapeKindSelect').selectOption('rounded');await page.locator('#addShapeButton').click();
+  await page.locator('#shapeFilled').scrollIntoViewIfNeeded();await page.locator('#shapeFilled').check();
+  await page.locator('#shapeFillColor').fill('#ffee00');await page.locator('#shapeStrokeColor').fill('#16624f');
+  assert.ok(await page.locator('#labelEditorSvg rect[fill="#ffee00"]').count());
+  await page.locator('#shapeKindSelect').selectOption('line');await page.locator('#addShapeButton').click();
+  await page.locator('#shapeDirection').selectOption('down');
+  assert.ok(await page.locator('#labelEditorSvg g[data-element-id] line[stroke="#16624f"]').count());
+  await page.locator('#addTextButton').click();await page.locator('#textColor').fill('#aa2233');
+  assert.ok(await page.locator('#labelEditorSvg text[fill="#aa2233"]').count());
+  await page.locator('#extraCodeKind').selectOption('ean13');await page.locator('#addExtraCodeButton').click();
+  await page.locator('#codeValueInput').fill('4901234567890');
+  assert.ok(await page.locator('#codeValidation').evaluate(el=>el.classList.contains('is-error')));
+  await page.locator('#codeValueInput').fill('490123456789');
+  assert.ok(await page.locator('#labelEditorSvg text').filter({hasText:'4901234567894'}).count());
+  // Verify the earlier edits survived the later element additions before switching views.
+  assert.ok(await page.locator('#labelEditorSvg rect[fill="#ffee00"]').count());
+  assert.ok(await page.locator('#labelEditorSvg text[fill="#aa2233"]').count());
+  await nav.locator('[data-page="sheetPage"]').click();
+  // The sheet is redrawn on the next animation frame, not synchronously on click.
+  // Wait for the actual expected SVG nodes; missing or incorrect colors still fail.
+  const sheetShape=page.locator('#sheetPreviewSvg rect[fill="#ffee00"]');
+  const sheetText=page.locator('#sheetPreviewSvg text[fill="#aa2233"]');
+  await sheetShape.first().waitFor({state:'attached',timeout:10000});
+  await sheetText.first().waitFor({state:'attached',timeout:10000});
+  assert.ok(await sheetShape.count());
+  assert.ok(await sheetText.count());
+  await nav.locator('[data-page="outputPage"]').click();
+  await page.locator('#createPrintPdf').scrollIntoViewIfNeeded();await page.locator('#createPrintPdf').click();
+  await page.locator('#outputResult').waitFor({state:'visible',timeout:40000});
+  assert.deepEqual(errors,[]);assert.deepEqual(requests,[]);
+  console.log('PASS design and barcode smoke '+locale+' '+width);
+ }catch(e){await page.screenshot({path:path.join(results,'failure-design-'+locale+'.png')}).catch(()=>{});throw e;}finally{await context.close();}
+ }
+}
+
 async function main() {
   const results = path.resolve(__dirname, '..', 'test-results', 'mobile-help');
   fs.mkdirSync(results, { recursive: true });
   const browser = await chromium.launch();
   try {
     await editorUsabilitySmoke(browser,results);
+    await batchLabelSmoke(browser,results);
+    await designLabelSmoke(browser,results);
     for (const file of ['dist/index.html', 'dist/index.self-extract.html', 'label-sheet-maker.html']) {
       for (const language of ['ja', 'en']) {
         for (const [width, height] of [[1360, 900], [821, 700], [820, 700], [601, 568], [600, 568], [390, 844], [360, 640], [320, 568], [393, 252]]) {

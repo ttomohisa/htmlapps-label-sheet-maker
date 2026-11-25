@@ -16,11 +16,9 @@ GitHub Pages delivers the initial HTML. After it loads, sheet geometry, label ed
 
 [![Label Sheet Maker screenshot](assets/screenshot-en.png)](https://ttomohisa.github.io/htmlapps-label-sheet-maker/)
 
-*Screenshot from an earlier version.*
-
 ## Features
 
-- **Define sheets by real dimensions** — Use A4, Letter, custom paper, or manufacturer-neutral presets and adjust label size, rows, columns, margins, and gaps in mm or inches.
+- **Define sheets by real dimensions** — Use A4, Letter, custom paper, or generic or manufacturer/product-code presets and adjust label size, rows, columns, margins, and gaps in mm or inches.
 - **Design one label directly on the canvas** — Add text, local PNG / JPEG / WebP images, QR codes, Code 128, and Code 39; move, resize, duplicate, reorder, delete, undo, and redo without leaving the editor.
 - **Merge local data into labels** — Load UTF-8, UTF-8 BOM, or Shift_JIS CSV / TSV files, drag and drop them, or paste spreadsheet-style table data and bind columns to text or code elements.
 - **Reuse partially used label sheets** — Mark already-used positions on the first sheet and fill only the remaining labels while preserving data order. Later pages are treated as fresh sheets.
@@ -78,7 +76,21 @@ Python, Node.js, and a local web server are not required for the standard Window
 9. Create the print-ready PDF and print it at **Actual size / 100%**.
 10. Expand **Project file** in the header to save or open `.labelsheet.json`. You can also drop a project file onto that control.
 
-Built-in presets describe physical dimensions and grid counts only. They are not manufacturer-official templates.
+Built-in presets include generic dimensions and independent layouts based on published manufacturer dimensions. They are not official manufacturer templates.
+
+### Batch labels
+
+- Expand **Generate serial numbers** in Label and enter start, increment, count, minimum digits, prefix and suffix. Generate up to 10,000 non-negative serial numbers as a `serial` data column; existing merge data is replaced only after confirmation. Add the column as text or bind it to a QR/barcode field.
+- Expand **Copies per row** in merge mode. Set the current row's copies, or apply an integer quantity column to all rows. Zero excludes a row; the initial quantity is one. Invalid values leave previous quantities unchanged. Explicit quantities allow up to 10,000 copies per row and a total of 10,000 (or the original row count if larger). New data imports reset quantities.
+- In Text style, enable **Shrink text to fit** and choose a minimum font size (4 pt or more). The same per-row layout is used in the editor, sheet and print PDF. Text that still does not fit at the minimum is flagged by the print check; review the final preview.
+- Choose from 20 generic A4/Letter layouts and 13 named A-one/HISAGO A4 layouts; check actual stock dimensions and margins before printing.
+- Projects using custom quantities, auto-fit, shapes, non-default text colors or new barcode formats use schema 2 so older versions cannot silently ignore the settings. v1.3.0 reads both schemas; projects without these features remain schema 1.
+
+### Shapes, colors and additional barcodes
+
+- Add rectangles, rounded rectangles, ellipses or lines. Set fill, outline color, stroke width, corner radius or line direction. Text color is editable separately. Shapes use the same position/size, stacking, duplicate, Undo and project save controls as other elements.
+- JAN/EAN-13 (12 or 13 digits), JAN/EAN-8 (7 or 8 digits) and UPC-A (11 or 12 digits) calculate a missing check digit and reject a wrong supplied check digit. ITF accepts 2–80 digits in pairs, without automatic check digits or ITF-14 bearer bars. Fixed values and merged columns both work. Preserve leading zeros in CSV. Code generation does not assign or register GTINs. EAN/UPC use format-specific guard bars and digit placement. Dimension warnings are estimates for general retail POS, not print-quality or conformance certification; verify the printed symbol with the intended scanner and applicable GS1 requirements before production use.
+
 
 ### Editing features
 
@@ -186,7 +198,7 @@ The GitHub Pages version requires the initial HTML request, but data selected or
 
 ## Limitations
 
-- Built-in layouts are generic dimension presets, not official templates supplied by label-sheet manufacturers. Check the actual sheet dimensions before printing.
+- Named layouts reference published dimensions; they are not official templates supplied by label-sheet manufacturers. Check the actual sheet dimensions before printing.
 - Print-ready pages are rendered at approximately 300 dpi for output fidelity; PDF text is not intended to remain searchable or editable.
 - Code 128 currently uses Set B and accepts printable ASCII characters. Code 39 accepts uppercase letters, digits, spaces, and its supported symbol set.
 - QR codes are generated from UTF-8 text, but very small printed QR codes can become difficult to scan.
@@ -203,7 +215,7 @@ The GitHub Pages version requires the initial HTML request, but data selected or
 | --- | --- | --- |
 | Project Nayuki QR Code generator algorithms (adapted) | MIT | QR encoding and error-correction structure |
 
-Code 39 and Code 128 are implemented locally from their published symbol structures; no external barcode runtime package is bundled. `dependencies.json` currently contains no runtime package dependency.
+Code 39, Code 128, EAN-13, EAN-8, UPC-A and ITF are implemented locally from their published symbol structures; no external barcode runtime package is bundled. `dependencies.json` currently contains no runtime package dependency.
 
 See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for the full notice.
 

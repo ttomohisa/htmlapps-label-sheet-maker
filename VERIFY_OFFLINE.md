@@ -45,3 +45,17 @@ All user data and PDF generation remain local to the browser. The readable stand
 - Run Check before printing against empty text, overflowing text, an invalid barcode, a missing field and an offset beyond the paper; select an issue to navigate to the relevant row/element.
 - Verify autosave is off by default. Enable, reload, restore, then turn off and confirm the recovery entry is removed. Test quota/blocked storage, and a second tab changing the saved work during confirmation. Recovery is not a replacement for a portable project file.
 - Repeat offline checks using normal and self-extracting release files. Record browser/device and results; a checklist is not evidence of a completed test.
+
+## v1.3.0 batch labels
+
+- Generate serial values 007, 009, 011 with prefix A-; bind to text and a QR/code. Confirm ascending/descending and invalid range handling.
+- Apply quantities [2,0,3] manually and from a column; check five labels in order across used positions, page boundaries and print PDF. Reject blanks/fractions/negative counts without altering previous values; all-zero disables print PDF.
+- Enable auto-fit on long text; check original size remains unchanged, effective size is smaller in all previews and PDF, and minimum-size overflow is reported. Verify Undo, project save/restore and language switching.
+- Confirm all 33 presets produce valid layouts and match measured paper. Verify legacy schema-1 projects and new schema-2 roundtrip; run the same checks offline for both release variants.
+
+### Design and new codes
+
+- Add all shape kinds, set colors, geometry, layering and line direction; Undo, duplicate, save/reopen schema 2; confirm the same paint and shape in sheet preview and PDF.
+- Check EAN-13, EAN-8, UPC-A and ITF with fixed data and CSV fields, valid/missing/incorrect check digits, leading zeros, skipped invalid rows, and invalid ITF length. Verify the generated printed symbols using independent scanners at realistic dimensions; this is a separate physical test.
+
+Release-specific checks: verify UPC-A outer digits, EAN-13 leading digit, EAN-8 paired digit groups and extended guards at realistic module widths. Check narrow/short symbol warnings, no shape-size change after save/reopen, new import resets page indexes and stale serial confirmation cannot replace changed quantities. Do not infer physical scan success from SVG/PDF generation tests.

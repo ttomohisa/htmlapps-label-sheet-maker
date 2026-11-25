@@ -2,6 +2,17 @@
 
 ## Unreleased
 
+## 1.3.0 - 2026-11-25
+
+- Generate serial-number merge data with start, increment, minimum digits and prefix/suffix.
+- Set copies per data row manually or from a quantity column, including zero to skip; use the same mapping in sheet placement, PDF and preflight.
+- Optional text auto-fit with minimum size and overflow warnings.
+- Add editable rectangles, rounded rectangles, ellipses and lines, with fill/outline controls and text color.
+- Add JAN/EAN-13, EAN-8, UPC-A and generic ITF; validate or complete retail check digits.
+- Expand generic A4/Letter presets from 4 to 20 and add 13 manufacturer/product-code layouts from published A-one and HISAGO dimensions.
+- Save projects using custom quantities, auto-fit, shapes, non-default text colors or new barcode types with schema 2; read schema 1 as well.
+- Refine EAN/UPC guard bars, human-readable digit placement and dimension warnings; preserve shape geometry on save/restore and reset page indexes when importing new data.
+
 ## 1.2.0 - 2026-11-25
 
 - Element list, collapsible import settings, fit-to-view, rounded coordinate display, print preflight report, drag selection with Undo, opt-in local recovery and image replacement.
